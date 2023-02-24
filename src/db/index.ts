@@ -23,7 +23,7 @@ import type {
 } from "./types";
 
 //////////////// creates temporary database ////////////////
-const db = new Database("", { verbose: console.log });
+const db = new Database("");
 
 //////////////// insert champions ////////////////
 const champions = csvParse(championsCSV).map((c) => ({
