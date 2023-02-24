@@ -10,4 +10,5 @@ export default defineConfig({
 			theme: "nord",
 		},
 	},
+	site: "https://openboxing.org",
 });
