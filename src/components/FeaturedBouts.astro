@@ -1,0 +1,146 @@
+---
+import TitleTags from "./TitleTags.astro";
+import dayjs from "dayjs";
+import { group } from "d3-array";
+import { slugify } from "../utils";
+import type { FeaturedBoutPreview } from "../utils";
+
+interface Props {
+	featuredBoutPreviews: FeaturedBoutPreview[];
+}
+
+const { featuredBoutPreviews } = Astro.props;
+---
+
+<ul class="bouts">
+	{
+		featuredBoutPreviews.map((featuredBout) => (
+			<li class="bouts__bout">
+				<a class="bouts__link" href={`${Astro.url.origin}/articles/${featuredBout.bout.date}-${slugify(featuredBout.name)}`}>
+					<img
+						class="bouts__thumbnail"
+						src={`${Astro.url.origin}/${featuredBout.thumbnail}`}
+						alt={`${featuredBout.name} thumbnail`}
+						width="1280"
+						height="720"
+						loading="lazy"
+						style="height:auto;max-width:100%;"
+					/>
+					<div class="bouts__details">
+						<p class="bouts__date">
+							<time datetime={featuredBout.bout.date}>{dayjs(featuredBout.bout.date).format("D MMMM YYYY")}</time>
+						</p>
+						<p class="bouts__name">
+							{featuredBout.name.split(" v ").map((boxer, i) => (
+								<span class="bouts__boxer">{i === 0 ? `${boxer} v` : `${boxer}`}</span>
+							))}
+						</p>
+						{[...group(featuredBout.bout.titles, (t) => t.weight.class)].map(([weightClass, titles]) => (
+							<div>
+								<p class="bouts__weight">{weightClass}</p>
+								<ul class="bouts__titles">
+									<TitleTags titles={titles} includeLinks={false} />
+								</ul>
+							</div>
+						))}
+					</div>
+				</a>
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.bouts {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(12, 1fr);
+		grid-auto-columns: 1fr;
+		list-style: none;
+		padding: 0;
+	}
+
+	.bouts__bout {
+		grid-column: span 12;
+		display: flex;
+		flex-direction: column;
+		background-color: var(--theme-content-bg);
+		border: 1px solid var(--theme-border);
+		border-radius: 4px;
+		overflow: hidden;
+		/* box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
+	}
+
+	.bouts__link {
+		text-decoration: none;
+	}
+
+	.bouts__details {
+		padding: 4px 12px 12px 12px;
+	}
+
+	.bouts__date {
+		font-size: var(--font-size-small);
+		line-height: var(--line-height-small);
+		margin-bottom: 6px;
+		color: var(--theme-text-secondary);
+		font-weight: 500;
+	}
+
+	.bouts__name {
+		font-size: var(--font-size-medium);
+		line-height: var(--line-height-medium);
+		height: calc(var(--line-height-medium) * 2);
+		margin-bottom: 6px;
+		font-weight: 600;
+		color: var(--theme-text);
+	}
+
+	.bouts__boxer {
+		display: block;
+	}
+
+	.bouts__weight {
+		font-size: var(--font-size-small);
+		line-height: var(--line-height-small);
+		margin-bottom: 4px;
+		color: var(--theme-text-secondary);
+		font-weight: 500;
+	}
+
+	.bouts__titles {
+		display: flex;
+		align-items: flex-end;
+		flex-wrap: wrap;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		height: 44px;
+	}
+
+	.bouts__bout:hover .bouts__name {
+		text-decoration: underline;
+	}
+
+	.bouts__thumbnail {
+		width: 100%;
+	}
+
+	@media (min-width: 480px) {
+		.bouts__bout {
+			grid-column: span 6;
+		}
+	}
+
+	@media (min-width: 667px) {
+		.bouts__bout {
+			grid-column: span 4;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.bouts__bout {
+			grid-column: span 3;
+		}
+	}
+</style>

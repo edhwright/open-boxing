@@ -1,0 +1,43 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Open Boxing • Page Not Found" description="Page not found!" img={null}>
+	<main class="content">
+		<header class="header">
+			<h1 class="header__title">Page not found. Y'all Must've 404got the URL</h1>
+		</header>
+		<iframe
+			width="560"
+			height="315"
+			src="https://www.youtube-nocookie.com/embed/pWIqZKhNY90"
+			title="YouTube video player"
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+			allowfullscreen
+		>
+		</iframe>
+	</main>
+</Layout>
+
+<style>
+	.header {
+		margin: 2rem auto;
+	}
+
+	.header__title {
+		font-size: var(--font-size-h1);
+		line-height: var(--line-height-h1);
+	}
+
+	iframe {
+		max-width: 100%;
+		border: none;
+	}
+
+	@media (min-width: 1280px) {
+		.content {
+			max-width: 956px;
+			margin: 0 auto;
+		}
+	}
+</style>

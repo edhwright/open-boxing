@@ -1,0 +1,310 @@
+---
+import dayjs from "dayjs";
+import { boutNameFromBout, slugify } from "../../../utils";
+import Layout from "../../../layouts/Layout.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import Reference from "./_components/Reference.astro";
+import { CollectionEntry, getCollection } from "astro:content";
+import { getBout } from "../../../db";
+import { group } from "d3-array";
+import type { Bout } from "../../../types";
+
+interface Props {
+	boutName: string;
+	thumbnail: string | undefined;
+	bout: Bout;
+	articles: CollectionEntry<"bouts">[];
+}
+
+export async function getStaticPaths() {
+	const boutArticles = await getCollection("bouts");
+	const articlesByBout = group(boutArticles, (a) => a.data.boutId);
+
+	return [...articlesByBout].map(([boutId, articles]) => {
+		const bout = getBout(boutId);
+		return {
+			params: {
+				bout: `${bout.date}-${slugify(boutNameFromBout(bout))}`,
+			},
+			props: {
+				boutName: boutNameFromBout(getBout(boutId)),
+				thumbnail: articles[0].data.thumbnail,
+				bout: getBout(boutId),
+				articles: articles.sort((a, b) => a.data.publicationDate.localeCompare(b.data.publicationDate)),
+			},
+		};
+	});
+}
+
+const { boutName, thumbnail, bout, articles } = Astro.props;
+
+const articleComponents = await Promise.all(
+	articles.map(async (a) => ({
+		Content: await a.render().then((d) => d.Content),
+		headingSlug: await a.render().then((d) => d.headings[0].slug),
+		data: a.data,
+	}))
+);
+---
+
+<Layout
+	title={`Open Boxing • ${boutName}`}
+	description={`Public domain ${boutName} articles.`}
+	img={thumbnail ? { url: thumbnail, width: "1280", height: "720", alt: `${boutName} thumbnail` } : null}
+>
+	<main>
+		<Breadcrumbs
+			route={[
+				["Articles", `${Astro.url.origin}/articles`],
+				[boutName, `${Astro.url.origin}/articles/${bout.boutId}`],
+			]}
+		/>
+		<header class="header">
+			<h1 class="header__title">{boutName}</h1>
+			<div class="header__details">
+				<p class="header__date">
+					<time datetime={dayjs(bout.date).format("YYYY-MM-DD")}>
+						{dayjs(bout.date).format("dddd, D MMMM, YYYY")}
+					</time>
+				</p>
+				<p class="header__weight">{bout.weight.class} ({bout.weight.lb} lb)</p>
+				<div class="header__titles">
+					{
+						bout.titles.map((title) => (
+							<p>
+								{title.org.name.full} {title.weight.class} title
+							</p>
+						))
+					}
+				</div>
+			</div>
+		</header>
+		<div id="articles" class="container">
+			<nav class="nav">
+				<h3 class="nav__heading">Articles</h3>
+				<ul class="nav__titles">
+					{
+						articleComponents.map((article) => (
+							<li class="nav__title">
+								<a class="nav__anchor" href={`#${article.headingSlug}`}>
+									{article.data.title}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+			<ul class="articles">
+				{
+					articleComponents.map(({ Content, data }) => (
+						<li class="articles__article">
+							<div class="article__reference">
+								<Reference bout={bout} author={data.author} publication={data.publication} publicationDate={data.publicationDate} link={{ text: "Source", url: data.link }} />
+							</div>
+							<section class="articles__content">
+								<Content />
+							</section>
+						</li>
+					))
+				}
+			</ul>
+			<div class="timeline__mobile"><p><a href="#articles">Back to top</a></p></div>
+		</div>
+	</main>
+</Layout>
+
+<style is:global>
+	.articles__content h2 {
+		font-size: var(--article-font-size-h2);
+		line-height: var(--article-line-height-h2);
+		margin: 3rem auto 1rem auto;
+	}
+
+	.articles__content h3 {
+		font-size: var(--article-font-size-h3);
+		line-height: var(--article-line-height-h3);
+		font-weight: 600;
+		margin: 3rem auto 1rem auto;
+	}
+
+	.articles__content h4 {
+		font-size: var(--article-font-size-body);
+		line-height: var(--article-line-height-body);
+		font-weight: 600;
+		margin: 3rem auto 1rem auto;
+	}
+
+	.articles__content hr {
+		margin: 8px 0;
+		border: 0;
+		border-top: 1px solid var(--theme-border);
+	}
+
+	.articles__content img {
+		margin: 24px auto 16px auto;
+		display: block;
+	}
+
+	.articles__content p {
+		font-family: Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
+		margin-top: 0;
+		margin-bottom: 16px;
+		font-size: var(--article-font-size-body);
+		line-height: var(--article-line-height-body);
+	}
+</style>
+
+<style>
+	.header {
+		margin: 2rem auto;
+	}
+
+	.header__title {
+		margin: 3rem auto 1rem auto;
+		text-align: center;
+		font-size: var(--article-font-size-h1);
+		line-height: var(--article-line-height-h1);
+	}
+
+	.header__details {
+		text-align: center;
+		font-size: 14px;
+		line-height: 18px;
+	}
+
+	.header__date {
+		margin-bottom: 8px;
+	}
+
+	.header__weight {
+		margin-bottom: 8px;
+	}
+
+	.container {
+		display: grid;
+		grid-template-rows: auto auto;
+		grid-template-columns: auto 0px;
+		row-gap: 1rem;
+	}
+
+	.nav {
+		padding: 12px 0;
+		background-color: var(--theme-bg);
+		grid-column-start: 1;
+		grid-row-start: 1;
+	}
+
+	.nav__heading,
+	.nav__title {
+		font-size: 13px;
+		line-height: 17px;
+	}
+
+	.nav__title {
+		margin: 12px 0;
+	}
+
+	.nav__titles,
+	.articles {
+		list-style: none;
+		padding: 0;
+	}
+
+	.nav__anchor {
+		color: var(--theme-text);
+		text-decoration: none;
+	}
+
+	.nav__anchor:hover {
+		text-decoration: underline;
+	}
+
+	.articles {
+		padding: 0;
+		grid-column-start: 1;
+		grid-row-start: 2;
+	}
+
+	.timeline__mobile {
+		place-self: end;
+		position: sticky;
+		bottom: 20px;
+		margin-top: calc(100vh + 100px);
+		white-space: nowrap;
+		grid-column-start: 2;
+		grid-row-start: 2;
+		background-color: var(--theme-callout-bg);
+		border-radius: 4px;
+		padding: 12px;
+		font-size: 14px;
+		line-height: 18px;
+	}
+
+	.timeline__mobile :global(a) {
+		color: var(--theme-callout-text);
+		text-decoration: none;
+	}
+
+	.timeline__mobile :global(a:hover) {
+		text-decoration: underline;
+	}
+
+	.articles__article {
+		box-shadow: 0px -4px 0px 0px var(--theme-text);
+		padding: 12px 0 2rem 0;
+	}
+
+	@media (min-width: 768px) {
+		.nav {
+			width: calc(((100% - (1rem * 7)) * 6 / 8) + 5rem);
+			margin: 0 auto;
+		}
+
+		.articles__article {
+			width: calc(((100% - (1rem * 7)) * 6 / 8) + 5rem);
+			margin: 0 auto;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.container {
+			gap: 1rem;
+			grid-template-columns: repeat(16, 1fr);
+			grid-template-rows: initial;
+		}
+
+		.nav {
+			grid-column: span 4;
+			position: sticky;
+			top: 0;
+			align-self: start;
+			max-height: 100vh;
+			overflow-y: scroll;
+			margin: 0;
+		}
+
+		.articles {
+			grid-column: span 12;
+			grid-row-start: initial;
+		}
+
+		.articles__article {
+			width: calc(((100% - (1rem * 5)) * 5 / 6) + 4rem);
+			margin: 0;
+		}
+
+		.timeline__mobile {
+			display: none;
+		}
+	}
+
+	@media (min-width: 1280px) {
+		.nav {
+			max-width: 75%;
+		}
+
+		.articles__article {
+			width: calc(((100% - (1rem * 5)) * 4 / 6) + 3rem);
+		}
+	}
+</style>

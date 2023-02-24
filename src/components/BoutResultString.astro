@@ -1,0 +1,59 @@
+---
+import BoxerName from './BoxerName.astro';
+import type { Bout } from '../types';
+
+interface Props {
+    bout: Bout;
+}
+
+const methodOfVictoryByInitials = new Map([
+	["KO", "knockout"],
+	["TKO", "technical knockout"],
+	["RTD", "corner retirement"],
+	["UD", "unanimous decision"],
+	["SD", "split decision"],
+	["MD", "majority decision"],
+	["DQ", "disqualification"],
+	["TD", "technical decision"],
+	["PTS", "points decision"],
+	["NWS", "newspaper decision"],
+]);
+
+const { bout } = Astro.props;
+
+
+---
+<>
+{
+	bout.status === "SCHEDULED" ? (
+		<>
+			<BoxerName boxer={bout.boxers.boxerA} useShortName={false} useTwoLines={false} /> v <BoxerName boxer={bout.boxers.boxerB} useShortName={false} useTwoLines={false} />
+		</>
+	) : bout.result.winner === "DRAW" ? (
+		<>
+			<BoxerName boxer={bout.boxers.boxerA} useShortName={false} useTwoLines={false} /> and <BoxerName boxer={bout.boxers.boxerB} useShortName={false} useTwoLines={false} /> share a draw {bout.result.totalRounds}/{bout.scheduledRounds}
+		</>
+	) : bout.result.winner === "NO CONTEST" ? (
+		<>
+			<BoxerName boxer={bout.boxers.boxerA} useShortName={false} useTwoLines={false} /> v <BoxerName boxer={bout.boxers.boxerB} useShortName={false} useTwoLines={false} /> results in a no contest {bout.result.totalRounds}/{bout.scheduledRounds}
+		</>
+	) : bout.result.winner === "BOXER A" ? (
+		<>
+			<BoxerName boxer={bout.boxers.boxerA} useShortName={false} useTwoLines={false} /> beats <BoxerName boxer={bout.boxers.boxerB} useShortName={false} useTwoLines={false} /> via {methodOfVictoryByInitials.get(bout.result.methodOfVictory as string)}{" "}{bout.result.totalRounds}/{bout.scheduledRounds}
+		</>
+	) : bout.result.winner === "BOXER B" ? (
+		<>
+			<BoxerName boxer={bout.boxers.boxerB} useShortName={false} useTwoLines={false} /> beats <BoxerName boxer={bout.boxers.boxerA} useShortName={false} useTwoLines={false} /> via {methodOfVictoryByInitials.get(bout.result.methodOfVictory as string)}{" "}{bout.result.totalRounds}/{bout.scheduledRounds}
+		</>
+	) : (
+		<></>
+	)
+}
+</>
+
+<style is:global>
+	.champion__link {
+		display: inline-block;
+		/* color: var(--theme-text); */
+	}
+</style>

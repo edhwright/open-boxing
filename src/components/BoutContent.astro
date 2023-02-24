@@ -1,0 +1,92 @@
+---
+import BoxerName from "./BoxerName.astro";
+import TitleTags from "./TitleTags.astro";
+import dayjs from "dayjs";
+import { slugify } from "../utils";
+import type { Bout } from "../types";
+
+interface Props {
+	bout: Bout;
+	dateFormat: string;
+	includeWeightClass: boolean;
+	useShortName: boolean;
+}
+
+const { bout, dateFormat, includeWeightClass, useShortName } = Astro.props;
+---
+
+<p class="bout__date">
+	<time datetime={bout.date}>
+		{dayjs(bout.date).format(dateFormat)}
+	</time>
+</p>
+
+<p class="bout__boxers">
+	<span class="bout__boxer"><BoxerName boxer={bout.boxers.boxerA} useShortName={useShortName} useTwoLines={false} /></span> v <br />
+	<span class="bout__boxer"><BoxerName boxer={bout.boxers.boxerB} useShortName={useShortName} useTwoLines={false} /></span>
+</p>
+
+{
+	includeWeightClass && (
+		<p class="bout__weight">
+			<a class="bout__link" href={`${Astro.url.origin}/${slugify(bout.weight.class)}`}>
+				{bout.weight.class}
+				<br />
+				{bout.weight.lb + " lb"}
+			</a>
+		</p>
+	)
+}
+
+<ul class="bout__titles">
+	<TitleTags titles={bout.titles} includeLinks={true} />
+</ul>
+
+<style>
+	.bout__date {
+		font-size: var(--font-size-small);
+		line-height: var(--line-height-small);
+		color: var(--theme-text-secondary);
+		font-weight: 500;
+		text-align: right;
+		margin: 0 0 6px 0;
+	}
+
+	.bout__boxers {
+		font-size: var(--font-size-medium);
+		line-height: var(--line-height-medium);
+		margin: 0 0 6px 0;
+		color: var(--theme-text);
+	}
+
+	.bout__boxer {
+		display: inline-block;
+	}
+
+	.bout__weight {
+		font-size: var(--font-size-small);
+		line-height: var(--line-height-small);
+		/* color: var(--theme-text-secondary); */
+		font-weight: 500;
+		margin: 0 0 4px 0;
+	}
+
+	.bout__link {
+		color: var(--theme-text-secondary);
+		text-decoration: none;
+	}
+
+	.bout__link:hover {
+		text-decoration: underline;
+	}
+
+	.bout__titles {
+		display: flex;
+		align-items: flex-end;
+		flex-wrap: wrap;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		height: 44px;
+	}
+</style>

@@ -1,0 +1,58 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import FeaturedBouts from "../../components/FeaturedBouts.astro";
+import { getAllFeaturedBoutPreviews } from "../../utils";
+
+const featuredBoutPreviews = await getAllFeaturedBoutPreviews();
+---
+
+<Layout
+	title="Open Boxing • Articles"
+	description="A collection of public domain newspaper articles and documents that provide a unique and in depth look at significant moments in the sport."
+	img={null}
+>
+	<main>
+		<Breadcrumbs route={[["Articles", `${Astro.url.origin}/articles`]]} />
+
+		<h1 class="header">Articles</h1>
+
+		<div class="description">
+			<p>A collection of public domain newspaper articles and documents.</p>
+		</div>
+
+		<section class="featured">
+			<h2 id="featured-bouts" class="featured__title">Featured bouts</h2>
+			<FeaturedBouts featuredBoutPreviews={featuredBoutPreviews} />
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.header {
+		margin: 2rem auto;
+		font-size: var(--font-size-h1);
+		line-height: var(--line-height-h1);
+	}
+
+	.description,
+	.featured {
+		margin: 2rem auto;
+	}
+
+	.featured__title {
+		font-size: var(--font-size-h2);
+		line-height: var(--line-height-h2);
+		margin: 12px 0;
+	}
+
+	@media (min-width: 1280px) {
+		.header,
+		.description,
+		.featured:global(> *) {
+			max-width: 956px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+</style>

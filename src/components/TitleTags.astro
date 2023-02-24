@@ -1,0 +1,46 @@
+---
+import { slugify } from "../utils";
+import type { Title } from "../types";
+
+interface Props {
+	titles: Title[];
+	includeLinks: boolean;
+}
+
+const { titles, includeLinks } = Astro.props;
+---
+
+{
+	titles.map((title) => (
+		<li class="title" style={`color: var(--${title.org.name.abbreviation.toLowerCase()}-text); background-color: var(--${title.org.name.abbreviation.toLowerCase()}-bg)`}>
+			{includeLinks ? (
+				<a class="title__link" href={`${Astro.url.origin}/${slugify(title.weight.class)}/${slugify(title.org.name.abbreviation)}`}>
+					{title.org.name.abbreviation}
+				</a>
+			) : (
+				title.org.name.abbreviation
+			)}
+		</li>
+	))
+}
+
+<style>
+	.title {
+		font-size: 12px;
+		line-height: 14px;
+		font-weight: 600;
+		border-radius: 4px;
+		padding: 2px 8px;
+		margin: 4px 4px 0 0;
+		width: max-content;
+	}
+
+	.title__link {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.title__link:hover {
+		text-decoration: underline;
+	}
+</style>

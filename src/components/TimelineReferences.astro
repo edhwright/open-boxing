@@ -1,0 +1,120 @@
+---
+import { boutNameFromBout, slugify } from "../utils";
+import type { TimelineDate } from "../utils";
+
+interface Props {
+	timelineDate: TimelineDate;
+	boutArticleIds: number[];
+}
+
+const { timelineDate, boutArticleIds } = Astro.props;
+---
+
+<>
+	{
+		timelineDate.events.bouts &&
+			timelineDate.events.bouts.map((bout) => (
+				<>
+					{boutArticleIds.includes(bout.boutId) && (
+						<li class="reference__internal">
+							<a href={`${Astro.url.origin}/articles/${bout.date}-${slugify(boutNameFromBout(bout))}`}>{boutNameFromBout(bout)}</a>
+						</li>
+					)}
+				</>
+			))
+	}
+
+	{
+		timelineDate.events.bouts &&
+			timelineDate.events.bouts.map((bout) => (
+				<>
+					{bout.references.length > 0 &&
+						bout.references.map((reference) => (
+							<li class="reference__external">
+								<a href={reference.link.url} target="_blank">
+									{reference.link.text}
+								</a>
+							</li>
+						))}
+				</>
+			))
+	}
+
+	{
+		timelineDate.events.titleReignsBegin &&
+			timelineDate.events.titleReignsBegin.map((reign) => (
+				<>
+					{reign.references.length > 0 &&
+						reign.references.map((reference) => (
+							<>
+								{reference.eventDate === reign.period.begins && (
+									<li class="reference__external">
+										<a href={reference.link.url} target="_blank">
+											{reference.link.text}
+										</a>
+									</li>
+								)}
+							</>
+						))}
+				</>
+			))
+	}
+
+	{
+		timelineDate.events.titleReignsEnd &&
+			timelineDate.events.titleReignsEnd.map((reign) => (
+				<>
+					{reign.references.length > 0 &&
+						reign.references.map((reference) => (
+							<>
+								{reference.eventDate === reign.period.ends && (
+									<li class="reference__external">
+										<a href={reference.link.url}>{reference.link.text}</a>
+									</li>
+								)}
+							</>
+						))}
+				</>
+			))
+	}
+</>
+
+<style>
+	.reference__internal,
+	.reference__external {
+		display: inline-block;
+		font-size: var(--font-size-small);
+		line-height: var(--line-height-small);
+		padding: 8px;
+		margin: 0 4px 4px 0;
+	}
+
+	.reference__internal {
+		background-color: var(--theme-callout-bg);
+		border-radius: 4px;
+	}
+
+	.reference__internal > a {
+		color: var(--theme-callout-text);
+		text-decoration: none;
+	}
+
+	.reference__internal > a:hover {
+		text-decoration: underline;
+	}
+
+	.reference__external {
+		background-color: var(--theme-content-bg);
+		border: 1px solid var(--theme-border);
+		border-radius: 4px;
+	}
+
+	.reference__external > a {
+		color: var(--theme-text);
+		text-decoration: none;
+	}
+
+	.reference__external > a:hover {
+		text-decoration: underline;
+	}
+</style>

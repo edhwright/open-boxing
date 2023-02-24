@@ -1,0 +1,158 @@
+---
+import BoxerName from "./BoxerName.astro";
+import dayjs from "dayjs";
+import { slugify } from "../utils";
+import type { Reign } from "../types";
+
+interface Props {
+	reign: Reign | null;
+	dateFormat: string;
+	includeWeightClass: boolean;
+	isUndisputed: boolean;
+}
+
+const { reign, dateFormat, includeWeightClass, isUndisputed } = Astro.props;
+
+const useUndisputedClass = reign && isUndisputed && ["WBAS", "WBC", "IBF", "WBO"].includes(reign.title.org.name.abbreviation);
+---
+
+{
+	reign ? (
+		<>
+			<p class={`champion__date ${useUndisputedClass ? "champion--undisputed" : ""}`}>
+				<time datetime={reign.period.current ? reign.period.begins : reign.period.ends}>
+					{dayjs(reign.period.current ? reign.period.begins : reign.period.ends).format(dateFormat)}
+				</time>
+			</p>
+			{reign.period.current ? (
+				<p class={`champion__boxer ${useUndisputedClass ? "champion--undisputed" : ""}`}>
+					<BoxerName boxer={reign.champion} useShortName={false} useTwoLines={true} />
+				</p>
+			) : (
+				<p class="champion__boxer champion--vacant">
+					Vacant <br />
+				</p>
+			)}
+			{includeWeightClass && (
+				<p class={`champion__weight ${useUndisputedClass ? "champion--undisputed" : ""}`}>
+					<a class="champion__link" href={`${Astro.url.origin}/${slugify(reign.title.weight.class)}`}>
+						{reign.title.weight.class} <br /> {`${reign.title.weight.lb} lb`}
+					</a>
+				</p>
+			)}
+			<p class={`champion__title ${useUndisputedClass ? "champion--undisputed" : ""} champion--${reign.title.org.name.abbreviation.toLowerCase()}`}>
+				<a class="champion__link" href={`${Astro.url.origin}/${slugify(reign.title.weight.class)}/${slugify(reign.title.org.name.abbreviation)}`}>
+					{reign.title.org.name.abbreviation}
+				</a>
+			</p>
+		</>
+	) : (
+		<div class="champion__empty" />
+	)
+}
+
+<style>
+	.champion__date {
+		font-size: var(--font-size-small);
+		line-height: var(--line-height-small);
+		font-weight: 500;
+		text-align: right;
+		margin: 0 0 6px 0;
+		color: var(--theme-text-secondary);
+	}
+
+	.champion__boxer {
+		font-size: var(--font-size-medium);
+		line-height: var(--line-height-medium);
+		height: calc(var(--line-height-medium) * 2);
+		margin: 0 0 6px 0;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	.champion__weight {
+		font-size: var(--font-size-small);
+		line-height: var(--line-height-small);
+		font-weight: 500;
+		margin: 0 0 6px 0;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+		color: var(--theme-text-secondary);
+	}
+
+	.champion__link {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.champion__link:hover {
+		text-decoration: underline;
+	}
+
+	.champion__title {
+		font-size: 12px;
+		line-height: 14px;
+		font-weight: 600;
+		padding: 2px 8px;
+		border-radius: 4px;
+		text-decoration: none;
+		width: fit-content;
+	}
+
+	.champion--ibu {
+		color: var(--ibu-text);
+		background-color: var(--ibu-bg);
+	}
+
+	.champion--nysac {
+		color: var(--nysac-text);
+		background-color: var(--nysac-bg);
+	}
+
+	.champion--wba {
+		color: var(--wba-text);
+		background-color: var(--wba-bg);
+	}
+
+	.champion--wbar {
+		color: var(--wbar-text);
+		background-color: var(--wbar-bg);
+	}
+
+	.champion--wbas {
+		color: var(--wbas-text);
+		background-color: var(--wbas-bg);
+	}
+
+	.champion--wbc {
+		color: var(--wbc-text);
+		background-color: var(--wbc-bg);
+	}
+
+	.champion--ibf {
+		color: var(--ibf-text);
+		background-color: var(--ibf-bg);
+	}
+
+	.champion--wbo {
+		color: var(--wbo-text);
+		background-color: var(--wbo-bg);
+	}
+
+	.champion--ring {
+		color: var(--ring-text);
+		background-color: var(--ring-bg);
+	}
+
+	.champion--undisputed {
+		color: #000;
+		background-color: var(--theme-gold);
+		padding-left: 0;
+	}
+
+	.champion__empty {
+		height: 100%;
+	}
+</style>

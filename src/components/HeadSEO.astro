@@ -1,0 +1,33 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	img: {
+		url: string;
+		width: string;
+		height: string;
+		alt: string;
+	} | null;
+}
+
+const { title, description, img } = Astro.props;
+
+const socialImageURL = img !== null ? img.url : new URL("/og/default.png", Astro.url);
+const socialImageWidth = img !== null ? img.width : "1200";
+const socialImageHeight = img !== null ? img.height : "630";
+const socialImageAlt = img !== null ? img.alt : "Open Boxing logo";
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Open Boxing" />
+<meta property="og:title" content={title} />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={socialImageURL} />
+<meta property="og:image:width" content={socialImageWidth} />
+<meta property="og:image:height" content={socialImageHeight} />
+<meta property="og:image:alt" content={socialImageAlt} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content={socialImageURL} />

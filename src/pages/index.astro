@@ -1,0 +1,122 @@
+---
+import Layout from "../layouts/Layout.astro";
+import LatestChampions from "./_components/LatestChampions.astro";
+import CurrentChampions from "./_components/CurrentChampions.astro";
+import ScheduledBouts from "./_components/ScheduledBouts.astro";
+import { getScheduledBouts, getLatestReigns } from "../db/index";
+import { getCurrentChampions } from "../utils";
+
+const currentChampions = getCurrentChampions();
+const latestReigns = getLatestReigns(10);
+const scheduledBouts = getScheduledBouts();
+---
+
+<Layout title="Open Boxing" description="Open source world championship boxing data and articles." img={null}>
+	<main>
+		<header class="header">
+			<h1 class="header__title">Open Boxing</h1>
+			<p class="header__description">World championship boxing data and articles</p>
+		</header>
+		<div class="champions">
+			<section class="champions__recent">
+				<h2 class="champions__heading">Recently won titles</h2>
+				<LatestChampions latestReigns={latestReigns} />
+			</section>
+			<section class="champions__current">
+				<h2 class="champions__heading">
+					<a class="champions__link" href={`${Astro.url.origin}/champions`}>Current world champions</a>
+				</h2>
+				<CurrentChampions currentChampions={currentChampions} />
+			</section>
+			<section class="champions__scheduled">
+				<h2 class="champions__heading">
+					<a class="champions__link" href={`${Astro.url.origin}/scheduled-bouts`}>Scheduled world title bouts</a>
+				</h2>
+				<ScheduledBouts scheduledBouts={scheduledBouts} />
+			</section>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.header {
+		margin: 48px 0 2rem 0;
+	}
+
+	.header__title {
+		font-size: 40px;
+		line-height: 50px;
+		margin-bottom: 8px;
+		text-align: center;
+	}
+
+	.header__description {
+		max-width: 470px;
+		text-align: center;
+		margin: 0 auto;
+		color: var(--theme-text-secondary);
+	}
+
+	.champions__heading {
+		font-size: var(--data-font-size-h2);
+		line-height: var(--data-line-height-h2);
+		margin: 0 0 12px 0;
+	}
+
+	.champions__link {
+		color: var(--theme-text);
+		text-decoration: none;
+	}
+
+	.champions__link:hover {
+		text-decoration: underline;
+	}
+
+	.champions {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(12, 1fr);
+		grid-template-rows: repeat(3, auto);
+	}
+
+	.champions__recent {
+		background-color: var(--theme-bg);
+		grid-column: 1 / 13;
+		grid-row: 1;
+		box-shadow: 0px 8px var(--theme-bg), 0px 9px var(--theme-border);
+	}
+
+	.champions__current {
+		background-color: var(--theme-bg);
+		grid-column: 1 / 13;
+		grid-row: 2;
+		box-shadow: 0px 8px var(--theme-bg), 0px 9px var(--theme-border);
+	}
+
+	.champions__scheduled {
+		background-color: var(--theme-bg);
+		grid-column: 1 / 13;
+		grid-row: 3;
+	}
+
+	@media (min-width: 1280px) {
+		.champions {
+			grid-template-columns: repeat(16, 1fr);
+			grid-template-rows: repeat(2, auto);
+		}
+
+		.champions__recent {
+			grid-column: 1 / 17;
+		}
+
+		.champions__current {
+			box-shadow: none;
+		}
+
+		.champions__scheduled {
+			grid-column: 13 / 17;
+			grid-row: 2;
+			box-shadow: -8px 0px var(--theme-bg), -9px 0px var(--theme-border);
+		}
+	}
+</style>

@@ -1,0 +1,75 @@
+---
+import ChampionContent from "../../components/ChampionContent.astro";
+import type { Reign } from "../../types";
+
+interface Props {
+	latestReigns: Reign[];
+}
+
+const { latestReigns } = Astro.props;
+---
+
+<div class="champions">
+	{
+		latestReigns.map((reign) => (
+			<div class="champions__champion">
+				<ChampionContent reign={reign} dateFormat="D MMM YYYY" includeWeightClass={true} isUndisputed={false} />
+			</div>
+		))
+	}
+</div>
+
+<style>
+	.champions {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(12, 1fr);
+		grid-template-rows: repeat(2, 1fr);
+	}
+
+	.champions__champion {
+		grid-column: span 6;
+		background-color: var(--theme-content-bg);
+		padding: 12px;
+		overflow: hidden;
+		border: 1px solid var(--theme-border);
+		border-radius: 4px;
+		height: 134px;
+	}
+
+	.champions__champion:nth-of-type(n + 5) {
+		display: none;
+	}
+
+	@media (min-width: 768px) {
+		.champions__champion {
+			grid-column: span 4;
+		}
+
+		.champions__champion:nth-of-type(5),
+		.champions__champion:nth-of-type(6) {
+			display: initial;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.champions {
+			grid-template-rows: 1fr;
+		}
+
+		.champions__champion {
+			grid-column: span 2;
+		}
+	}
+
+	@media (min-width: 1280px) {
+		.champions {
+			grid-template-columns: repeat(16, 1fr);
+		}
+
+		.champions__champion:nth-of-type(7),
+		.champions__champion:nth-of-type(8) {
+			display: initial;
+		}
+	}
+</style>

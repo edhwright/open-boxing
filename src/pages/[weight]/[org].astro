@@ -1,0 +1,200 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import OrgStatus from "./_components/OrgStatus.astro";
+import WBAWarning from "./_components/WBAWarning.astro";
+import Overview from "./_components/Overview.astro";
+import Timeline from "./_components/Timeline.astro";
+import FeaturedBouts from "../../components/FeaturedBouts.astro";
+import { getAllTitles, getScheduledTitleBouts, getLatestTitleReign, getTitleReigns, getTitleBouts } from "../../db";
+import { geTimelineFromReignsAndBouts, slugify, getAllBoutArticlesIds, getAllFeaturedBoutPreviews, filterFeaturedBoutPreviewsByTitle } from "../../utils";
+import type { WeightClassCurrentChampions, TimelineDate, FeaturedBoutPreview } from "../../utils";
+import type { Title, Bout, Reign } from "../../types";
+
+interface Props {
+	title: Title;
+	timeline: TimelineDate[];
+	champions: WeightClassCurrentChampions;
+	scheduledBouts: Bout[];
+	featuredBoutPreviews: FeaturedBoutPreview[];
+	bouts: Bout[];
+	reigns: Reign[];
+	allBoutArticleIds: number[];
+}
+
+export async function getStaticPaths() {
+	const allTitles = getAllTitles();
+	const allFeaturedBoutPreviews = await getAllFeaturedBoutPreviews();
+	const allBoutArticleIds = await getAllBoutArticlesIds();
+
+	const data = allTitles.map((title) => {
+		const titleScheduledBouts = getScheduledTitleBouts(title.weight.class, title.org.name.abbreviation);
+		const titleChampion = getLatestTitleReign(title.weight.class, title.org.name.abbreviation);
+		const titleReigns = getTitleReigns(title.weight.class, title.org.name.abbreviation);
+		const titleBouts = getTitleBouts(title.weight.class, title.org.name.abbreviation);
+		const titleTimeline = geTimelineFromReignsAndBouts(titleReigns, titleBouts);
+		const titleFeaturedBoutPreviews = filterFeaturedBoutPreviewsByTitle(allFeaturedBoutPreviews, title.weight.class, title.org.name.abbreviation);
+
+		return {
+			params: {
+				weight: slugify(title.weight.class),
+				org: slugify(title.org.name.abbreviation),
+			},
+			props: {
+				title: title,
+				timeline: titleTimeline,
+				champion: titleChampion,
+				scheduledBouts: titleScheduledBouts,
+				featuredBoutPreviews: titleFeaturedBoutPreviews,
+				bouts: titleBouts,
+				reigns: titleReigns,
+				allBoutArticleIds: allBoutArticleIds,
+			},
+		};
+	});
+
+	return data;
+}
+
+const { title, timeline, champion, scheduledBouts, featuredBoutPreviews, bouts, reigns, allBoutArticleIds } = Astro.props;
+---
+
+<Layout
+	title={`Open Boxing • ${title.weight.class} • ${title.org.name.full}`}
+	description={`${title.org.name.full} ${title.weight.class} world title reigns and bouts.`}
+	img={null}
+>
+	<main class="content">
+		<Breadcrumbs
+			route={[
+				[title.weight.class, `${Astro.url.origin}/${slugify(title.weight.class)}`],
+				[title.org.name.full, `${Astro.url.origin}/${slugify(title.weight.class)}/${slugify(title.org.name.abbreviation)}`],
+			]}
+		/>
+
+		<header class="header">
+			<h1 class="header__title">{title.weight.class} • {title.org.name.full}</h1>
+			<Overview isActive={title.active} bouts={bouts} reigns={reigns} target="ORG" />
+		</header>
+
+		{title.active && <OrgStatus title={title} bouts={bouts} reigns={reigns} />}
+
+		{
+			featuredBoutPreviews.length > 0 && (
+				<section class="featured">
+					<h2 class="featured__title">
+						<a class="featured__link" href={`${Astro.url.origin}/articles#featured-bouts`}>
+							Featured bouts
+						</a>
+					</h2>
+					<FeaturedBouts featuredBoutPreviews={featuredBoutPreviews} />
+				</section>
+			)
+		}
+
+		{title.org.name.abbreviation.includes("WBA") && <WBAWarning title={title} />}
+
+		<section class="timeline">
+			<h2 id="timeline" class="timeline__title">Timeline</h2>
+			<Timeline timeline={timeline} boutArticleIds={allBoutArticleIds} target="ORG" />
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.header {
+		margin: 2rem auto;
+	}
+
+	.header__title {
+		margin-bottom: 1rem;
+		font-size: var(--font-size-h1);
+		line-height: var(--line-height-h1);
+	}
+
+	.featured__title {
+		font-size: var(--font-size-h2);
+		line-height: var(--line-height-h2);
+		margin-bottom: 12px;
+	}
+
+	.featured__link {
+		color: var(--theme-text);
+		text-decoration: none;
+	}
+
+	.featured__link:hover {
+		text-decoration: underline;
+	}
+
+	.featured,
+	.timeline {
+		margin-top: 2rem;
+		margin-bottom: 2rem;
+	}
+
+	.timeline__title {
+		font-size: var(--font-size-h2);
+		line-height: var(--line-height-h2);
+		margin: 12px 0 12px 0;
+	}
+
+	.featured {
+		padding: 1rem 0 2rem 0;
+		position: relative;
+		background-image: var(--theme-featured-bg);
+		border-top: 1px solid var(--theme-border);
+	}
+
+	.featured:before {
+		content: "";
+		position: absolute;
+		width: 12px;
+		top: 0;
+		bottom: 0;
+		right: 100%;
+		background-image: var(--theme-featured-bg);
+		border-top: 1px solid var(--theme-border);
+		z-index: -1;
+	}
+
+	.featured:after {
+		content: "";
+		position: absolute;
+		width: 12px;
+		top: 0;
+		bottom: 0;
+		left: 100%;
+		background-image: var(--theme-featured-bg);
+		border-top: 1px solid var(--theme-border);
+		z-index: -1;
+	}
+
+	@media (min-width: 1280px) {
+		.content {
+			width: 100%;
+		}
+
+		.header,
+		.featured:global(> *),
+		.timeline__title {
+			max-width: 956px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.timeline {
+			max-width: 1280px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.featured:before {
+			display: none;
+		}
+
+		.featured:after {
+			display: none;
+		}
+	}
+</style>

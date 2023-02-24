@@ -1,0 +1,56 @@
+---
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+import type { Bout } from "../../../../types";
+
+interface Props {
+	bout: Bout;
+	author: string | null;
+	publication: string;
+	publicationDate: string;
+	link: {
+		text: string;
+		url: string;
+	};
+}
+
+const { bout, author, publication, publicationDate, link } = Astro.props;
+
+let relativeTimeString = "";
+if (dayjs(publicationDate).isSame(bout.date, "day")) {
+	relativeTimeString = "the day of the bout";
+} else if (dayjs(publicationDate).isBefore(bout.date) && dayjs(publicationDate).from(bout.date, true) === "a day") {
+	relativeTimeString = "the day before the bout";
+} else if (dayjs(publicationDate).isBefore(bout.date)) {
+	relativeTimeString = `${dayjs(publicationDate).from(bout.date, true)} before the bout`;
+} else if (dayjs(publicationDate).from(bout.date, true) === "a day") {
+	relativeTimeString = "the day after the bout";
+} else {
+	relativeTimeString = `${dayjs(publicationDate).from(bout.date, true)} after the bout`;
+}
+---
+
+<p>
+	<time datetime={dayjs(publicationDate).format("YYYY-MM-DD")}>
+		{dayjs(publicationDate).format("D MMMM YYYY")}
+	</time> ({relativeTimeString})
+</p>
+<p>{author && <>{`${author}, `}</>}{publication}</p>
+<p><a target="_blank" href={link.url}>{link.text}</a></p>
+
+<style>
+	p {
+		font-size: 13px;
+		line-height: 17px;
+	}
+
+	a {
+		color: var(--theme-text);
+		text-decoration: none;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+</style>

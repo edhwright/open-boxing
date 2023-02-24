@@ -1,0 +1,77 @@
+---
+import BoutContent from "../../components/BoutContent.astro";
+import type { Bout } from "../../types";
+
+interface Props {
+	scheduledBouts: Bout[];
+}
+
+const { scheduledBouts } = Astro.props;
+---
+
+<div class="bouts">
+	{
+		scheduledBouts.map((bout) => (
+			<div class="bouts__container">
+				<div class="bouts__bout">
+					<BoutContent bout={bout} dateFormat="ddd D MMM YYYY" includeWeightClass={true} useShortName={false} />
+				</div>
+			</div>
+		))
+	}
+</div>
+
+<style>
+	.bouts {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(12, 1fr);
+	}
+
+	.bouts__container {
+		grid-column: span 12;
+		box-shadow: 0px 8px var(--theme-bg), 0px 9px var(--theme-border);
+	}
+
+	.bouts__container:nth-child(12) {
+		box-shadow: none;
+	}
+
+	.bouts__bout {
+		background-color: var(--theme-content-bg);
+		padding: 12px;
+		/* grid-column: span 12; */
+		/* box-shadow: 0px 7px var(--theme-bg), 0px 9px var(--theme-divider); */
+		border: 1px solid var(--theme-border);
+		border-radius: 4px;
+		height: 158px;
+	}
+
+	@media (min-width: 768px) {
+		.bouts__container {
+			grid-column: span 6;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.bouts__container {
+			grid-column: span 4;
+		}
+	}
+
+	@media (min-width: 1280px) {
+		.bouts {
+			grid-template-columns: repeat(4, 1fr);
+		}
+
+		.bouts__container {
+			grid-column: span 4;
+			/* box-shadow: 0px 8px var(--theme-bg), 0px 9px var(--theme-border); */
+			/* position: relative; */
+		}
+
+		.bouts__container:nth-child(n + 13) {
+			display: none;
+		}
+	}
+</style>

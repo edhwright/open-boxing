@@ -1,0 +1,85 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import BoutContent from "../../components/BoutContent.astro";
+import dayjs from "dayjs";
+import { getScheduledBouts } from "../../db";
+import { group } from "d3-array";
+
+const scheduledBouts = getScheduledBouts();
+const scheduledBoutsByMonth = group(scheduledBouts, (b) => dayjs(b.date).format("MMMM YYYY"));
+---
+
+<Layout title="Open Boxing • Scheduled Bouts" description="Scheduled world title boxing bouts from the WBA, WBC, IBF and WBO." img={null}>
+	<main>
+		<Breadcrumbs route={[["Scheduled Bouts", `${Astro.url.origin}/scheduled-bouts`]]} />
+		<h1 class="header">Scheduled world title bouts</h1>
+		{
+			[...scheduledBoutsByMonth].map(([month, bouts]) => (
+				<section class="month">
+					<h2 class="month__name">{month}</h2>
+					<ol class="month__bouts">
+						{bouts.map((bout) => (
+							<li class="month__bout">
+								<BoutContent bout={bout} dateFormat="ddd D MMM YYYY" includeWeightClass={true} useShortName={false} />
+							</li>
+						))}
+					</ol>
+				</section>
+			))
+		}
+	</main>
+</Layout>
+
+<style>
+	.header {
+		margin: 2rem auto;
+		font-size: var(--font-size-h1);
+		line-height: var(--line-height-h1);
+	}
+
+	.month {
+		margin-top: 2rem;
+		margin-bottom: 2rem;
+	}
+
+	.month__name {
+		font-size: var(--font-size-h2);
+		line-height: var(--line-height-h2);
+		margin: 12px 0 12px 0;
+	}
+
+	.month__bouts {
+		grid-column: span 12;
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(12, 1fr);
+		margin-bottom: 1rem;
+		list-style: none;
+		padding: 0;
+	}
+
+	.month__bout {
+		grid-column: span 6;
+		background-color: var(--theme-content-bg);
+		padding: 12px;
+		border: 1px solid var(--theme-border);
+		border-radius: 4px;
+		height: 158px;
+	}
+
+	@media (min-width: 768px) {
+		.month__bout {
+			grid-column: span 4;
+		}
+	}
+
+	@media (min-width: 1280px) {
+		.header,
+		.month {
+			max-width: 956px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+</style>

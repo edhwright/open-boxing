@@ -1,0 +1,176 @@
+---
+import TimelineBelts from "./TimelineBelts.svelte";
+import TimelineEvents from "../../../../components/TimelineEvents.astro";
+import TimelineReferences from "../../../../components/TimelineReferences.astro";
+import dayjs from "dayjs";
+import type { TimelineDate } from "../../../../utils";
+import type { Reign } from "../../../../types";
+
+interface Props {
+	timeline: TimelineDate[];
+	reigns: Reign[];
+	boutArticleIds: number[];
+}
+
+const { timeline, reigns, boutArticleIds } = Astro.props;
+---
+
+<ol class="timeline">
+	{
+		timeline.map((timelineDate) => (
+			<li class="timeline__item" id={timelineDate.date}>
+				<ul class="timeline__belts">
+					<TimelineBelts reigns={reigns} timelineDate={timelineDate} />
+				</ul>
+				<p class="timeline__date">
+					<a href={`#${timelineDate.date}`} class="timeline__link">
+						<img class="timeline__icon" src={`${Astro.url.origin}/icons/link.svg`} />
+					</a>
+					{dayjs(timelineDate.date).format("D MMM YYYY")}
+				</p>
+				<div class="timeline__events">
+					<TimelineEvents timelineDate={timelineDate} />
+				</div>
+				<ul class="timeline__references">
+					<TimelineReferences timelineDate={timelineDate} boutArticleIds={boutArticleIds} />
+				</ul>
+			</li>
+		))
+	}
+</ol>
+
+<style>
+	.timeline {
+		padding: 0;
+		list-style: none;
+	}
+
+	.timeline__item {
+		width: 100%;
+		display: flex;
+	}
+
+	.timeline__belts {
+		display: none;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.timeline__date {
+		padding: 12px 16px 8px 0;
+		display: flex;
+		justify-content: flex-end;
+		width: 20%;
+		word-spacing: 100vw;
+		color: var(--theme-text-secondary);
+		background-color: var(--theme-content-bg);
+		border-bottom: 1px solid var(--theme-border);
+		border-left: 1px solid var(--theme-border);
+		font-size: var(--font-size-small);
+		line-height: var(--line-height-medium);
+		font-weight: 500;
+		text-align: right;
+	}
+
+	.timeline__item:first-child > .timeline__date {
+		border-top: 1px solid var(--theme-border);
+		border-top-left-radius: 4px;
+	}
+
+	.timeline__item:last-child > .timeline__date {
+		border-bottom-left-radius: 4px;
+	}
+
+	.timeline__link {
+		display: none;
+		width: 20px;
+		height: 20px;
+		position: relative;
+		top: -2px;
+		margin-right: 4px;
+	}
+
+	.timeline__icon {
+		/* stroke: var(--theme-text); */
+		filter: var(--theme-svg-icon-filter);
+	}
+
+	.timeline__events {
+		width: 80%;
+		background-color: var(--theme-content-bg);
+		border-bottom: 1px solid var(--theme-border);
+		border-right: 1px solid var(--theme-border);
+	}
+
+	.timeline__item:first-child > .timeline__events {
+		border-top: 1px solid var(--theme-border);
+		border-top-right-radius: 4px;
+	}
+
+	.timeline__item:last-child > .timeline__events {
+		border-borrom-right-radius: 4px;
+	}
+
+	.timeline__references {
+		display: none;
+		padding: 12px 16px;
+		list-style-type: none;
+		background-color: var(--theme-content-bg);
+		border-bottom: 1px solid var(--theme-border);
+	}
+
+	@media (min-width: 768px) {
+		.timeline__date {
+			word-spacing: initial;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.timeline__belts {
+			display: flex;
+			justify-content: flex-end;
+			width: calc(((100% - (1rem * 7)) * 1 / 8));
+			margin-right: 1rem;
+			/* width: calc(((100% - (1rem * 7)) * 1/8) + 1rem); */
+		}
+
+		.timeline__date {
+			width: calc(((100% - (1rem * 7)) * 1 / 8) + 1rem);
+			padding: 12px 16px 0 0;
+		}
+
+		.timeline__date:hover > .timeline__link {
+			display: initial;
+		}
+
+		.timeline__events {
+			width: calc(((100% - (1rem * 7)) * 6 / 16) + 2rem);
+			border-right: none;
+			/* width: calc(((100% - (1rem * 7)) * 1 / 2) + 3rem); */
+		}
+
+		.timeline__item:first-child > .timeline__events {
+			border-top-right-radius: 0;
+		}
+
+		.timeline__item:last-child > .timeline__events {
+			border-bottom-right-radius: 0;
+		}
+
+		.timeline__references {
+			display: initial;
+			width: calc(((100% - (1rem * 7)) * 1 / 4) + 2rem);
+			border-right: 1px solid var(--theme-border);
+		}
+
+		.timeline__item:first-child > .timeline__references {
+			border-top: 1px solid var(--theme-border);
+			border-top-right-radius: 4px;
+		}
+
+		.timeline__item:last-child > .timeline__references {
+			border-bottom-right-radius: 4px;
+		}
+	}
+</style>

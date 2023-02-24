@@ -1,0 +1,53 @@
+---
+import Alert from "../../../components/Alert.astro";
+import { slugify } from "../../../utils";
+import type { Title } from "../../../types";
+
+interface Props {
+	title: Title;
+}
+
+const { title } = Astro.props;
+---
+
+<Alert type="INFO">
+	{
+		title.org.name.abbreviation === "WBA" && (
+			<p>
+				The WBA timeline stops on the introduction of the WBA Super title. See also: <a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbar`}>WBA Regular</a>,
+				<a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbas`}>WBA Super</a>
+			</p>
+		)
+	}
+	{
+		title.org.name.abbreviation === "WBAR" && (
+			<p>
+				The WBA Regular timeline starts on the introduction of the WBA Super title. See also: <a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wba`}>WBA</a>,
+				<a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbas`}>WBA Super</a>
+			</p>
+		)
+	}
+	{
+		title.org.name.abbreviation === "WBAS" && (
+			<p>
+				The WBA timeline stops on the introduction of the WBA Super title. See also: <a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wba`}>WBA</a>,{" "}
+				<a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbar`}>WBA Regular</a>
+			</p>
+		)
+	}
+</Alert>
+
+<style>
+	p {
+		font-size: var(--font-size-medium);
+		line-height: var(--line-height-medium);
+	}
+
+	a {
+		text-decoration: none;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+</style>

@@ -1,0 +1,223 @@
+---
+import { getAllTitles, getScheduledWeightClassBouts, getWeightClassBouts, getWeightClassReigns } from "../../db";
+import {
+	getCurrentWeightClassChampions,
+	geTimelineFromReignsAndBouts,
+	slugify,
+	getAllBoutArticlesIds,
+	getAllFeaturedBoutPreviews,
+	filterFeaturedBoutPreviewsByWeightClass,
+} from "../../utils";
+import type { WeightClassCurrentChampions, TimelineDate, FeaturedBoutPreview } from "../../utils";
+import type { Bout, Reign } from "../../types";
+import Layout from "../../layouts/Layout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Overview from "./_components/Overview.astro";
+import Timeline from "./_components/Timeline.astro";
+import FeaturedBouts from "../../components/FeaturedBouts.astro";
+import ScheduledBouts from "./_components/ScheduledBouts.astro";
+import CurrentChampions from "./_components/CurrentChampions.astro";
+
+interface Props {
+	weightClass: string;
+	timeline: TimelineDate[];
+	champions: WeightClassCurrentChampions;
+	scheduledBouts: Bout[];
+	featuredBoutPreviews: FeaturedBoutPreview[];
+	bouts: Bout[];
+	reigns: Reign[];
+	allBoutArticleIds: number[];
+}
+
+export async function getStaticPaths() {
+	const allWeightClasses = [...new Set(getAllTitles().map((title) => title.weight.class))];
+	const allFeaturedBoutPreviews = await getAllFeaturedBoutPreviews();
+	const allBoutArticleIds = await getAllBoutArticlesIds();
+
+	const data = allWeightClasses.map((weightClass) => {
+		const weightClassScheduledBouts = getScheduledWeightClassBouts(weightClass);
+		const weightClassChampions = getCurrentWeightClassChampions(weightClass);
+		const weightClassReigns = getWeightClassReigns(weightClass);
+		const weightClassBouts = getWeightClassBouts(weightClass);
+		const weightClassTimeline = geTimelineFromReignsAndBouts(weightClassReigns, weightClassBouts);
+		const weightClassFeaturedBoutPreviews = filterFeaturedBoutPreviewsByWeightClass(allFeaturedBoutPreviews, weightClass);
+
+		return {
+			params: {
+				weight: slugify(weightClass),
+			},
+			props: {
+				weightClass: weightClass,
+				timeline: weightClassTimeline,
+				champions: weightClassChampions,
+				scheduledBouts: weightClassScheduledBouts,
+				featuredBoutPreviews: weightClassFeaturedBoutPreviews,
+				bouts: weightClassBouts,
+				reigns: weightClassReigns,
+				allBoutArticleIds: allBoutArticleIds,
+			},
+		};
+	});
+
+	return data;
+}
+
+const { weightClass, timeline, champions, scheduledBouts, featuredBoutPreviews, bouts, reigns, allBoutArticleIds } = Astro.props;
+
+const isWeightClassActive = getAllTitles().filter((title) => title.weight.class === weightClass && title.active).length > 0;
+---
+
+<Layout title={`Open Boxing • ${weightClass}`} description={`${weightClass} current champions, world title reigns and bouts.`} img={null}>
+	<main class="content">
+		<Breadcrumbs route={[[weightClass, `${Astro.url.origin}/${slugify(weightClass)}`]]} />
+		<header class="header">
+			<h1 class="header__title">{weightClass}</h1>
+			<Overview isActive={isWeightClassActive} bouts={bouts} reigns={reigns} target="WEIGHT" />
+		</header>
+		{
+			featuredBoutPreviews.length > 0 && (
+				<section class="featured">
+					<h2 class="featured__title">
+						<a class="featured__link" href={`${Astro.url.origin}/articles#featured-bouts`}>
+							Featured bouts
+						</a>
+					</h2>
+					<FeaturedBouts featuredBoutPreviews={featuredBoutPreviews} />
+				</section>
+			)
+		}
+		<section class="bouts">
+			<h2 class="bouts__title">
+				<a class="bouts__link" href={`${Astro.url.origin}/scheduled-bouts`}>Scheduled world title bouts</a>
+			</h2>
+			{scheduledBouts.length > 0 ? <ScheduledBouts scheduledBouts={scheduledBouts} /> : <div class="bouts__empty">No scheduled {weightClass} world title bouts</div>}
+		</section>
+		<section class="champions">
+			<h2 class="champions__title">
+				<a class="champions__link" href={`${Astro.url.origin}/champions`}>Current champions</a>
+			</h2>
+			<CurrentChampions currentChampions={champions} />
+		</section>
+		<section class="timeline">
+			<h2 id="timeline" class="timeline__title">Timeline</h2>
+			<Timeline timeline={timeline} boutArticleIds={allBoutArticleIds} target="WEIGHT" />
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.header {
+		margin: 2rem auto;
+	}
+
+	.header__title {
+		margin-bottom: 1rem;
+		font-size: var(--font-size-h1);
+		line-height: var(--line-height-h1);
+	}
+
+	.featured__title {
+		font-size: var(--font-size-h2);
+		line-height: var(--line-height-h2);
+		margin-bottom: 12px;
+	}
+
+	.featured__link {
+		color: var(--theme-text);
+		text-decoration: none;
+	}
+
+	.bouts__link,
+	.champions__link {
+		color: var(--theme-text);
+		text-decoration: none;
+	}
+
+	.featured__link:hover,
+	.bouts__link:hover,
+	.champions__link:hover {
+		text-decoration: underline;
+	}
+
+	.featured,
+	.bouts,
+	.champions,
+	.timeline {
+		margin-top: 2rem;
+		margin-bottom: 2rem;
+	}
+
+	.bouts__title,
+	.champions__title,
+	.timeline__title {
+		font-size: var(--font-size-h2);
+		line-height: var(--line-height-h2);
+		margin: 12px 0 12px 0;
+	}
+
+	.featured {
+		padding: 1rem 0 2rem 0;
+		position: relative;
+		background-image: var(--theme-featured-bg);
+		border-top: 1px solid var(--theme-border);
+	}
+
+	.featured:before {
+		content: "";
+		position: absolute;
+		width: 12px;
+		top: 0;
+		bottom: 0;
+		right: 100%;
+		background-image: var(--theme-featured-bg);
+		border-top: 1px solid var(--theme-border);
+		z-index: -1;
+	}
+
+	.featured:after {
+		content: "";
+		position: absolute;
+		width: 12px;
+		top: 0;
+		bottom: 0;
+		left: 100%;
+		background-image: var(--theme-featured-bg);
+		border-top: 1px solid var(--theme-border);
+		z-index: -1;
+	}
+
+	.bouts__empty {
+		font-size: var(--font-size-medium);
+		line-height: var(--line-height-medium);
+	}
+
+	@media (min-width: 1280px) {
+		.content {
+			width: 100%;
+		}
+
+		.header,
+		.featured:global(> *),
+		.bouts,
+		.champions,
+		.timeline__title {
+			max-width: 956px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.timeline {
+			max-width: 1280px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.featured:before {
+			display: none;
+		}
+
+		.featured:after {
+			display: none;
+		}
+	}
+</style>

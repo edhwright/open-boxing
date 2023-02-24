@@ -1,0 +1,132 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import { group } from "d3-array";
+import { getAllTitles } from "../../db";
+import { weightClasses, slugify } from "../../utils";
+
+const titles = getAllTitles();
+const titlesByWeightClass = group(titles, (t) => t.weight.class);
+---
+
+<Layout title="Open Boxing • Data" description="A collection of links where you can easily access all of the resources and information on Open Boxing." img={null}>
+	<main>
+		<Breadcrumbs route={[["Data", `${Astro.url.origin}/data`]]} />
+		<h1 class="header">Data</h1>
+		<div class="details">
+			<p>Below are links to the weight classes and titles we currently track.</p>
+			<p>
+				All the data used by Open Boxing can be found on <a class="details__link" href="" target="_blank">GitHub</a> as CSV files. We also offer an <a
+					class="details__link"
+					href={`${Astro.url.origin}/api`}>API</a
+				> to explore this data.
+			</p>
+		</div>
+		<div>
+			{
+				weightClasses.map((weightClass) => (
+					<section class="weight">
+						<h2 class="weight__heading">
+							<a class="weight__link" href={`${Astro.url.origin}/${slugify(weightClass.class)}`}>
+								{weightClass.class}
+							</a>
+						</h2>
+						<div class="titles">
+							{titlesByWeightClass.get(weightClass.class)!.map((title) => (
+								<p class="titles__title">
+									<a class="titles__link" href={`${Astro.url.origin}/${slugify(weightClass.class)}/${slugify(title.org.name.abbreviation)}`}>
+										{title.org.name.full}
+									</a>
+								</p>
+							))}
+						</div>
+					</section>
+				))
+			}
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.header {
+		margin: 2rem auto;
+		font-size: var(--font-size-h1);
+		line-height: var(--line-height-h1);
+	}
+
+	.details > p {
+		margin: 1rem 0;
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.details__link {
+		color: var(--theme-text);
+	}
+
+	.weight {
+		padding-top: 24px;
+		padding-bottom: 24px;
+		border-bottom: 1px solid var(--theme-border);
+	}
+
+	.weight:last-child {
+		border-bottom: none;
+	}
+
+	.weight__heading {
+		font-size: var(--font-size-h2);
+		line-height: var(--line-height-h2);
+		margin: 0 0 16px 0;
+	}
+
+	.weight__link {
+		color: var(--theme-text);
+		text-decoration: none;
+	}
+
+	.weight__link:hover {
+		text-decoration: underline;
+	}
+
+	.titles__title {
+		border-bottom: 1px solid var(--theme-border);
+		background-color: var(--theme-content-bg);
+	}
+
+	.titles__title:hover {
+		background-color: var(--theme-border);
+		text-decoration: underline;
+	}
+
+	.titles__title:first-child {
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+	}
+
+	.titles__title:last-child {
+		border: none;
+		border-bottom-left-radius: 4px;
+		border-bottom-right-radius: 4px;
+	}
+
+	.titles__link {
+		padding: 4px 0 4px 16px;
+		line-height: 28px;
+		width: 100%;
+		display: block;
+		font-size: var(--font-size-medium);
+		color: var(--theme-text);
+		text-decoration: none;
+	}
+
+	@media (min-width: 1280px) {
+		.header,
+		.details,
+		.weight {
+			max-width: 956px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+</style>

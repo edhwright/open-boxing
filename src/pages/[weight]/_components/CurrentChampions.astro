@@ -1,0 +1,68 @@
+---
+import ChampionContent from "../../../components/ChampionContent.astro";
+import type { WeightClassCurrentChampions } from "../../../utils";
+import type { Reign } from "../../../types";
+
+interface Props {
+	currentChampions: WeightClassCurrentChampions;
+}
+
+const { currentChampions } = Astro.props;
+
+const useUndisputedClass = (reign: Reign | null, undisputed: boolean) => reign && undisputed && ["WBAS", "WBC", "IBF", "WBO"].includes(reign.title.org.name.abbreviation);
+---
+
+<div class="champions">
+	{
+		currentChampions.champions.map((reign) => (
+			<div
+				class={`champions__champion ${useUndisputedClass(reign, currentChampions.undisputed) ? "champions--undisputed" : ""} ${
+					reign ? `champions--${reign.title.org.name.abbreviation.toLowerCase()}` : "champions--empty"
+				}`}
+			>
+				<ChampionContent reign={reign} dateFormat="D MMM YYYY -" includeWeightClass={false} isUndisputed={currentChampions.undisputed} />
+			</div>
+		))
+	}
+</div>
+
+<style>
+	.champions {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(12, 1fr);
+	}
+
+	.champions__champion {
+		padding: 12px;
+		grid-column: span 6;
+		overflow: hidden;
+		background-color: var(--theme-content-bg);
+		border: 1px solid var(--theme-border);
+		border-radius: 4px;
+		height: 100px;
+	}
+
+	.champions--undisputed {
+		background-color: var(--theme-gold);
+		border: 1px solid var(--theme-gold);
+	}
+
+	@media (min-width: 768px) {
+		.champions__champion {
+			grid-column: span 4;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.champions__champion {
+			grid-column: span 2;
+		}
+
+		.champions--wbas:is(.champions--undisputed),
+		.champions--wbc:is(.champions--undisputed),
+		.champions--ibf:is(.champions--undisputed) {
+			box-shadow: calc(1rem + 6px) 0px 0px 0px var(--theme-gold);
+		}
+	}
+</style>

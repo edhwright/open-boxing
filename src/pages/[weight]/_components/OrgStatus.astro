@@ -1,0 +1,87 @@
+---
+import BoxerName from "../../../components/BoxerName.astro";
+import dayjs from "dayjs";
+import type { Title, Reign, Bout } from "../../../types";
+
+interface Props {
+	title: Title;
+	reigns: Reign[];
+	bouts: Bout[];
+}
+
+const { title, reigns, bouts } = Astro.props;
+
+const latestReign = reigns[reigns.length - 1];
+const latestBout = bouts[bouts.length - 1];
+const currentChampionTitleDefenses = bouts.filter((bout) => bout.status === "FINISHED" && bout.date > latestReign.period.begins).length;
+---
+
+<div class="status">
+	<p class="status__reign">
+		Current champion: {
+			latestReign.period.current ? (
+				<>
+					<span class="status__boxer">
+						<BoxerName boxer={latestReign.champion} useShortName={false} useTwoLines={false} />
+					</span>{" "}
+					({currentChampionTitleDefenses} title {currentChampionTitleDefenses === 1 ? "defense" : "defenses"})
+				</>
+			) : (
+				<>Vacant (since {dayjs(latestReign.period.ends).format("D MMMM YYYY")})</>
+			)
+		}
+	</p>
+	<p class="status__bout">
+		{
+			latestBout.status === "SCHEDULED" ? (
+				<>
+					Scheduled bout:
+					<span class="status__boxer">
+						<BoxerName boxer={latestBout.boxers.boxerA} useShortName={false} useTwoLines={false} />
+					</span>{" "}
+					v{" "}
+					<span class="status__boxer">
+						<BoxerName boxer={latestBout.boxers.boxerB} useShortName={false} useTwoLines={false} />
+					</span>
+				</>
+			) : (
+				<>No scheduled {`${title.org.name.short} ${title.weight.class}`} bout</>
+			)
+		}
+	</p>
+</div>
+
+<style>
+	.status {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(12, 1fr);
+		margin: 2rem auto;
+	}
+
+	.status__boxer {
+		display: inline-block;
+		color: var(--theme-text);
+		text-decoration: none;
+	}
+
+	.status__reign,
+	.status__bout {
+		grid-column: span 12;
+		font-size: var(--font-size-medium);
+		line-height: var(--line-height-medium);
+	}
+
+	@media (min-width: 768px) {
+		.status__reign,
+		.status__bout {
+			grid-column: span 6;
+		}
+	}
+
+	@media (min-width: 1280px) {
+		.status {
+			max-width: 956px;
+		}
+	}
+</style>

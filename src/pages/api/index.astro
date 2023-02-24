@@ -1,0 +1,105 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Docs from "./_components/Docs.md";
+---
+
+<Layout title="Open Boxing • API" description="Open Boxing API." img={null}>
+	<main>
+		<Breadcrumbs route={[["API", `${Astro.url.origin}/api`]]} />
+		<h1 class="header">API</h1>
+		<div class="description">
+			<p>
+				We provide a basic API to explore our data. Open Boxing is in very early development, so expect some mistakes and missing data. Found a bug or mistake? Please raise an
+				issue on <a href="">GitHub</a>.
+			</p>
+		</div>
+		<div class="content">
+			<hr />
+			<Docs />
+		</div>
+	</main>
+</Layout>
+
+<style is:global>
+	p {
+		margin: 1rem 0;
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	h2 {
+		margin-top: 24px;
+		margin-bottom: 16px;
+		font-size: 24px;
+		line-height: 30px;
+		font-size: var(--font-size-h2);
+		line-height: var(--line-height-h2);
+	}
+
+	h3 {
+		margin-top: 24px;
+		margin-bottom: 16px;
+		font-size: var(--font-size-h3);
+		line-height: var(--line-height-h3);
+	}
+
+	pre {
+		margin-bottom: 16px;
+		font-size: 13px;
+		line-height: 17px;
+		padding: 16px;
+		tab-size: 2;
+		overflow-x: scroll;
+		border-radius: 4px;
+	}
+
+	p > code {
+		padding: 6px;
+		font-size: 14px;
+		line-height: 20px;
+		border-radius: 4px;
+		background-color: rgb(62, 67, 74);
+		color: rgb(202, 219, 216);
+		display: inline-block;
+		margin-bottom: 4px;
+	}
+
+	hr {
+		margin: 24px 0;
+		border: 0;
+		border-top: 1px solid var(--theme-border);
+	}
+
+	@media (min-width: 768px) {
+		pre {
+			font-size: 14px;
+			line-height: 20px;
+		}
+	}
+</style>
+<style>
+	.header {
+		margin: 2rem auto;
+		font-size: var(--font-size-h1);
+		line-height: var(--line-height-h1);
+	}
+
+	.description > p > a {
+		color: var(--theme-text);
+	}
+
+	.content {
+		max-width: 100%;
+	}
+
+	@media (min-width: 1280px) {
+		.header,
+		.description,
+		.content {
+			max-width: 956px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+</style>

@@ -1,0 +1,87 @@
+---
+interface Props {
+	type: "INFO" | "ALERT";
+}
+
+const { type } = Astro.props;
+---
+
+<div class={`alert ${type === "INFO" ? "alert--info" : "alert--warning"}`}>
+	{
+		type === "INFO" ? (
+			<svg
+				class="alert__icon"
+				xmlns="http://www.w3.org/2000/svg"
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="rgb(255, 255, 255)"
+				fill="none"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+				<circle cx="12" cy="12" r="9" />
+				<line x1="12" y1="8" x2="12.01" y2="8" />
+				<polyline points="11 12 12 12 12 16 13 16" />
+			</svg>
+		) : (
+			<svg
+				class="alert__icon"
+				xmlns="http://www.w3.org/2000/svg"
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="rgb(255, 255, 255)"
+				fill="none"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+				<path d="M12 9v2m0 4v.01" />
+				<path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
+			</svg>
+		)
+	}
+
+	<div class={`alert__body ${type === "INFO" ? "info--border" : "warning--border"}`}>
+		<slot />
+	</div>
+</div>
+
+<style>
+	.alert {
+		display: flex;
+		border-radius: 4px;
+		color: var(--theme-callout-text);
+		background-color: var(--theme-callout-bg);
+		/* background-color: var(--theme-content-bg);
+		border: 1px solid var(--theme-border);
+		color: var(--theme-text); */
+	}
+
+	.alert__icon {
+		margin: 1rem;
+		min-width: 30px;
+		align-self: center;
+		justify-self: center;
+	}
+
+	.alert__body {
+		margin: auto 0;
+		padding: 1rem 1rem 1rem 0;
+	}
+
+	.alert__body :global(a) {
+		color: rgb(255, 255, 255);
+	}
+
+	@media (min-width: 1280px) {
+		.alert {
+			max-width: 956px;
+			margin: 0 auto;
+		}
+	}
+</style>

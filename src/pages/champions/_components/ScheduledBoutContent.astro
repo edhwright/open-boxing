@@ -1,0 +1,72 @@
+---
+import BoxerName from "../../../components/BoxerName.astro";
+import dayjs from "dayjs";
+import type { Bout } from "../../../types";
+
+interface Props {
+	bout: Bout;
+}
+
+const { bout } = Astro.props;
+---
+
+<p class="bout__date">
+	<time datetime={bout.date}>
+		{dayjs(bout.date).format("ddd D MMM YYYY")}
+	</time>
+</p>
+
+<p class="bout__boxers">
+	<span class="bout__boxer"><BoxerName boxer={bout.boxers.boxerA} useShortName={true} useTwoLines={false} /></span> v <br />
+	<span class="bout__boxer"><BoxerName boxer={bout.boxers.boxerB} useShortName={true} useTwoLines={false} /></span>
+</p>
+
+<ul class="bout__titles">
+	{
+		bout.titles.map((title) => (
+			<li>
+				<div title={`${title.weight.class} • ${title.org.name.short}`} class="bout__title" style={`background-color: var(--${title.org.name.abbreviation.toLowerCase()}-bg);`} />
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.bout__date {
+		font-size: var(--font-size-small);
+		line-height: var(--line-height-small);
+		font-weight: 500;
+		text-align: right;
+		margin: 0 0 6px 0;
+		color: var(--theme-text-secondary);
+	}
+
+	.bout__boxers {
+		font-size: var(--font-size-medium);
+		line-height: var(--line-height-medium);
+		height: calc(var(--line-height-medium) * 2);
+		margin: 0 0 6px 0;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	.bout__boxer {
+		display: inline-block;
+	}
+
+	.bout__titles {
+		display: flex;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		height: 18px;
+	}
+
+	.bout__title {
+		height: 14px;
+		width: 14px;
+		border-radius: 50%;
+		margin: 2px 4px 2px 0;
+	}
+</style>

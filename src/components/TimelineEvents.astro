@@ -1,0 +1,118 @@
+---
+import BoutResultString from "./BoutResultString.astro";
+import TitleTags from "./TitleTags.astro";
+import { slugify } from "../utils";
+import { group } from "d3-array";
+import type { TimelineDate } from "../utils";
+
+interface Props {
+	timelineDate: TimelineDate;
+}
+
+const { timelineDate } = Astro.props;
+---
+
+<>
+	{
+		timelineDate.events.bouts &&
+			timelineDate.events.bouts.map((bout) => (
+				<div class="bout">
+					<p class="bout__result">
+						<BoutResultString bout={bout} />
+					</p>
+					<p class="bout__weight">
+						<a class="bout__link" href={`${Astro.url.origin}/${slugify(bout.weight.class)}`}>
+							{bout.weight.class} ({bout.weight.lb + " lb"})
+						</a>
+					</p>
+					<ul class="bout__titles">
+						<TitleTags titles={bout.titles} includeLinks={true} />
+					</ul>
+				</div>
+			))
+	}
+	{
+		timelineDate.events.titleReignsBegin &&
+			[...group(timelineDate.events.titleReignsBegin, (r) => r.champion.championId)].map(([championId, championReigns]) => (
+				<p class="reign__starts">
+					{[...group(championReigns, (r) => r.title.weight.class)].map(([weightClass, weightClassReigns]) => (
+						<>
+							{`${championReigns[0].champion.name.first} ${championReigns[0].champion.name.last}`} becomes the
+							{weightClassReigns.map((reign, i) => (
+								<>
+									{i === 0 ? "" : i === weightClassReigns.length - 1 ? " and " : ", "}
+									{reign.title.org.name.abbreviation}
+								</>
+							))}{" "}
+							{weightClass} world champion <br />
+						</>
+					))}
+				</p>
+			))
+	}
+	{
+		timelineDate.events.titleReignsEnd &&
+			timelineDate.events.bouts === null &&
+			timelineDate.events.titleReignsBegin === null &&
+			[...group(timelineDate.events.titleReignsEnd, (r) => r.champion.championId)].map(([championId, championReigns]) => (
+				<p class="reign__ends">
+					{[...group(championReigns, (r) => r.title.weight.class)].map(([weightClass, weightClassReigns]) => (
+						<>
+							{`${championReigns[0].champion.name.first} ${championReigns[0].champion.name.last}'s`}{" "}
+							{weightClassReigns.map((reign, i) => (
+								<>
+									{i === 0 ? "" : i === weightClassReigns.length - 1 ? " and " : ", "}
+									{reign.title.org.name.abbreviation}
+								</>
+							))}{" "}
+							{weightClass} world title reign ends <br />
+						</>
+					))}
+				</p>
+			))
+	}
+</>
+
+<style>
+	.bout {
+		padding: 12px;
+	}
+
+	.bout__result {
+		font-size: var(--font-size-medium);
+		line-height: var(--line-height-medium);
+		margin: 0 0 6px 0;
+	}
+
+	.bout__weight {
+		font-size: var(--font-size-small);
+		line-height: var(--line-height-small);
+		margin: 0 0 4px 0;
+		font-weight: 500;
+	}
+
+	.bout__link {
+		text-decoration: none;
+		color: var(--theme-text-secondary);
+	}
+
+	.bout__link:hover {
+		text-decoration: underline;
+	}
+
+	.bout__titles {
+		display: flex;
+		align-items: flex-end;
+		flex-wrap: wrap;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.reign__starts,
+	.reign__ends {
+		padding: 12px;
+		font-size: var(--font-size-medium);
+		line-height: var(--line-height-medium);
+	}
+</style>

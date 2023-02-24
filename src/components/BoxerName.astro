@@ -1,0 +1,52 @@
+---
+import { isChampion } from "../utils";
+import type { Boxer } from "../types";
+
+interface Props {
+	boxer: Boxer;
+	useShortName: boolean;
+	useTwoLines: boolean;
+}
+
+const { boxer, useShortName, useTwoLines } = Astro.props;
+---
+
+{
+	isChampion(boxer) ? (
+		<a class="champion__link" href={`${Astro.url.origin}/champions/${boxer.championId}`}>
+			{useShortName ? (
+				boxer.name.short
+			) : useTwoLines ? (
+				<>
+					{boxer.name.first} <br /> {boxer.name.last}
+				</>
+			) : (
+				<>{`${boxer.name.first} ${boxer.name.last}`}</>
+			)}
+		</a>
+	) : (
+		<>
+			{useShortName ? (
+				boxer.name.split(" ").slice(1).join(" ")
+			) : useTwoLines ? (
+				<>
+					{boxer.name.split(" ")[0]} <br /> {boxer.name.split(" ").slice(1).join(" ")}
+				</>
+			) : (
+				boxer.name
+			)}
+		</>
+	)
+}
+
+<style>
+	a {
+		font-weight: 600;
+		color: inherit;
+		text-decoration: none;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+</style>
