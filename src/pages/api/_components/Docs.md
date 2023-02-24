@@ -41,11 +41,11 @@ Each bout endpoint returns an array of Bout objects.
 
 `https://openboxing.org/api/bouts/all.json`
 
-`https://openboxing.org/api/bouts/{WEIGHT}.json`
-
-`https://openboxing.org/api/bouts/{WEIGHT}/{ORG}.json`
-
 `https://openboxing.org/api/bouts/scheduled.json`
+
+`https://openboxing.org/api/{WEIGHT}/bouts.json`
+
+`https://openboxing.org/api/{WEIGHT}/{ORG}/bouts.json`
 
 Bout object example
 
@@ -147,9 +147,9 @@ Each reign endpoint returns an array of Reign objects.
 
 `https://openboxing.org/api/reigns/all.json`
 
-`https://openboxing.org/api/reigns/{WEIGHT}.json`
+`https://openboxing.org/api/{WEIGHT}/reigns.json`
 
-`https://openboxing.org/api/reigns/{WEIGHT}/{ORG}.json`
+`https://openboxing.org/api/{WEIGHT}/{ORG}/reigns.json`
 
 Reign object example
 
