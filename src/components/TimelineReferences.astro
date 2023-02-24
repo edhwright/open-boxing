@@ -31,7 +31,7 @@ const { timelineDate, boutArticleIds } = Astro.props;
 					{bout.references.length > 0 &&
 						bout.references.map((reference) => (
 							<li class="reference__external">
-								<a href={reference.link.url} target="_blank">
+								<a href={reference.link.url} target="_blank" rel="noreferrer">
 									{reference.link.text}
 								</a>
 							</li>
@@ -49,7 +49,7 @@ const { timelineDate, boutArticleIds } = Astro.props;
 							<>
 								{reference.eventDate === reign.period.begins && (
 									<li class="reference__external">
-										<a href={reference.link.url} target="_blank">
+										<a href={reference.link.url} target="_blank" rel="noreferrer">
 											{reference.link.text}
 										</a>
 									</li>
@@ -69,7 +69,9 @@ const { timelineDate, boutArticleIds } = Astro.props;
 							<>
 								{reference.eventDate === reign.period.ends && (
 									<li class="reference__external">
-										<a href={reference.link.url}>{reference.link.text}</a>
+										<a href={reference.link.url} target="_blank" rel="noreferrer">
+											{reference.link.text}
+										</a>
 									</li>
 								)}
 							</>
