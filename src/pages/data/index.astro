@@ -16,10 +16,12 @@ const titlesByWeightClass = group(titles, (t) => t.weight.class);
 		<div class="details">
 			<p>Below are links to the weight classes and titles we currently track.</p>
 			<p>
-				All the data used by Open Boxing can be found on <a class="details__link" href="" target="_blank">GitHub</a> as CSV files. We also offer an <a
+				All the data used by Open Boxing can be found on <a
 					class="details__link"
-					href={`${Astro.url.origin}/api`}>API</a
-				> to explore this data.
+					href="https://github.com/edhwright/open-boxing/tree/main/src/db/data"
+					target="_blank"
+					rel="noreferrer">GitHub</a
+				> as CSV files. We also offer an <a class="details__link" href={`${Astro.url.origin}/api`}>API</a> to explore this data.
 			</p>
 		</div>
 		<div>

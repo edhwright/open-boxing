@@ -1,5 +1,5 @@
 <div class="github">
-	<a href="https://github.com">
+	<a href="https://github.com/edhwright/open-boxing" target="_blank" rel="noreferrer">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			class="icon icon-tabler icon-tabler-brand-github"
