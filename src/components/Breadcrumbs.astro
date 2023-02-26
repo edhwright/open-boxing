@@ -38,6 +38,9 @@ const { route } = Astro.props;
 	.breadcrumbs__item {
 		font-size: var(--font-size-medium);
 		line-height: var(--line-height-medium);
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
 	}
 
 	.breadcrumbs__item::before {
