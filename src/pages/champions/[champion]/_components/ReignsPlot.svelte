@@ -72,11 +72,7 @@
 			{/if}
 			{#if titleData.bouts}
 				{#each titleData.bouts as bout}
-					<div
-						class="plot__bout plot--tooltip plot--{boutResultClass(bout)}"
-						style="left: {timeScale(new Date(bout.date))}%; top: {i * 40}px"
-						data-text={boutNameFromBout(bout, true)}
-					/>
+					<div class="plot__bout plot--tooltip plot--{boutResultClass(bout)}" style="left: {timeScale(new Date(bout.date))}%; top: {i * 40}px" data-text={boutNameFromBout(bout, true)} />
 				{/each}
 			{/if}
 		{/each}
@@ -85,9 +81,7 @@
 		{#each ticks as tick}
 			<div class="plot__tick" style="left: {timeScale(new Date(tick.date))}%" />
 			<div class="plot__date" style="left: {timeScale(new Date(tick.date))}%">
-				<span class="plot__year">{dayjs(tick.date).format(reignsPlotData.ticks.length === 1 ? "MMM YYYY" : "YYYY")}</span><span class="plot__age"
-					><br />({tick.boxerAge} years old)</span
-				>
+				<span class="plot__year">{dayjs(tick.date).format(reignsPlotData.ticks.length === 1 ? "MMM YYYY" : "YYYY")}</span><span class="plot__age"><br />({tick.boxerAge} years old)</span>
 			</div>
 		{/each}
 	</div>

@@ -73,7 +73,9 @@ const { title, timeline, champion, scheduledBouts, featuredBoutPreviews, bouts, 
 		/>
 
 		<header class="header">
-			<h1 class="header__title">{title.weight.class} • {title.org.name.full}</h1>
+			<h1 class="header__title">
+				{title.weight.class} • {title.org.name.full}
+			</h1>
 			<Overview isActive={title.active} bouts={bouts} reigns={reigns} target="ORG" />
 		</header>
 

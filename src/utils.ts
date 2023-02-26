@@ -67,7 +67,10 @@ export function getCurrentChampions(): WeightClassCurrentChampions[] {
 export function getCurrentWeightClassChampions(weightClass: string): WeightClassCurrentChampions {
 	const orgChampions = currentChampionOrgs.map((org) => getLatestTitleReign(weightClass, org));
 	return {
-		weight: weightClasses.find((wc) => wc.class === weightClass) as { class: string; lb: string },
+		weight: weightClasses.find((wc) => wc.class === weightClass) as {
+			class: string;
+			lb: string;
+		},
 		champions: orgChampions,
 		undisputed: hasUndisputedChampion(orgChampions),
 	};
@@ -236,15 +239,25 @@ export function getReignsPlotData(champion: Champion, championReigns: Reign[], c
 	// yearly ticks
 	// first tick is first 1st january after earliest date
 	for (let year = parseInt(dayjs(earliestDate).format("YYYY")) + 1; year <= parseInt(dayjs(latestDate).format("YYYY")); year++) {
-		tickData.push({ date: `${year}-01-01`, boxerAge: ageFromDates(champion.born, `${year}-01-01`) });
+		tickData.push({
+			date: `${year}-01-01`,
+			boxerAge: ageFromDates(champion.born, `${year}-01-01`),
+		});
 	}
 
 	if (tickData.length === 0) {
-		tickData.push({ date: championTimeline[0].date, boxerAge: ageFromDates(champion.born, championTimeline[0].date) });
+		tickData.push({
+			date: championTimeline[0].date,
+			boxerAge: ageFromDates(champion.born, championTimeline[0].date),
+		});
 	}
 
 	const allTitles = getAllTitles();
-	const titleData: { title: Title; reigns: Reign[] | null; bouts: Bout[] | null }[] = [];
+	const titleData: {
+		title: Title;
+		reigns: Reign[] | null;
+		bouts: Bout[] | null;
+	}[] = [];
 
 	for (const weightClass of weightClasses) {
 		for (const org of orgs) {
@@ -264,7 +277,13 @@ export function getReignsPlotData(champion: Champion, championReigns: Reign[], c
 		}
 	}
 
-	return { champion: champion, titleData: titleData, ticks: tickData, startDate: earliestDate, endDate: latestDate };
+	return {
+		champion: champion,
+		titleData: titleData,
+		ticks: tickData,
+		startDate: earliestDate,
+		endDate: latestDate,
+	};
 }
 
 function ageFromDates(startDate: string, endDate: string) {
