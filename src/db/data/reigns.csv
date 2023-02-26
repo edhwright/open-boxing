@@ -2984,7 +2984,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2983,2020-01-30,,1454,Murodjon Akhmadaliev,1,IBF-Super Bantamweight-122
 2984,2020-01-30,,1454,Murodjon Akhmadaliev,1,WBAS-Super Bantamweight-122
 2985,2020-01-30,2021-02-12,1439,Joseph Diaz,0,IBF-Super Featherweight-130
-2986,2020-01-31,,1325,Ilunga Makabu,1,WBC-Cruiserweight-200
+2986,2020-01-31,2023-02-26,1325,Ilunga Makabu,0,WBC-Cruiserweight-200
 2987,2020-02-08,2021-08-14,1138,Guillermo Rigondeaux,0,WBAR-Bantamweight-118
 2988,2020-02-22,2022-08-13,1344,Tyson Fury,0,RING-Heavyweight-200+
 2989,2020-02-22,,1344,Tyson Fury,1,WBC-Heavyweight-200+
@@ -3094,3 +3094,4 @@ reign_id,begins,ends,champion_id,name,current,title
 3093,2023-02-18,,1502,Mauricio Lara,1,WBAR-Featherweight-126
 3094,2023-01-06,,1503,Melvin Jerusalem,1,WBO-Minimumweight-105
 3095,2023-02-25,,1504,Subriel Matias,1,IBF-Super Lightweight-140
+3096,2023-02-26,,1229,Badou Jack,1,WBC-Cruiserweight-200
