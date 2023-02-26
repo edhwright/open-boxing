@@ -14,18 +14,37 @@ interface Props {
 
 const { isActive, bouts, reigns, target } = Astro.props;
 
-const championsFromBouts = bouts.flatMap((bout) => [isChampion(bout.boxers.boxerA) ? [bout.boxers.boxerA] : [], isChampion(bout.boxers.boxerB) ? [bout.boxers.boxerB] : []]).flat();
+const championsFromBouts = bouts
+	.flatMap((bout) => [
+		isChampion(bout.boxers.boxerA) ? [bout.boxers.boxerA] : [],
+		isChampion(bout.boxers.boxerB) ? [bout.boxers.boxerB] : [],
+	])
+	.flat();
 const totalBoutsByChampionId = rollup(
 	championsFromBouts,
 	(c) => c.length,
 	(c) => c.championId
 );
-const [championIdWithMostBouts, championIdWithMostBoutsTotalBouts] = greatest(totalBoutsByChampionId, ([, totalBouts]) => totalBouts) as [number, number];
-const championWithMostBouts = championsFromBouts.find((c) => c.championId === championIdWithMostBouts) as Champion;
-const championWithMostBoutsRecord = getChampionRecordFromBouts(championWithMostBouts.championId, bouts);
+const [championIdWithMostBouts, championIdWithMostBoutsTotalBouts] = greatest(
+	totalBoutsByChampionId,
+	([, totalBouts]) => totalBouts
+) as [number, number];
+const championWithMostBouts = championsFromBouts.find(
+	(c) => c.championId === championIdWithMostBouts
+) as Champion;
+const championWithMostBoutsRecord = getChampionRecordFromBouts(
+	championWithMostBouts.championId,
+	bouts
+);
 
-const firstDate = least([...reigns.map((reign) => reign.period.begins), ...bouts.map((bout) => bout.date)]) as string;
-const lastDate = greatest([...reigns.map((reign) => reign.period.ends), ...bouts.map((bout) => bout.date)]) as string;
+const firstDate = least([
+	...reigns.map((reign) => reign.period.begins),
+	...bouts.map((bout) => bout.date),
+]) as string;
+const lastDate = greatest([
+	...reigns.map((reign) => reign.period.ends),
+	...bouts.map((bout) => bout.date),
+]) as string;
 ---
 
 <ul class="overview">
@@ -34,27 +53,52 @@ const lastDate = greatest([...reigns.map((reign) => reign.period.ends), ...bouts
 		{
 			isActive ? (
 				<p class="overview__body">
-					Active ({target === "WEIGHT" ? "orgs active " : ""}since {dayjs(firstDate).format("YYYY")})
+					Active ({target === "WEIGHT" ? "orgs active " : ""}since{" "}
+					{dayjs(firstDate).format("YYYY")})
 				</p>
 			) : (
-				<p class="overview__body">Inactive (since {dayjs(lastDate).format("YYYY")})</p>
+				<p class="overview__body">
+					Inactive (since {dayjs(lastDate).format("YYYY")})
+				</p>
 			)
 		}
 	</li>
 	<li class="overview__item">
-		<h3 class="overview__heading">{target === "WEIGHT" ? "Total world champions" : "Total champions"}</h3>
-		<p class="overview__body">{[...new Set(reigns.map((reign) => reign.champion.championId))].length}</p>
-	</li>
-	<li class="overview__item">
-		<h3 class="overview__heading">{target === "WEIGHT" ? "Total world title bouts" : "Total bouts"}</h3>
-		<p class="overview__body">{bouts.filter((bout) => bout.status === "FINISHED").length}</p>
-	</li>
-	<li class="overview__item">
-		<h3 class="overview__heading">{target === "WEIGHT" ? "Most world title bouts" : "Most bouts"}</h3>
+		<h3 class="overview__heading">
+			{target === "WEIGHT" ? "Total world champions" : "Total champions"}
+		</h3>
 		<p class="overview__body">
-			<span class="overview__boxer"><BoxerName boxer={championWithMostBouts} useShortName={false} useTwoLines={false} /></span>
-			({championWithMostBoutsRecord.w}-{championWithMostBoutsRecord.l}-{championWithMostBoutsRecord.d})
-			{championWithMostBoutsRecord.nc > 0 ? `${championWithMostBoutsRecord.nc} NC` : ""}
+			{[...new Set(reigns.map((reign) => reign.champion.championId))].length}
+		</p>
+	</li>
+	<li class="overview__item">
+		<h3 class="overview__heading">
+			{target === "WEIGHT" ? "Total world title bouts" : "Total bouts"}
+		</h3>
+		<p class="overview__body">
+			{bouts.filter((bout) => bout.status === "FINISHED").length}
+		</p>
+	</li>
+	<li class="overview__item">
+		<h3 class="overview__heading">
+			{target === "WEIGHT" ? "Most world title bouts" : "Most bouts"}
+		</h3>
+		<p class="overview__body">
+			<span class="overview__boxer"
+				><BoxerName
+					boxer={championWithMostBouts}
+					useShortName={false}
+					useTwoLines={false}
+				/></span
+			>
+			({championWithMostBoutsRecord.w}-{championWithMostBoutsRecord.l}-{
+				championWithMostBoutsRecord.d
+			})
+			{
+				championWithMostBoutsRecord.nc > 0
+					? `${championWithMostBoutsRecord.nc} NC`
+					: ""
+			}
 		</p>
 	</li>
 </ul>
@@ -78,7 +122,6 @@ const lastDate = greatest([...reigns.map((reign) => reign.period.ends), ...bouts
 		line-height: var(--line-height-h3);
 		padding-top: 4px;
 		padding-bottom: 2px;
-		border-top: 2px solid var(--theme-text-secondary);
 	}
 
 	.overview__body {
@@ -95,6 +138,10 @@ const lastDate = greatest([...reigns.map((reign) => reign.period.ends), ...bouts
 	@media (min-width: 768px) {
 		.overview__item {
 			grid-column: span 6;
+		}
+
+		.overview__heading {
+			border-top: 2px solid var(--theme-text-secondary);
 		}
 	}
 
