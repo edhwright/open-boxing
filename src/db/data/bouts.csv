@@ -6952,7 +6952,7 @@ bout_id,date,boxer_a_champion_id,boxer_a_name,boxer_b_champion_id,boxer_b_name,s
 6951,2023-02-03,1457,Emanuel Navarrete,,Liam Wilson,FINISHED,BOXER A,TKO,9,12,Super Featherweight,130,"WBO-Super Featherweight-130",,
 6952,2023-02-11,1501,O'Shaquie Foster,1410,Rey Vargas,FINISHED,BOXER A,UD,12,12,Super Featherweight,130,"WBC-Super Featherweight-130",,
 6953,2023-02-18,1342,Leigh Wood,1502,Mauricio Lara,FINISHED,BOXER B,TKO,7,12,Featherweight,126,"WBAR-Featherweight-126",,
-6954,2023-02-25,,Subriel Matias,,Jeremias Ponce,SCHEDULED,,,,12,Super Lightweight,140,"IBF-Super Lightweight-140",,
+6954,2023-02-25,1504,Subriel Matias,,Jeremias Ponce,FINISHED,BOXER A,RTD,5,12,Super Lightweight,140,"IBF-Super Lightweight-140",,
 6955,2023-02-26,1325,Ilunga Makabu,1229,Badou Jack,SCHEDULED,,,,12,Cruiserweight,200,"WBC-Cruiserweight-200",,
 6956,2023-03-01,1404,Knockout CP Freshmart,1488,Erick Rosa,SCHEDULED,,,,12,Minimumweight,105,"WBAS-Minimumweight-105",,
 6957,2023-03-25,1441,Lawrence Okolie,,David Light,SCHEDULED,,,,12,Cruiserweight,200,"WBO-Cruiserweight-200",,
