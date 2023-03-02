@@ -14,24 +14,24 @@ const { title } = Astro.props;
 	{
 		title.org.name.abbreviation === "WBA" && (
 			<p>
-				The WBA timeline stops on the introduction of the WBA Super title. See also: <a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbar`}>WBA Regular</a>,
-				<a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbas`}>WBA Super</a>
+				The WBA timeline stops on the introduction of the WBA Super title. See also: <a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbar/`}>WBA Regular</a>,
+				<a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbas/`}>WBA Super</a>
 			</p>
 		)
 	}
 	{
 		title.org.name.abbreviation === "WBAR" && (
 			<p>
-				The WBA Regular timeline starts on the introduction of the WBA Super title. See also: <a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wba`}>WBA</a>,
-				<a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbas`}>WBA Super</a>
+				The WBA Regular timeline starts on the introduction of the WBA Super title. See also: <a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wba/`}>WBA</a>,
+				<a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbas/`}>WBA Super</a>
 			</p>
 		)
 	}
 	{
 		title.org.name.abbreviation === "WBAS" && (
 			<p>
-				The WBA timeline stops on the introduction of the WBA Super title. See also: <a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wba`}>WBA</a>,{" "}
-				<a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbar`}>WBA Regular</a>
+				The WBA timeline stops on the introduction of the WBA Super title. See also: <a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wba/`}>WBA</a>,{" "}
+				<a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbar/`}>WBA Regular</a>
 			</p>
 		)
 	}

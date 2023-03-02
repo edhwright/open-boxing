@@ -11,7 +11,7 @@ const titlesByWeightClass = group(titles, (t) => t.weight.class);
 
 <Layout title="Open Boxing • Data" description="A collection of links where you can easily access all of the resources and information on Open Boxing." img={null}>
 	<main>
-		<Breadcrumbs route={[["Data", `${Astro.url.origin}/data`]]} />
+		<Breadcrumbs route={[["Data", `${Astro.url.origin}/data/`]]} />
 		<h1 class="header">Data</h1>
 		<div class="details">
 			<p>Below are links to the weight classes and titles we currently track.</p>
@@ -21,7 +21,7 @@ const titlesByWeightClass = group(titles, (t) => t.weight.class);
 					href="https://github.com/edhwright/open-boxing/tree/main/src/db/data"
 					target="_blank"
 					rel="noreferrer">GitHub</a
-				> as CSV files. We also offer an <a class="details__link" href={`${Astro.url.origin}/api`}>API</a> to explore this data.
+				> as CSV files. We also offer an <a class="details__link" href={`${Astro.url.origin}/api/`}>API</a> to explore this data.
 			</p>
 		</div>
 		<div>
@@ -29,14 +29,14 @@ const titlesByWeightClass = group(titles, (t) => t.weight.class);
 				weightClasses.map((weightClass) => (
 					<section class="weight">
 						<h2 class="weight__heading">
-							<a class="weight__link" href={`${Astro.url.origin}/${slugify(weightClass.class)}`}>
+							<a class="weight__link" href={`${Astro.url.origin}/${slugify(weightClass.class)}/`}>
 								{weightClass.class}
 							</a>
 						</h2>
 						<div class="titles">
 							{titlesByWeightClass.get(weightClass.class)!.map((title) => (
 								<p class="titles__title">
-									<a class="titles__link" href={`${Astro.url.origin}/${slugify(weightClass.class)}/${slugify(title.org.name.abbreviation)}`}>
+									<a class="titles__link" href={`${Astro.url.origin}/${slugify(weightClass.class)}/${slugify(title.org.name.abbreviation)}/`}>
 										{title.org.name.full}
 									</a>
 								</p>

@@ -14,7 +14,7 @@ const { titles, includeLinks } = Astro.props;
 	titles.map((title) => (
 		<li class="title" style={`color: var(--${title.org.name.abbreviation.toLowerCase()}-text); background-color: var(--${title.org.name.abbreviation.toLowerCase()}-bg)`}>
 			{includeLinks ? (
-				<a class="title__link" href={`${Astro.url.origin}/${slugify(title.weight.class)}/${slugify(title.org.name.abbreviation)}`}>
+				<a class="title__link" href={`${Astro.url.origin}/${slugify(title.weight.class)}/${slugify(title.org.name.abbreviation)}/`}>
 					{title.org.name.abbreviation}
 				</a>
 			) : (

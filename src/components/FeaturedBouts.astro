@@ -16,7 +16,7 @@ const { featuredBoutPreviews } = Astro.props;
 	{
 		featuredBoutPreviews.map((featuredBout) => (
 			<li class="bouts__bout">
-				<a class="bouts__link" href={`${Astro.url.origin}/articles/${featuredBout.bout.date}-${slugify(featuredBout.name)}`}>
+				<a class="bouts__link" href={`${Astro.url.origin}/articles/${featuredBout.bout.date}-${slugify(featuredBout.name)}/`}>
 					<img
 						class="bouts__thumbnail"
 						src={`${Astro.url.origin}/${featuredBout.thumbnail}`}

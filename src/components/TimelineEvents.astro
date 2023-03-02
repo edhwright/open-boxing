@@ -21,7 +21,7 @@ const { timelineDate } = Astro.props;
 						<BoutResultString bout={bout} />
 					</p>
 					<p class="bout__weight">
-						<a class="bout__link" href={`${Astro.url.origin}/${slugify(bout.weight.class)}`}>
+						<a class="bout__link" href={`${Astro.url.origin}/${slugify(bout.weight.class)}/`}>
 							{bout.weight.class} ({bout.weight.lb + " lb"})
 						</a>
 					</p>

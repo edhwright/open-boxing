@@ -29,7 +29,7 @@ const { bout, dateFormat, includeWeightClass, useShortName } = Astro.props;
 {
 	includeWeightClass && (
 		<p class="bout__weight">
-			<a class="bout__link" href={`${Astro.url.origin}/${slugify(bout.weight.class)}`}>
+			<a class="bout__link" href={`${Astro.url.origin}/${slugify(bout.weight.class)}/`}>
 				{bout.weight.class}
 				<br />
 				{bout.weight.lb + " lb"}

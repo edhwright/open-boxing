@@ -13,7 +13,7 @@ const { boxer, useShortName, useTwoLines } = Astro.props;
 
 {
 	isChampion(boxer) ? (
-		<a class="champion__link" href={`${Astro.url.origin}/champions/${boxer.championId}`}>
+		<a class="champion__link" href={`${Astro.url.origin}/champions/${boxer.championId}/`}>
 			{useShortName ? (
 				boxer.name.short
 			) : useTwoLines ? (

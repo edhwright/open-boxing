@@ -37,7 +37,7 @@
 			<ul class="search__list">
 				{#each filteredSearchIndex.slice(0, 20) as i}
 					<li class="search__item">
-						<a class="search__link" tabindex="0" href="/{i.slug}">{i.name}</a>
+						<a class="search__link" tabindex="0" href="/{i.slug}/">{i.name}</a>
 					</li>
 				{/each}
 			</ul>

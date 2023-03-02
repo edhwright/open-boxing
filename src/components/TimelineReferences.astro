@@ -17,7 +17,7 @@ const { timelineDate, boutArticleIds } = Astro.props;
 				<>
 					{boutArticleIds.includes(bout.boutId) && (
 						<li class="reference__internal">
-							<a href={`${Astro.url.origin}/articles/${bout.date}-${slugify(boutNameFromBout(bout))}`}>{boutNameFromBout(bout)}</a>
+							<a href={`${Astro.url.origin}/articles/${bout.date}-${slugify(boutNameFromBout(bout))}/`}>{boutNameFromBout(bout)}</a>
 						</li>
 					)}
 				</>

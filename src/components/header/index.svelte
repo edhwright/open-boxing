@@ -28,10 +28,10 @@
 			<div class="header__main">
 				<nav class="header__nav">
 					<ul class="header__list">
-						<li class="header__item"><a class="header__link" href="/data">Data</a></li>
-						<li class="header__item"><a class="header__link" href="/articles">Articles</a></li>
-						<li class="header__item"><a class="header__link" href="/api">API</a></li>
-						<li class="header__item"><a class="header__link" href="/about">About</a></li>
+						<li class="header__item"><a class="header__link" href="/data/">Data</a></li>
+						<li class="header__item"><a class="header__link" href="/articles/">Articles</a></li>
+						<li class="header__item"><a class="header__link" href="/api/">API</a></li>
+						<li class="header__item"><a class="header__link" href="/about/">About</a></li>
 					</ul>
 				</nav>
 				<GitHub />

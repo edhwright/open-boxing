@@ -69,8 +69,8 @@ const { champion, reigns, bouts, timeline, reignsPlotData, allBoutArticleIds, fe
 	<main class="content">
 		<Breadcrumbs
 			route={[
-				["Champions", `${Astro.url.origin}/champions`],
-				[`${champion.name.first} ${champion.name.last}`, `${Astro.url.origin}/champions/${champion.championId}`],
+				["Champions", `${Astro.url.origin}/champions/`],
+				[`${champion.name.first} ${champion.name.last}`, `${Astro.url.origin}/champions/${champion.championId}/`],
 			]}
 		/>
 		<header class="header">

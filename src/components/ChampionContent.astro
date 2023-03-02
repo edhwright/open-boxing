@@ -35,13 +35,13 @@ const useUndisputedClass = reign && isUndisputed && ["WBAS", "WBC", "IBF", "WBO"
 			)}
 			{includeWeightClass && (
 				<p class={`champion__weight ${useUndisputedClass ? "champion--undisputed" : ""}`}>
-					<a class="champion__link" href={`${Astro.url.origin}/${slugify(reign.title.weight.class)}`}>
+					<a class="champion__link" href={`${Astro.url.origin}/${slugify(reign.title.weight.class)}/`}>
 						{reign.title.weight.class} <br /> {`${reign.title.weight.lb} lb`}
 					</a>
 				</p>
 			)}
 			<p class={`champion__title ${useUndisputedClass ? "champion--undisputed" : ""} champion--${reign.title.org.name.abbreviation.toLowerCase()}`}>
-				<a class="champion__link" href={`${Astro.url.origin}/${slugify(reign.title.weight.class)}/${slugify(reign.title.org.name.abbreviation)}`}>
+				<a class="champion__link" href={`${Astro.url.origin}/${slugify(reign.title.weight.class)}/${slugify(reign.title.org.name.abbreviation)}/`}>
 					{reign.title.org.name.abbreviation}
 				</a>
 			</p>

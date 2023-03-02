@@ -67,8 +67,8 @@ const { title, timeline, champion, scheduledBouts, featuredBoutPreviews, bouts, 
 	<main class="content">
 		<Breadcrumbs
 			route={[
-				[title.weight.class, `${Astro.url.origin}/${slugify(title.weight.class)}`],
-				[title.org.name.full, `${Astro.url.origin}/${slugify(title.weight.class)}/${slugify(title.org.name.abbreviation)}`],
+				[title.weight.class, `${Astro.url.origin}/${slugify(title.weight.class)}/`],
+				[title.org.name.full, `${Astro.url.origin}/${slugify(title.weight.class)}/${slugify(title.org.name.abbreviation)}/`],
 			]}
 		/>
 

@@ -55,8 +55,8 @@ const articleComponents = await Promise.all(
 	<main>
 		<Breadcrumbs
 			route={[
-				["Articles", `${Astro.url.origin}/articles`],
-				[boutName, `${Astro.url.origin}/articles/${bout.boutId}`],
+				["Articles", `${Astro.url.origin}/articles/`],
+				[boutName, `${Astro.url.origin}/articles/${bout.boutId}/`],
 			]}
 		/>
 		<header class="header">

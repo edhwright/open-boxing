@@ -30,7 +30,7 @@ const currentChampionsWithScheduledBouts = currentChampions.map((weightClassCham
 	currentChampionsWithScheduledBouts.map((weightClassChampions) => (
 		<section class="champions">
 			<h3 class="champions__heading">
-				<a class="champions__link" href={`${Astro.url.origin}/${slugify(weightClassChampions.weight.class)}`}>
+				<a class="champions__link" href={`${Astro.url.origin}/${slugify(weightClassChampions.weight.class)}/`}>
 					<span class="champions__class">{weightClassChampions.weight.class}</span>
 					<span class="champions__lb">{weightClassChampions.weight.lb} lb</span>
 				</a>

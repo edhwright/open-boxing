@@ -24,13 +24,13 @@ const scheduledBouts = getScheduledBouts();
 			</section>
 			<section class="champions__current">
 				<h2 class="champions__heading">
-					<a class="champions__link" href={`${Astro.url.origin}/champions`}>Current world champions</a>
+					<a class="champions__link" href={`${Astro.url.origin}/champions/`}>Current world champions</a>
 				</h2>
 				<CurrentChampions currentChampions={currentChampions} />
 			</section>
 			<section class="champions__scheduled">
 				<h2 class="champions__heading">
-					<a class="champions__link" href={`${Astro.url.origin}/scheduled-bouts`}>Scheduled world title bouts</a>
+					<a class="champions__link" href={`${Astro.url.origin}/scheduled-bouts/`}>Scheduled world title bouts</a>
 				</h2>
 				<ScheduledBouts scheduledBouts={scheduledBouts} />
 			</section>

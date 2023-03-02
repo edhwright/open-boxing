@@ -34,16 +34,16 @@
 	<MenuButton bind:showMobileNav />
 	<ul class="nav__list">
 		<li class="nav__item">
-			<a class="nav__link" href="/data">Data</a>
+			<a class="nav__link" href="/data/">Data</a>
 		</li>
 		<li class="nav__item">
-			<a class="nav__link" href="/articles">Articles</a>
+			<a class="nav__link" href="/articles/">Articles</a>
 		</li>
 		<li class="nav__item">
-			<a class="nav__link" href="/api">API</a>
+			<a class="nav__link" href="/api/">API</a>
 		</li>
 		<li class="nav__item">
-			<a class="nav__link" href="/about">About</a>
+			<a class="nav__link" href="/about/">About</a>
 		</li>
 	</ul>
 	<button class="nav__button" on:click={() => changeTheme()}>
