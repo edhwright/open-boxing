@@ -37,7 +37,7 @@ const { latestReigns } = Astro.props;
 		height: 134px;
 	}
 
-	.champions__champion:nth-of-type(n + 5) {
+	.champions__champion:nth-of-type(n + 9) {
 		display: none;
 	}
 
@@ -46,8 +46,7 @@ const { latestReigns } = Astro.props;
 			grid-column: span 4;
 		}
 
-		.champions__champion:nth-of-type(5),
-		.champions__champion:nth-of-type(6) {
+		.champions__champion:nth-of-type(9) {
 			display: initial;
 		}
 	}
@@ -60,6 +59,10 @@ const { latestReigns } = Astro.props;
 		.champions__champion {
 			grid-column: span 2;
 		}
+
+		.champions__champion:nth-of-type(n + 7) {
+			display: none;
+		}
 	}
 
 	@media (min-width: 1280px) {
@@ -70,6 +73,10 @@ const { latestReigns } = Astro.props;
 		.champions__champion:nth-of-type(7),
 		.champions__champion:nth-of-type(8) {
 			display: initial;
+		}
+
+		.champions__champion:nth-of-type(n + 9) {
+			display: none;
 		}
 	}
 </style>
