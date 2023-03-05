@@ -10,10 +10,12 @@ const scheduledBouts = getScheduledBouts();
 const scheduledBoutsByMonth = group(scheduledBouts, (b) => dayjs(b.date).format("MMMM YYYY"));
 ---
 
-<Layout title="Open Boxing • Scheduled Bouts" description="Scheduled world title boxing bouts from the WBA, WBC, IBF and WBO." img={null}>
+<Layout title="Scheduled Bouts" description="Scheduled world title boxing bouts from the WBA, WBC, IBF and WBO." img={null}>
 	<main>
-		<Breadcrumbs route={[["Scheduled Bouts", `${Astro.url.origin}/scheduled-bouts`]]} />
+		<Breadcrumbs route={[["Scheduled Bouts", `${Astro.url.origin}/scheduled-bouts/`]]} />
+
 		<h1 class="header">Scheduled world title bouts</h1>
+
 		{
 			[...scheduledBoutsByMonth].map(([month, bouts]) => (
 				<section class="month">

@@ -3,10 +3,12 @@ import Layout from "../../layouts/Layout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 ---
 
-<Layout title="Open Boxing • About" description="Everything you need to know about Open Boxing" img={null}>
+<Layout title="About" description="Everything you need to know about Open Boxing" img={null}>
 	<main>
-		<Breadcrumbs route={[["About", `${Astro.url.origin}/about`]]} />
+		<Breadcrumbs route={[["About", `${Astro.url.origin}/about/`]]} />
+
 		<h1 class="header">About</h1>
+
 		<div class="content">
 			<p>Boxing's many titles are hard to follow. Open Boxing's goal is to make it easier.</p>
 			<p>We provide timelines that give you an overview of weight classes, world titles and world champions.</p>

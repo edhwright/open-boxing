@@ -4,16 +4,19 @@ import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Docs from "./_components/Docs.md";
 ---
 
-<Layout title="Open Boxing • API" description="Open Boxing API." img={null}>
+<Layout title="API" description="Open Boxing API." img={null}>
 	<main>
 		<Breadcrumbs route={[["API", `${Astro.url.origin}/api/`]]} />
+
 		<h1 class="header">API</h1>
+
 		<div class="description">
 			<p>
 				We provide a basic API to explore our data. Open Boxing is in very early development, so expect some mistakes and missing data. Found a bug or mistake? Please raise an
 				issue on <a href="https://github.com/edhwright/open-boxing/issues" target="_blank" rel="noreferrer">GitHub</a>.
 			</p>
 		</div>
+
 		<div class="content">
 			<hr />
 			<Docs />

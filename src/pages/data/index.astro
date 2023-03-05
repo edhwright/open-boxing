@@ -9,10 +9,12 @@ const titles = getAllTitles();
 const titlesByWeightClass = group(titles, (t) => t.weight.class);
 ---
 
-<Layout title="Open Boxing • Data" description="A collection of links where you can easily access all of the resources and information on Open Boxing." img={null}>
+<Layout title="Data" description="A collection of links where you can easily access all of the resources and information on Open Boxing." img={null}>
 	<main>
 		<Breadcrumbs route={[["Data", `${Astro.url.origin}/data/`]]} />
+
 		<h1 class="header">Data</h1>
+
 		<div class="details">
 			<p>Below are links to the weight classes and titles we currently track.</p>
 			<p>
@@ -24,6 +26,7 @@ const titlesByWeightClass = group(titles, (t) => t.weight.class);
 				> as CSV files. We also offer an <a class="details__link" href={`${Astro.url.origin}/api/`}>API</a> to explore this data.
 			</p>
 		</div>
+
 		<div>
 			{
 				weightClasses.map((weightClass) => (

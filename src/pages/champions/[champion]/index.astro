@@ -61,11 +61,7 @@ export async function getStaticPaths() {
 const { champion, reigns, bouts, timeline, reignsPlotData, allBoutArticleIds, featuredBoutPreviews } = Astro.props;
 ---
 
-<Layout
-	title={`Open Boxing • ${champion.name.first} ${champion.name.last}`}
-	description={`${champion.name.first} ${champion.name.last}'s world title reigns and bouts.`}
-	img={null}
->
+<Layout title={`${champion.name.first} ${champion.name.last}`} description={`${champion.name.first} ${champion.name.last}'s world boxing title reigns and bouts.`} img={null}>
 	<main class="content">
 		<Breadcrumbs
 			route={[
@@ -73,9 +69,11 @@ const { champion, reigns, bouts, timeline, reignsPlotData, allBoutArticleIds, fe
 				[`${champion.name.first} ${champion.name.last}`, `${Astro.url.origin}/champions/${champion.championId}/`],
 			]}
 		/>
+
 		<header class="header">
 			<h1 class="header__title">{`${champion.name.first} ${champion.name.last}`}</h1>
 		</header>
+
 		{
 			featuredBoutPreviews.length > 0 && (
 				<section class="featured">
@@ -88,12 +86,14 @@ const { champion, reigns, bouts, timeline, reignsPlotData, allBoutArticleIds, fe
 				</section>
 			)
 		}
+
 		<section class="plot">
 			<h2 class="plot__title">World title reigns and bouts</h2>
 			<figure class="plot__figure">
 				<ReignsPlot reignsPlotData={reignsPlotData} />
 			</figure>
 		</section>
+
 		<section class="timeline">
 			<h2 id="timeline" class="timeline__title">Timeline of world title events</h2>
 			<Timeline timeline={timeline} reigns={reigns} boutArticleIds={allBoutArticleIds} />

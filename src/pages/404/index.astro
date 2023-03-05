@@ -2,20 +2,20 @@
 import Layout from "../../layouts/Layout.astro";
 ---
 
-<Layout title="Open Boxing • Page Not Found" description="Page not found!" img={null}>
+<Layout title="Page Not Found" description="Page not found!" img={null}>
 	<main class="content">
 		<header class="header">
-			<h1 class="header__title">Page not found. Y'all Must've 404got the URL</h1>
+			<h1 class="header__title">Sorry, the page you requested was not found</h1>
 		</header>
+
 		<iframe
 			width="560"
 			height="315"
 			src="https://www.youtube-nocookie.com/embed/pWIqZKhNY90"
 			title="YouTube video player"
-			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-			allowfullscreen
-		>
-		</iframe>
+			frameborder="0"
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+			allowfullscreen></iframe>
 	</main>
 </Layout>
 

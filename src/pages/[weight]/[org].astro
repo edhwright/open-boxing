@@ -59,11 +59,7 @@ export async function getStaticPaths() {
 const { title, timeline, champion, scheduledBouts, featuredBoutPreviews, bouts, reigns, allBoutArticleIds } = Astro.props;
 ---
 
-<Layout
-	title={`Open Boxing • ${title.weight.class} • ${title.org.name.full}`}
-	description={`${title.org.name.full} ${title.weight.class} world title reigns and bouts.`}
-	img={null}
->
+<Layout title={`${title.weight.class} • ${title.org.name.full}`} description={`${title.org.name.full} ${title.weight.class} world title reigns and bouts.`} img={null}>
 	<main class="content">
 		<Breadcrumbs
 			route={[

@@ -67,13 +67,15 @@ const { weightClass, timeline, champions, scheduledBouts, featuredBoutPreviews, 
 const isWeightClassActive = getAllTitles().filter((title) => title.weight.class === weightClass && title.active).length > 0;
 ---
 
-<Layout title={`Open Boxing • ${weightClass}`} description={`${weightClass} current champions, world title reigns and bouts.`} img={null}>
+<Layout title={weightClass} description={`${weightClass} current champions, world title reigns and bouts.`} img={null}>
 	<main class="content">
 		<Breadcrumbs route={[[weightClass, `${Astro.url.origin}/${slugify(weightClass)}/`]]} />
+
 		<header class="header">
 			<h1 class="header__title">{weightClass}</h1>
 			<Overview isActive={isWeightClassActive} bouts={bouts} reigns={reigns} target="WEIGHT" />
 		</header>
+
 		{
 			featuredBoutPreviews.length > 0 && (
 				<section class="featured">
@@ -92,12 +94,14 @@ const isWeightClassActive = getAllTitles().filter((title) => title.weight.class 
 			</h2>
 			{scheduledBouts.length > 0 ? <ScheduledBouts scheduledBouts={scheduledBouts} /> : <div class="bouts__empty">No scheduled {weightClass} world title bouts</div>}
 		</section>
+
 		<section class="champions">
 			<h2 class="champions__title">
 				<a class="champions__link" href={`${Astro.url.origin}/champions/`}>Current champions</a>
 			</h2>
 			<CurrentChampions currentChampions={champions} />
 		</section>
+
 		<section class="timeline">
 			<h2 id="timeline" class="timeline__title">Timeline</h2>
 			<Timeline timeline={timeline} boutArticleIds={allBoutArticleIds} target="WEIGHT" />
