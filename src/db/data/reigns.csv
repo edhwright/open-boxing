@@ -2930,8 +2930,8 @@ reign_id,begins,ends,champion_id,name,current,title
 2929,2019-05-04,2019-08-01,1398,Canelo Alvarez,0,IBF-Middleweight-160
 2930,2019-05-11,2020-01-18,1390,Julian Williams,0,IBF-Super Welterweight-154
 2931,2019-05-11,2020-01-18,1390,Julian Williams,0,WBAS-Super Welterweight-154
-2932,2019-05-18,,1445,Naoya Inoue,1,IBF-Bantamweight-118
-2933,2019-05-18,,1445,Naoya Inoue,1,RING-Bantamweight-118
+2932,2019-05-18,2023-01-14,1445,Naoya Inoue,0,IBF-Bantamweight-118
+2933,2019-05-18,2023-01-14,1445,Naoya Inoue,0,RING-Bantamweight-118
 2934,2019-05-18,2022-08-26,1415,Josh Taylor,0,IBF-Super Lightweight-140
 2935,2019-05-18,2021-05-08,1379,Billy Joe Saunders,0,WBO-Super Middleweight-168
 2936,2019-05-25,2021-10-23,1274,Jamel Herring,0,WBO-Super Featherweight-130
@@ -2942,7 +2942,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2941,2019-06-05,2019-06-15,1292,Krzysztof Glowacki,0,WBO-Cruiserweight-200
 2942,2019-06-15,2020-09-26,1284,Yuniel Dorticos,0,IBF-Cruiserweight-200
 2943,2019-06-15,2019-11-25,1261,Mairis Briedis,0,WBO-Cruiserweight-200
-2944,2019-06-19,,1367,Kazuto Ioka,1,WBO-Super Flyweight-115
+2944,2019-06-19,2023-02-17,1367,Kazuto Ioka,0,WBO-Super Flyweight-115
 2945,2019-06-21,2021-10-16,1475,Elwin Soto,0,WBO-Light Flyweight-108
 2946,2019-06-27,,1396,Jermall Charlo,1,WBC-Middleweight-160
 2947,2019-07-12,2021-01-06,1280,Ryota Murata,0,WBAR-Middleweight-160
@@ -2963,11 +2963,11 @@ reign_id,begins,ends,champion_id,name,current,title
 2962,2019-10-18,,1262,Artur Beterbiev,1,WBC-Light Heavyweight-175
 2963,2019-10-23,,1481,Devin Haney,1,WBC-Lightweight-135
 2964,2019-10-26,2020-07-07,1477,Shakur Stevenson,0,WBO-Featherweight-126
-2965,2019-10-26,,1415,Josh Taylor,1,RING-Super Lightweight-140
+2965,2019-10-26,2023-06-10,1415,Josh Taylor,0,RING-Super Lightweight-140
 2966,2019-10-26,2022-05-15,1415,Josh Taylor,0,WBAS-Super Lightweight-140
 2967,2019-10-31,2021-09-01,1476,Brandon Figueroa,0,WBAR-Super Bantamweight-122
 2968,2019-11-02,2019-12-17,1398,Canelo Alvarez,0,WBO-Light Heavyweight-175
-2969,2019-11-07,,1445,Naoya Inoue,1,WBAS-Bantamweight-118
+2969,2019-11-07,2023-01-14,1445,Naoya Inoue,0,WBAS-Bantamweight-118
 2970,2019-11-23,2021-01-02,1363,Rene Alvarado,0,WBAR-Super Featherweight-130
 2971,2019-11-24,2020-10-31,1343,Leo Santa Cruz,0,WBAS-Super Featherweight-130
 2972,2019-11-30,2022-05-03,1387,John Riel Casimero,0,WBO-Bantamweight-118
@@ -2981,8 +2981,8 @@ reign_id,begins,ends,champion_id,name,current,title
 2980,2019-12-28,,1455,Gervonta Davis,1,WBAR-Lightweight-135
 2981,2020-01-18,2020-09-26,1460,Jeison Rosario,0,IBF-Super Welterweight-154
 2982,2020-01-18,2020-09-26,1460,Jeison Rosario,0,WBAS-Super Welterweight-154
-2983,2020-01-30,,1454,Murodjon Akhmadaliev,1,IBF-Super Bantamweight-122
-2984,2020-01-30,,1454,Murodjon Akhmadaliev,1,WBAS-Super Bantamweight-122
+2983,2020-01-30,2023-04-08,1454,Murodjon Akhmadaliev,0,IBF-Super Bantamweight-122
+2984,2020-01-30,2023-04-08,1454,Murodjon Akhmadaliev,0,WBAS-Super Bantamweight-122
 2985,2020-01-30,2021-02-12,1439,Joseph Diaz,0,IBF-Super Featherweight-130
 2986,2020-01-31,2023-02-26,1325,Ilunga Makabu,0,WBC-Cruiserweight-200
 2987,2020-02-08,2021-08-14,1138,Guillermo Rigondeaux,0,WBAR-Bantamweight-118
@@ -3023,14 +3023,14 @@ reign_id,begins,ends,champion_id,name,current,title
 3022,2021-02-20,2022-04-30,1413,Oscar Valdez,0,WBC-Super Featherweight-130
 3023,2021-02-27,2022-07-01,1470,Rene Mark Cuarto,0,IBF-Minimumweight-105
 3024,2021-03-13,2022-08-11,1392,Juan Francisco Estrada,0,WBAS-Super Flyweight-115
-3025,2021-03-20,,1441,Lawrence Okolie,1,WBO-Cruiserweight-200
+3025,2021-03-20,2023-05-27,1441,Lawrence Okolie,0,WBO-Cruiserweight-200
 3026,2021-04-10,2022-06-18,1382,Joe Smith Jr,0,WBO-Light Heavyweight-175
 3027,2021-04-30,,1469,Sunny Edwards,1,IBF-Flyweight-112
 3028,2021-05-01,,1211,Erislandy Lara,1,WBAR-Middleweight-160
 3029,2021-05-08,,1398,Canelo Alvarez,1,WBO-Super Middleweight-168
 3030,2021-05-15,2021-11-27,1476,Brandon Figueroa,0,WBC-Super Bantamweight-122
 3031,2021-05-22,2022-07-01,1415,Josh Taylor,0,WBC-Super Lightweight-140
-3032,2021-05-22,,1415,Josh Taylor,1,WBO-Super Lightweight-140
+3032,2021-05-22,2023-06-10,1415,Josh Taylor,0,WBO-Super Lightweight-140
 3033,2021-05-28,2022-06-10,1467,Esteban Bermudez,0,WBAR-Light Flyweight-108
 3034,2021-05-29,2022-06-07,1198,Nonito Donaire,0,WBC-Bantamweight-118
 3035,2021-06-26,2021-12-07,1455,Gervonta Davis,0,WBAR-Super Lightweight-140
@@ -3041,7 +3041,7 @@ reign_id,begins,ends,champion_id,name,current,title
 3040,2021-09-25,,1305,Oleksandr Usyk,1,WBAS-Heavyweight-200+
 3041,2021-09-25,,1305,Oleksandr Usyk,1,WBO-Heavyweight-200+
 3042,2021-10-16,,1422,Jonathan Gonzalez,1,WBO-Light Flyweight-108
-3043,2021-10-22,,1316,Oscar Rivas,1,WBC-Bridgerweight-224
+3043,2021-10-22,2023-01-07,1316,Oscar Rivas,0,WBC-Bridgerweight-224
 3044,2021-10-23,2022-09-22,1477,Shakur Stevenson,0,WBO-Super Featherweight-130
 3045,2021-10-30,2022-04-16,1497,Radzhab Butaev,0,WBAR-Welterweight-147
 3046,2021-11-06,,1398,Canelo Alvarez,1,IBF-Super Middleweight-168
@@ -3070,7 +3070,7 @@ reign_id,begins,ends,champion_id,name,current,title
 3069,2022-06-05,,1481,Devin Haney,1,RING-Lightweight-135
 3070,2022-06-05,,1481,Devin Haney,1,WBAS-Lightweight-135
 3071,2022-06-05,,1481,Devin Haney,1,WBO-Lightweight-135
-3072,2022-06-07,,1445,Naoya Inoue,1,WBC-Bantamweight-118
+3072,2022-06-07,2023-01-14,1445,Naoya Inoue,0,WBC-Bantamweight-118
 3073,2022-06-11,,1499,Daniel Dubois,1,WBAR-Heavyweight-200+
 3074,2022-06-18,,1262,Artur Beterbiev,1,WBO-Light Heavyweight-175
 3075,2022-07-01,,1487,Daniel Valladares,1,IBF-Minimumweight-105
@@ -3079,19 +3079,34 @@ reign_id,begins,ends,champion_id,name,current,title
 3078,2022-07-09,,1410,Rey Vargas,1,WBC-Featherweight-126
 3079,2022-08-20,,1305,Oleksandr Usyk,1,RING-Heavyweight-200+
 3080,2022-08-20,,1493,Hector Luis Garcia,1,WBAR-Super Featherweight-130
-3081,2022-08-20,,1496,Alberto Puello,1,WBAR-Super Lightweight-140
+3081,2022-08-20,2023-05-10,1496,Alberto Puello,0,WBAR-Super Lightweight-140
 3082,2022-08-26,,1486,Zhanibek Alimkhanuly,1,WBO-Middleweight-160
 3083,2022-09-03,,1484,Sivenathi Nontshinga,1,IBF-Light Flyweight-108
 3084,2022-11-01,,1429,Kenshiro Teraji,1,RING-Light Flyweight-108
 3085,2022-11-01,,1429,Kenshiro Teraji,1,WBAS-Light Flyweight-108
-3086,2022-11-05,,1492,Shavkatdzhon Rakhimov,1,IBF-Super Featherweight-130
+3086,2022-11-05,2023-04-22,1492,Shavkatdzhon Rakhimov,0,IBF-Super Featherweight-130
 3087,2022-11-26,,1362,Regis Prograis,1,WBC-Super Lightweight-140
 3088,2022-12-03,,1392,Juan Francisco Estrada,1,WBC-Super Flyweight-115
 3089,2022-12-10,,1500,Luis Alberto Lopez,1,IBF-Featherweight-126
-3090,2022-12-13,,1445,Naoya Inoue,1,WBO-Bantamweight-118
+3090,2022-12-13,2023-01-14,1445,Naoya Inoue,0,WBO-Bantamweight-118
 3091,2023-02-03,,1457,Emanuel Navarrete,1,WBO-Super Featherweight-130
 3092,2023-02-11,,1501,O'Shaquie Foster,1,WBC-Super Featherweight-130
-3093,2023-02-18,,1502,Mauricio Lara,1,WBAR-Featherweight-126
-3094,2023-01-06,,1503,Melvin Jerusalem,1,WBO-Minimumweight-105
+3093,2023-02-18,2023-05-26,1502,Mauricio Lara,0,WBAR-Featherweight-126
+3094,2023-01-06,2023-05-27,1503,Melvin Jerusalem,0,WBO-Minimumweight-105
 3095,2023-02-25,,1504,Subriel Matias,1,IBF-Super Lightweight-140
 3096,2023-02-26,,1229,Badou Jack,1,WBC-Cruiserweight-200
+3097,2023-04-22,,1505,Lukasz Rozanski,1,WBC-Bridgerweight-224
+3098,2023-05-27,,1506,Chris Billam-Smith,1,WBO-Cruiserweight-200
+3099,2023-05-13,,1507,Rolando Romero,1,WBAR-Super Lightweight-140
+3100,2023-06-10,,1478,Teofimo Lopez,1,WBO-Super Lightweight-140
+3101,2023-06-10,,1478,Teofimo Lopez,1,RING-Super Lightweight-140
+3102,2023-04-22,,1491,Joe Cordina,1,IBF-Super Featherweight-130
+3103,2023-05-27,,1342,Leigh Wood,1,WBAR-Featherweight-126
+3104,2023-04-01,,1508,Robeisy Ramirez,1,WBO-Featherweight-126
+3105,2023-04-08,,1431,Marlon Tapales,1,IBF-Super Bantamweight-122
+3106,2023-04-08,,1431,Marlon Tapales,1,WBAS-Super Bantamweight-122
+3107,2023-04-08,,1509,Takuma Inoue,1,WBAR-Bantamweight-118
+3108,2023-05-13,,1510,Jason Moloney,1,WBO-Bantamweight-118
+3109,2023-05-20,,1479,Junto Nakatani,1,WBO-Super Flyweight-115
+3110,2023-04-08,,1495,Jesse Rodriguez,1,WBO-Flyweight-112
+3111,2023-05-27,,1511,Oscar Collazo,1,WBO-Minimumweight-105
