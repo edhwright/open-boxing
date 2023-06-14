@@ -4,11 +4,7 @@ This repo contains all the source code and content needed to build [openboxing.o
 
 openboxing.org is built with [Astro](https://astro.build/) as a static website.
 
-Found a mistake or bug? Could something be better? Creating a new Issue brings any problems or improvements to our attention.
-
 ## Development
-
-All commands are run from the root of the project from a terminal.
 
 ```shell
 # Installs dependencies
