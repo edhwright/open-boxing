@@ -63,7 +63,7 @@
 	}
 
 	.belt--beginsAndContinues {
-		background-image: linear-gradient(to right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+		background-image: linear-gradient(to right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0) 100%);
 	}
 
 	.belt--ends {
@@ -72,6 +72,6 @@
 	}
 
 	.belt--double {
-		background-image: linear-gradient(to right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+		background-image: linear-gradient(to right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0) 100%);
 	}
 </style>
