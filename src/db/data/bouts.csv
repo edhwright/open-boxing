@@ -6970,7 +6970,7 @@ bout_id,date,boxer_a_champion_id,boxer_a_name,boxer_b_champion_id,boxer_b_name,s
 6969,2023-05-13,1486,Zhanibek Alimkhanuly,,Steven Butler,FINISHED,BOXER A,KO,2,12,Middleweight,160,WBO-Middleweight-160,,
 6970,2023-07-29,1388,Errol Spence Jr,1322,Terence Crawford,SCHEDULED,,,,12,Welterweight,147,"WBAS-Welterweight-147,WBC-Welterweight-147,IBF-Welterweight-147,WBO-Welterweight-147,RING-Welterweight-147",,
 6971,2023-05-13,1507,Rolando Romero,,Ismael Barroso,FINISHED,BOXER A,TKO,9,12,Super Lightweight,140,WBAR-Super Lightweight-140,,
-6972,2023-06-17,1362,Regis Prograis,,Danielito Zorrilla,SCHEDULED,,,,12,Super Lightweight,140,WBC-Super Lightweight-140,,
+6972,2023-06-17,1362,Regis Prograis,,Danielito Zorrilla,FINISHED,BOXER A,SD,12,12,Super Lightweight,140,WBC-Super Lightweight-140,,
 6973,2023-05-20,1481,Devin Haney,1329,Vasyl Lomachenko,FINISHED,BOXER A,UD,12,12,Lightweight,135,"WBAS-Lightweight-135,WBC-Lightweight-135,IBF-Lightweight-135,WBO-Lightweight-135,RING-Lightweight-135",,
 6974,2023-08-12,1457,Emanuel Navarrete,1413,Oscar Valdez,SCHEDULED,,,,12,Super Featherweight,130,WBO-Super Featherweight-130,,
 6975,2023-05-27,1502,Mauricio Lara,1342,Leigh Wood,FINISHED,BOXER B,UD,12,12,Featherweight,126,WBAR-Featherweight-126,,
