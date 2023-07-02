@@ -2991,7 +2991,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2990,2020-02-29,2021-03-13,1317,Roman Gonzalez,0,WBAS-Super Flyweight-115
 2991,2020-03-01,,1404,Knockout CP Freshmart,1,WBAS-Minimumweight-105
 2992,2020-03-03,2020-06-23,1417,Andrew Moloney,0,WBAR-Super Flyweight-115
-2993,2020-06-23,,1468,Joshua Franco,1,WBAR-Super Flyweight-115
+2993,2020-06-23,2023-06-23,1468,Joshua Franco,0,WBAR-Super Flyweight-115
 2994,2020-08-01,2021-01-23,1450,Angelo Leo,0,WBO-Super Bantamweight-122
 2995,2020-09-06,2021-01-29,1291,Yordenis Ugas,0,WBAR-Welterweight-147
 2996,2020-09-26,2022-07-02,1261,Mairis Briedis,0,IBF-Cruiserweight-200
@@ -3110,3 +3110,4 @@ reign_id,begins,ends,champion_id,name,current,title
 3109,2023-05-20,,1479,Junto Nakatani,1,WBO-Super Flyweight-115
 3110,2023-04-08,,1495,Jesse Rodriguez,1,WBO-Flyweight-112
 3111,2023-05-27,,1511,Oscar Collazo,1,WBO-Minimumweight-105
+3112,2023-06-24,,1367,Kazuto Ioka,1,WBAR-Super Flyweight-115
