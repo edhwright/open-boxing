@@ -13,13 +13,15 @@
 	"dependencies": {
 		"@astrojs/sitemap": "^3.2.0",
 		"@astrojs/svelte": "^5.7.2",
+		"@astrojs/tailwind": "^5.1.1",
 		"astro": "^4.15.12",
 		"better-sqlite3": "^11.3.0",
 		"d3-array": "^3.2.4",
 		"d3-dsv": "^3.0.1",
 		"d3-scale": "^4.0.2",
 		"dayjs": "^1.11.13",
-		"svelte": "^4.2.19"
+		"svelte": "^4.2.19",
+		"tailwindcss": "^3.4.13"
 	},
 	"devDependencies": {
 		"@types/better-sqlite3": "^7.6.11",
