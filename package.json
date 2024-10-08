@@ -11,22 +11,22 @@
 		"astro": "astro"
 	},
 	"dependencies": {
-		"@astrojs/sitemap": "^1.0.0",
-		"@astrojs/svelte": "^2.0.0",
-		"astro": "^2.0.6",
-		"better-sqlite3": "^8.0.1",
-		"d3-array": "^3.2.2",
+		"@astrojs/sitemap": "^3.2.0",
+		"@astrojs/svelte": "^5.7.2",
+		"astro": "^4.15.12",
+		"better-sqlite3": "^11.3.0",
+		"d3-array": "^3.2.4",
 		"d3-dsv": "^3.0.1",
 		"d3-scale": "^4.0.2",
-		"dayjs": "^1.11.7",
-		"svelte": "^3.55.1"
+		"dayjs": "^1.11.13",
+		"svelte": "^4.2.19"
 	},
 	"devDependencies": {
-		"@types/better-sqlite3": "^7.6.3",
-		"@types/d3-array": "^3.0.4",
-		"@types/d3-dsv": "^3.0.1",
-		"@types/d3-scale": "^4.0.3",
-		"prettier": "^2.8.3",
-		"prettier-plugin-astro": "^0.8.0"
+		"@types/better-sqlite3": "^7.6.11",
+		"@types/d3-array": "^3.2.1",
+		"@types/d3-dsv": "^3.0.7",
+		"@types/d3-scale": "^4.0.8",
+		"prettier": "^3.3.3",
+		"prettier-plugin-astro": "^0.14.1"
 	}
 }
