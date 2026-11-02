@@ -1,0 +1,24 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+	--color-ibuText: #ffffff;
+	--color-ibuBg: #5c6bc0;
+	--color-nysacText: #004144;
+	--color-nysacBg: #80d6ff;
+	--color-wbaText: #ffffff;
+	--color-wbaBg: #4e4e4e;
+	--color-wbcText: #252525;
+	--color-wbcBg: #42be65;
+	--color-ibfText: #ffffff;
+	--color-ibfBg: #da1e28;
+	--color-wboText: #ffffff;
+	--color-wboBg: #6d4c41;
+	--color-ringText: #000000;
+	--color-ringBg: #c0b38d;
+	--color-gold: #c0b38d;
+	--color-featured: rgb(35 12 30);
+	--color-won: #77dd77;
+	--color-lost: #ff6961;
+	--color-draw: #c0c0c0;
+}

@@ -4,7 +4,7 @@ import { boutNameFromBout, slugify } from "../../../utils";
 import Layout from "../../../layouts/Layout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import Reference from "./_components/Reference.astro";
-import { CollectionEntry, getCollection } from "astro:content";
+import { type CollectionEntry, getCollection, render } from "astro:content";
 import { getBout } from "../../../db";
 import { group } from "d3-array";
 import type { Bout } from "../../../types";
@@ -20,30 +20,31 @@ export async function getStaticPaths() {
 	const boutArticles = await getCollection("bouts");
 	const articlesByBout = group(boutArticles, (a) => a.data.boutId);
 
-	return [...articlesByBout].map(([boutId, articles]) => {
-		const bout = getBout(boutId);
-		return {
-			params: {
-				bout: `${bout.date}-${slugify(boutNameFromBout(bout))}`,
-			},
-			props: {
-				boutName: boutNameFromBout(getBout(boutId)),
-				thumbnail: articles[0].data.thumbnail,
-				bout: getBout(boutId),
-				articles: articles.sort((a, b) => a.data.publicationDate.localeCompare(b.data.publicationDate)),
-			},
-		};
-	});
+	return await Promise.all(
+		[...articlesByBout].map(async ([boutId, articles]) => {
+			const bout = await getBout(boutId);
+			return {
+				params: {
+					bout: `${bout.date}-${slugify(boutNameFromBout(bout))}`,
+				},
+				props: {
+					boutName: boutNameFromBout(bout),
+					thumbnail: articles[0].data.thumbnail,
+					bout: bout,
+					articles: articles.sort((a, b) => a.data.publicationDate.localeCompare(b.data.publicationDate)),
+				},
+			};
+		}),
+	);
 }
 
 const { boutName, thumbnail, bout, articles } = Astro.props;
 
 const articleComponents = await Promise.all(
-	articles.map(async (a) => ({
-		Content: await a.render().then((d) => d.Content),
-		headingSlug: await a.render().then((d) => d.headings[0].slug),
-		data: a.data,
-	}))
+	articles.map(async (a) => {
+		const { Content, headings } = await render(a);
+		return { Content, headingSlug: headings[0].slug, data: a.data };
+	})
 );
 ---
 
@@ -60,16 +61,16 @@ const articleComponents = await Promise.all(
 			]}
 		/>
 
-		<header class="header">
-			<h1 class="header__title">{boutName}</h1>
-			<div class="header__details">
-				<p class="header__date">
+		<header class="my-8">
+			<h1 class="mx-auto mt-12 mb-4 text-center text-4xl">{boutName}</h1>
+			<div class="text-center text-sm">
+				<p class="mb-2">
 					<time datetime={dayjs(bout.date).format("YYYY-MM-DD")}>
 						{dayjs(bout.date).format("dddd, D MMMM, YYYY")}
 					</time>
 				</p>
-				<p class="header__weight">{bout.weight.class} ({bout.weight.lb} lb)</p>
-				<div class="header__titles">
+				<p class="mb-2">{bout.weight.class} ({bout.weight.lb} lb)</p>
+				<div>
 					{
 						bout.titles.map((title) => (
 							<p>
@@ -81,14 +82,15 @@ const articleComponents = await Promise.all(
 			</div>
 		</header>
 
-		<div id="articles" class="container">
-			<nav class="nav">
-				<h3 class="nav__heading">Articles</h3>
-				<ul class="nav__titles">
+		<!-- on small screens the second, zero-width column holds the sticky "Back to top" button -->
+		<div id="articles" class="grid grid-cols-[auto_0px] grid-rows-[auto_auto] gap-y-4 lg:grid-cols-16 lg:grid-rows-none lg:gap-4">
+			<nav class="col-start-1 row-start-1 py-3 md:mx-auto md:w-3/4 lg:sticky lg:top-0 lg:col-span-4 lg:col-start-auto lg:mx-0 lg:max-h-screen lg:w-auto lg:self-start lg:overflow-y-auto xl:max-w-3/4">
+				<h3 class="text-sm font-semibold">Articles</h3>
+				<ul>
 					{
 						articleComponents.map((article) => (
-							<li class="nav__title">
-								<a class="nav__anchor" href={`#${article.headingSlug}`}>
+							<li class="my-3 text-sm">
+								<a class="hover:underline" href={`#${article.headingSlug}`}>
 									{article.data.title}
 								</a>
 							</li>
@@ -97,14 +99,14 @@ const articleComponents = await Promise.all(
 				</ul>
 			</nav>
 
-			<ul class="articles">
+			<ul class="col-start-1 row-start-2 lg:col-span-12 lg:col-start-auto lg:row-start-auto">
 				{
 					articleComponents.map(({ Content, data }) => (
-						<li class="articles__article">
-							<div class="article__reference">
+						<li class="border-t-4 border-neutral-100 pt-3 pb-8 md:mx-auto md:w-3/4 lg:mx-0 lg:w-5/6 xl:w-2/3">
+							<div>
 								<Reference bout={bout} author={data.author} publication={data.publication} publicationDate={data.publicationDate} link={{ text: "Source", url: data.link }} />
 							</div>
-							<section class="articles__content">
+							<section class="prose max-w-none prose-invert prose-h2:mt-12 prose-h2:mb-4 prose-h2:text-3xl prose-h3:mt-12 prose-h3:mb-4 prose-h3:text-xl prose-h3:font-semibold prose-h4:mt-12 prose-h4:mb-4 prose-h4:text-lg prose-h4:font-semibold prose-p:mt-0 prose-p:mb-4 prose-p:font-serif prose-p:text-lg prose-hr:my-2 prose-hr:border-neutral-700 prose-img:mx-auto prose-img:mt-6 prose-img:mb-4">
 								<Content />
 							</section>
 						</li>
@@ -112,203 +114,7 @@ const articleComponents = await Promise.all(
 				}
 			</ul>
 
-			<div class="timeline__mobile"><p><a href="#articles">Back to top</a></p></div>
+			<div class="sticky bottom-5 col-start-2 row-start-2 mt-[calc(100vh+100px)] place-self-end rounded bg-neutral-950 p-3 text-sm whitespace-nowrap lg:hidden"><p><a class="hover:underline" href="#articles">Back to top</a></p></div>
 		</div>
 	</main>
 </Layout>
-
-<style is:global>
-	.articles__content h2 {
-		font-size: var(--article-font-size-h2);
-		line-height: var(--article-line-height-h2);
-		margin: 3rem auto 1rem auto;
-	}
-
-	.articles__content h3 {
-		font-size: var(--article-font-size-h3);
-		line-height: var(--article-line-height-h3);
-		font-weight: 600;
-		margin: 3rem auto 1rem auto;
-	}
-
-	.articles__content h4 {
-		font-size: var(--article-font-size-body);
-		line-height: var(--article-line-height-body);
-		font-weight: 600;
-		margin: 3rem auto 1rem auto;
-	}
-
-	.articles__content hr {
-		margin: 8px 0;
-		border: 0;
-		border-top: 1px solid var(--theme-border);
-	}
-
-	.articles__content img {
-		margin: 24px auto 16px auto;
-		display: block;
-	}
-
-	.articles__content p {
-		font-family: Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
-		margin-top: 0;
-		margin-bottom: 16px;
-		font-size: var(--article-font-size-body);
-		line-height: var(--article-line-height-body);
-	}
-</style>
-
-<style>
-	.header {
-		margin: 2rem auto;
-	}
-
-	.header__title {
-		margin: 3rem auto 1rem auto;
-		text-align: center;
-		font-size: var(--article-font-size-h1);
-		line-height: var(--article-line-height-h1);
-	}
-
-	.header__details {
-		text-align: center;
-		font-size: 14px;
-		line-height: 18px;
-	}
-
-	.header__date {
-		margin-bottom: 8px;
-	}
-
-	.header__weight {
-		margin-bottom: 8px;
-	}
-
-	.container {
-		display: grid;
-		grid-template-rows: auto auto;
-		grid-template-columns: auto 0px;
-		row-gap: 1rem;
-	}
-
-	.nav {
-		padding: 12px 0;
-		background-color: var(--theme-bg);
-		grid-column-start: 1;
-		grid-row-start: 1;
-	}
-
-	.nav__heading,
-	.nav__title {
-		font-size: 13px;
-		line-height: 17px;
-	}
-
-	.nav__title {
-		margin: 12px 0;
-	}
-
-	.nav__titles,
-	.articles {
-		list-style: none;
-		padding: 0;
-	}
-
-	.nav__anchor {
-		color: var(--theme-text);
-		text-decoration: none;
-	}
-
-	.nav__anchor:hover {
-		text-decoration: underline;
-	}
-
-	.articles {
-		padding: 0;
-		grid-column-start: 1;
-		grid-row-start: 2;
-	}
-
-	.timeline__mobile {
-		place-self: end;
-		position: sticky;
-		bottom: 20px;
-		margin-top: calc(100vh + 100px);
-		white-space: nowrap;
-		grid-column-start: 2;
-		grid-row-start: 2;
-		background-color: var(--theme-callout-bg);
-		border-radius: 4px;
-		padding: 12px;
-		font-size: 14px;
-		line-height: 18px;
-	}
-
-	.timeline__mobile :global(a) {
-		color: var(--theme-callout-text);
-		text-decoration: none;
-	}
-
-	.timeline__mobile :global(a:hover) {
-		text-decoration: underline;
-	}
-
-	.articles__article {
-		box-shadow: 0px -4px 0px 0px var(--theme-text);
-		padding: 12px 0 2rem 0;
-	}
-
-	@media (min-width: 768px) {
-		.nav {
-			width: calc(((100% - (1rem * 7)) * 6 / 8) + 5rem);
-			margin: 0 auto;
-		}
-
-		.articles__article {
-			width: calc(((100% - (1rem * 7)) * 6 / 8) + 5rem);
-			margin: 0 auto;
-		}
-	}
-
-	@media (min-width: 1024px) {
-		.container {
-			gap: 1rem;
-			grid-template-columns: repeat(16, 1fr);
-			grid-template-rows: initial;
-		}
-
-		.nav {
-			grid-column: span 4;
-			position: sticky;
-			top: 0;
-			align-self: start;
-			max-height: 100vh;
-			overflow-y: scroll;
-			margin: 0;
-		}
-
-		.articles {
-			grid-column: span 12;
-			grid-row-start: initial;
-		}
-
-		.articles__article {
-			width: calc(((100% - (1rem * 5)) * 5 / 6) + 4rem);
-			margin: 0;
-		}
-
-		.timeline__mobile {
-			display: none;
-		}
-	}
-
-	@media (min-width: 1280px) {
-		.nav {
-			max-width: 75%;
-		}
-
-		.articles__article {
-			width: calc(((100% - (1rem * 5)) * 4 / 6) + 3rem);
-		}
-	}
-</style>

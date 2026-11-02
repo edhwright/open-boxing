@@ -1,7 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
-import FeaturedBouts from "../../../components/FeaturedBouts.astro";
+import FeaturedBoutsSection from "../../../components/FeaturedBoutsSection.astro";
 import ReignsPlot from "./_components/ReignsPlot.svelte";
 import Timeline from "./_components/Timeline.astro";
 import { getAllChampions, getChampionReigns, getChampionBouts } from "../../../db";
@@ -28,32 +28,34 @@ interface Props {
 }
 
 export async function getStaticPaths() {
-	const allChampions = getAllChampions();
+	const allChampions = await getAllChampions();
 	const allFeaturedBoutPreviews = await getAllFeaturedBoutPreviews();
 	const allBoutArticleIds = await getAllBoutArticlesIds();
 
-	const data = allChampions.map((champion) => {
-		const championReigns = getChampionReigns(champion.championId);
-		const championBouts = getChampionBouts(champion.championId);
-		const championTimeline = geTimelineFromReignsAndBouts(championReigns, championBouts);
-		const championReignsPlotData = getReignsPlotData(champion, championReigns, championBouts, championTimeline);
-		const championFeaturedBoutPreviews = filterFeaturedBoutPreviewsByChampion(allFeaturedBoutPreviews, champion.championId);
+	const data = await Promise.all(
+		allChampions.map(async (champion) => {
+			const championReigns = await getChampionReigns(champion.championId);
+			const championBouts = await getChampionBouts(champion.championId);
+			const championTimeline = geTimelineFromReignsAndBouts(championReigns, championBouts);
+			const championReignsPlotData = await getReignsPlotData(champion, championReigns, championBouts, championTimeline);
+			const championFeaturedBoutPreviews = filterFeaturedBoutPreviewsByChampion(allFeaturedBoutPreviews, champion.championId);
 
-		return {
-			params: {
-				champion: champion.championId,
-			},
-			props: {
-				champion: champion,
-				reigns: championReigns,
-				bouts: championBouts,
-				timeline: championTimeline,
-				reignsPlotData: championReignsPlotData,
-				allBoutArticleIds: allBoutArticleIds,
-				featuredBoutPreviews: championFeaturedBoutPreviews,
-			},
-		};
-	});
+			return {
+				params: {
+					champion: String(champion.championId),
+				},
+				props: {
+					champion: champion,
+					reigns: championReigns,
+					bouts: championBouts,
+					timeline: championTimeline,
+					reignsPlotData: championReignsPlotData,
+					allBoutArticleIds: allBoutArticleIds,
+					featuredBoutPreviews: championFeaturedBoutPreviews,
+				},
+			};
+		}),
+	);
 
 	return data;
 }
@@ -62,7 +64,7 @@ const { champion, reigns, bouts, timeline, reignsPlotData, allBoutArticleIds, fe
 ---
 
 <Layout title={`${champion.name.first} ${champion.name.last}`} description={`${champion.name.first} ${champion.name.last}'s world boxing title reigns and bouts.`} img={null}>
-	<main class="content">
+	<main>
 		<Breadcrumbs
 			route={[
 				["Champions", `${Astro.url.origin}/champions/`],
@@ -70,194 +72,27 @@ const { champion, reigns, bouts, timeline, reignsPlotData, allBoutArticleIds, fe
 			]}
 		/>
 
-		<header class="header">
-			<h1 class="header__title">{`${champion.name.first} ${champion.name.last}`}</h1>
+		<header class="mx-auto my-8 xl:max-w-240">
+			<h1 class="mb-4 text-3xl">{`${champion.name.first} ${champion.name.last}`}</h1>
 		</header>
 
 		{
 			featuredBoutPreviews.length > 0 && (
-				<section class="featured">
-					<h2 class="featured__title">
-						<a class="featured__link" href={`${Astro.url.origin}/articles#featured-bouts`}>
-							Featured bouts
-						</a>
-					</h2>
-					<FeaturedBouts featuredBoutPreviews={featuredBoutPreviews} />
-				</section>
+				<FeaturedBoutsSection featuredBoutPreviews={featuredBoutPreviews} />
 			)
 		}
 
-		<section class="plot">
-			<h2 class="plot__title">World title reigns and bouts</h2>
-			<figure class="plot__figure">
+		<!-- like the featured band, the plot runs to the edges of the screen until it fits the page -->
+		<section class="-mx-3 my-8 hidden border-y border-neutral-700 bg-neutral-800 px-3 pt-4 pb-3 sm:block xl:mx-0 xl:px-0">
+			<h2 class="mb-3 text-lg xl:mx-auto xl:max-w-240">World title reigns and bouts</h2>
+			<figure class="xl:mx-auto xl:max-w-7xl">
 				<ReignsPlot reignsPlotData={reignsPlotData} />
 			</figure>
 		</section>
 
-		<section class="timeline">
-			<h2 id="timeline" class="timeline__title">Timeline of world title events</h2>
+		<section class="my-8 xl:mx-auto xl:max-w-7xl">
+			<h2 id="timeline" class="my-3 text-lg xl:mx-auto xl:max-w-240">Timeline of world title events</h2>
 			<Timeline timeline={timeline} reigns={reigns} boutArticleIds={allBoutArticleIds} />
 		</section>
 	</main>
 </Layout>
-
-<style>
-	.header {
-		margin: 2rem auto;
-	}
-
-	.header__title {
-		margin-bottom: 1rem;
-		font-size: var(--font-size-h1);
-		line-height: var(--line-height-h1);
-	}
-
-	.featured__title,
-	.plot__title {
-		font-size: var(--font-size-h2);
-		line-height: var(--line-height-h2);
-		margin-bottom: 12px;
-	}
-
-	.featured__link {
-		color: var(--theme-text);
-		text-decoration: none;
-	}
-
-	.featured__link:hover {
-		text-decoration: underline;
-	}
-
-	.featured,
-	.timeline,
-	.plot {
-		margin-top: 2rem;
-		margin-bottom: 2rem;
-	}
-
-	.plot {
-		position: relative;
-		display: none;
-		margin-top: 2rem;
-		padding: 1rem 0 12px 0;
-		background-color: var(--theme-content-bg);
-		border-top: 1px solid var(--theme-border);
-		border-bottom: 1px solid var(--theme-border);
-	}
-
-	.timeline__title {
-		font-size: var(--font-size-h2);
-		line-height: var(--line-height-h2);
-		margin: 12px 0 12px 0;
-	}
-
-	.featured {
-		padding: 1rem 0 2rem 0;
-		position: relative;
-		background-image: var(--theme-featured-bg);
-		border-top: 1px solid var(--theme-border);
-	}
-
-	.featured:before {
-		content: "";
-		position: absolute;
-		width: 12px;
-		top: 0;
-		bottom: 0;
-		right: 100%;
-		background-image: var(--theme-featured-bg);
-		border-top: 1px solid var(--theme-border);
-		z-index: -1;
-	}
-
-	.featured:after {
-		content: "";
-		position: absolute;
-		width: 12px;
-		top: 0;
-		bottom: 0;
-		left: 100%;
-		background-image: var(--theme-featured-bg);
-		border-top: 1px solid var(--theme-border);
-		z-index: -1;
-	}
-
-	.plot:before {
-		content: "";
-		position: absolute;
-		display: block;
-		height: 100%;
-		width: 12px;
-		top: -1px;
-		bottom: 0;
-		right: 100%;
-		background-color: var(--theme-content-bg);
-		border-top: 1px solid var(--theme-border);
-		border-bottom: 1px solid var(--theme-border);
-		z-index: -1;
-	}
-
-	.plot:after {
-		content: "";
-		position: absolute;
-		display: block;
-		height: 100%;
-		width: 12px;
-		top: -1px;
-		bottom: 0;
-		left: 100%;
-		background-color: var(--theme-content-bg);
-		border-top: 1px solid var(--theme-border);
-		border-bottom: 1px solid var(--theme-border);
-		z-index: -1;
-	}
-
-	@media (min-width: 667px) {
-		.plot {
-			display: inherit;
-		}
-	}
-
-	@media (min-width: 1280px) {
-		.content {
-			width: 100%;
-		}
-
-		.header,
-		.featured:global(> *),
-		.plot__title,
-		.timeline__title {
-			max-width: 956px;
-			margin-left: auto;
-			margin-right: auto;
-		}
-
-		.plot__figure {
-			max-width: 1280px;
-			margin-left: auto;
-			margin-right: auto;
-		}
-
-		.timeline {
-			max-width: 1280px;
-			margin-left: auto;
-			margin-right: auto;
-		}
-
-		.featured:before {
-			display: none;
-		}
-
-		.featured:after {
-			display: none;
-		}
-
-		.plot:before {
-			display: none;
-		}
-
-		.plot:after {
-			display: none;
-		}
-	}
-</style>

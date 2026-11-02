@@ -7,19 +7,21 @@ import Breadcrumbs from "../../components/Breadcrumbs.astro";
 	<main>
 		<Breadcrumbs route={[["About", `${Astro.url.origin}/about/`]]} />
 
-		<h1 class="header">About</h1>
+		<h1 class="my-8 text-3xl xl:mx-auto xl:max-w-240">About</h1>
 
-		<div class="content">
-			<p>Boxing's many titles are hard to follow. Open Boxing's goal is to make it easier.</p>
-			<p>We provide timelines that give you an overview of weight classes, world titles and world champions.</p>
-			<p>We publish newspaper articles that have fallen into the public domain to give significant bouts and events context.</p>
-			<p>
+		<div class="xl:mx-auto xl:max-w-240">
+			<p class="my-4">Boxing's many titles are hard to follow. Open Boxing's goal is to make it easier.</p>
+			<p class="my-4">We provide timelines that give you an overview of weight classes, world titles and world champions.</p>
+			<p class="my-4">We publish newspaper articles that have fallen into the public domain to give significant bouts and events context.</p>
+			<p class="my-4">
 				Open Boxing is in very early development. One of our goals is to verify every bout and reign with a reference, but until then expect some mistakes. We provide an <a
+					class="underline"
 					href={`${Astro.url.origin}/api/`}>API</a
 				> to explore our data.
 			</p>
-			<p>
+			<p class="my-4">
 				Found a mistake or want to make a suggestion to improve Open Boxing? Please raise an issue on <a
+					class="underline"
 					href="https://github.com/edhwright/open-boxing/issues"
 					target="_blank"
 					rel="noreferrer">GitHub</a
@@ -28,30 +30,3 @@ import Breadcrumbs from "../../components/Breadcrumbs.astro";
 		</div>
 	</main>
 </Layout>
-
-<style>
-	.header {
-		margin: 2rem auto;
-		font-size: var(--font-size-h1);
-		line-height: var(--line-height-h1);
-	}
-
-	p {
-		margin: 1rem 0;
-		font-size: 16px;
-		line-height: 20px;
-	}
-
-	a {
-		color: var(--theme-text);
-	}
-
-	@media (min-width: 1280px) {
-		.header,
-		.content {
-			max-width: 956px;
-			margin-left: auto;
-			margin-right: auto;
-		}
-	}
-</style>

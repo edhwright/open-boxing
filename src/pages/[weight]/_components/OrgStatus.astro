@@ -16,12 +16,12 @@ const latestBout = bouts[bouts.length - 1];
 const currentChampionTitleDefenses = bouts.filter((bout) => bout.status === "FINISHED" && bout.date > latestReign.period.begins).length;
 ---
 
-<div class="status">
-	<p class="status__reign">
+<div class="mx-auto my-8 grid grid-cols-12 gap-4 xl:max-w-240">
+	<p class="col-span-12 text-sm/4 md:col-span-6">
 		Current champion: {
 			latestReign.period.current ? (
 				<>
-					<span class="status__boxer">
+					<span class="inline-block">
 						<BoxerName boxer={latestReign.champion} useShortName={false} useTwoLines={false} />
 					</span>{" "}
 					({currentChampionTitleDefenses} title {currentChampionTitleDefenses === 1 ? "defense" : "defenses"})
@@ -31,16 +31,16 @@ const currentChampionTitleDefenses = bouts.filter((bout) => bout.status === "FIN
 			)
 		}
 	</p>
-	<p class="status__bout">
+	<p class="col-span-12 text-sm/4 md:col-span-6">
 		{
 			latestBout.status === "SCHEDULED" ? (
 				<>
 					Scheduled bout:
-					<span class="status__boxer">
+					<span class="inline-block">
 						<BoxerName boxer={latestBout.boxers.boxerA} useShortName={false} useTwoLines={false} />
 					</span>{" "}
 					v{" "}
-					<span class="status__boxer">
+					<span class="inline-block">
 						<BoxerName boxer={latestBout.boxers.boxerB} useShortName={false} useTwoLines={false} />
 					</span>
 				</>
@@ -50,38 +50,3 @@ const currentChampionTitleDefenses = bouts.filter((bout) => bout.status === "FIN
 		}
 	</p>
 </div>
-
-<style>
-	.status {
-		display: grid;
-		gap: 1rem;
-		grid-template-columns: repeat(12, 1fr);
-		margin: 2rem auto;
-	}
-
-	.status__boxer {
-		display: inline-block;
-		color: var(--theme-text);
-		text-decoration: none;
-	}
-
-	.status__reign,
-	.status__bout {
-		grid-column: span 12;
-		font-size: var(--font-size-medium);
-		line-height: var(--line-height-medium);
-	}
-
-	@media (min-width: 768px) {
-		.status__reign,
-		.status__bout {
-			grid-column: span 6;
-		}
-	}
-
-	@media (min-width: 1280px) {
-		.status {
-			max-width: 956px;
-		}
-	}
-</style>

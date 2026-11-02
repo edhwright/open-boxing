@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isChampion, boutNameFromBout } from "../../../../utils";
+	import { isChampion, boutNameFromBout, orgColours } from "../../../../utils";
 	import { scaleTime } from "d3-scale";
 	import dayjs from "dayjs";
 	import type { ReignsPlotData } from "../../../../utils";
@@ -28,31 +28,33 @@
 
 	function boutResultClass(bout: Bout) {
 		if (bout.status === "SCHEDULED") {
-			return "scheduled";
+			return "bg-neutral-800";
 		} else if (bout.result.winner === "DRAW") {
-			return "draw";
+			return "bg-draw";
 		} else if (bout.result.winner === "NO CONTEST") {
-			return "no-contest";
+			return "bg-draw";
 		} else if (bout.result.winner === "BOXER A" && isChampion(bout.boxers.boxerA) && bout.boxers.boxerA.championId === reignsPlotData.champion.championId) {
-			return "won";
+			return "bg-won";
 		} else if (bout.result.winner === "BOXER B" && isChampion(bout.boxers.boxerB) && bout.boxers.boxerB.championId === reignsPlotData.champion.championId) {
-			return "won";
+			return "bg-won";
 		} else {
-			return "lost";
+			return "bg-lost";
 		}
 	}
 </script>
 
-<div class="plot" style="height: {plotHeight}px">
+<!-- each title gets a 40px row; the left 10rem margin holds the weight class and org labels -->
+<div class="relative mb-12 ml-40 w-[calc(100%-10rem)] border-t border-neutral-700 bg-neutral-800" style="height: {plotHeight}px">
 	<div>
 		{#each reignsPlotData.titleData as titleData, i}
-			<div class="plot__org" style="top: {i * 40}px">{titleData.title.org.name.abbreviation}</div>
+			<div class="absolute inset-x-0 h-10 border-b border-neutral-700" style="top: {i * 40}px" />
+			<div class="absolute -left-15 translate-y-2.5 text-xs/5 font-medium text-neutral-400" style="top: {i * 40}px">{titleData.title.org.name.abbreviation}</div>
 		{/each}
 	</div>
 	<div>
 		{#each weightClassYLabelPositions as weightClassLabel}
-			<div class="plot__line" style="top: {weightClassLabel.index * 40}px" />
-			<div class="plot__weight" style="top: {weightClassLabel.index * 40}px">{weightClassLabel.class}</div>
+			<div class="absolute -left-40 w-[calc(100%+10rem)] border-t border-neutral-400" style="top: {weightClassLabel.index * 40}px" />
+			<div class="absolute -left-40 w-25 translate-y-1.5 text-xs font-medium" style="top: {weightClassLabel.index * 40}px">{weightClassLabel.class}</div>
 		{/each}
 	</div>
 	<div>
@@ -60,202 +62,36 @@
 			{#if titleData.reigns}
 				{#each titleData.reigns as reign}
 					<div
-						class="plot__reign"
-						style="left: {timeScale(new Date(reign.period.begins))}%; 
+						class="absolute h-5 {orgColours[reign.title.org.name.abbreviation].bg}"
+						style="left: {timeScale(new Date(reign.period.begins))}%;
                         width: calc({timeScale(reign.period.current || !reign.period.ends ? new Date(dayjs().format('YYYY-MM-DD')) : new Date(reign.period.ends))}% - {timeScale(
 							new Date(reign.period.begins)
-						)}%); 
-                        top: {i * 40 + 10}px;
-                        background-color: var(--{reign.title.org.name.abbreviation.toLowerCase()}-bg)"
+						)}%);
+                        top: {i * 40 + 10}px"
 					/>
 				{/each}
 			{/if}
 			{#if titleData.bouts}
 				{#each titleData.bouts as bout}
-					<div class="plot__bout plot--tooltip plot--{boutResultClass(bout)}" style="left: {timeScale(new Date(bout.date))}%; top: {i * 40}px" data-text={boutNameFromBout(bout, true)} />
+					<div
+						class="group absolute z-10 size-5 -translate-x-2.5 translate-y-2.5 rounded-full shadow-[0_1px_4px_rgb(0_0_0/16%),inset_0_0_0_2px_white] hover:bg-neutral-800 hover:shadow-none {boutResultClass(bout)}"
+						style="left: {timeScale(new Date(bout.date))}%; top: {i * 40}px"
+					>
+						<span class="absolute right-0 hidden h-5 w-max items-center rounded-r-full bg-neutral-800 pr-3 pl-1 text-sm/5 shadow-[0_2px_5px_rgb(0_0_0/16%)] group-hover:flex">
+							{boutNameFromBout(bout, true)}
+						</span>
+					</div>
 				{/each}
 			{/if}
 		{/each}
 	</div>
 	<div>
 		{#each ticks as tick}
-			<div class="plot__tick" style="left: {timeScale(new Date(tick.date))}%" />
-			<div class="plot__date" style="left: {timeScale(new Date(tick.date))}%">
-				<span class="plot__year">{dayjs(tick.date).format(reignsPlotData.ticks.length === 1 ? "MMM YYYY" : "YYYY")}</span><span class="plot__age"><br />({tick.boxerAge} years old)</span>
+			<div class="absolute h-full border-l border-dotted border-neutral-100" style="left: {timeScale(new Date(tick.date))}%" />
+			<div class="absolute top-full mt-2 w-max -translate-x-1/2 text-center text-xs font-medium text-neutral-400" style="left: {timeScale(new Date(tick.date))}%">
+				<span class="text-neutral-100">{dayjs(tick.date).format(reignsPlotData.ticks.length === 1 ? "MMM YYYY" : "YYYY")}</span><span class="hidden lg:inline"><br />({tick.boxerAge} years old)</span>
 			</div>
 		{/each}
 	</div>
-	<div class="plot__baseline" />
+	<div class="absolute top-full w-full border-t-2 border-neutral-100" />
 </div>
-
-<style>
-	.plot {
-		position: relative;
-		width: calc(100% - 162px); /* full width minus the margin */
-		margin-left: 162px;
-		margin-bottom: 48px;
-		background-image: linear-gradient(
-			0deg,
-			var(--theme-border) 0%,
-			var(--theme-border) 1%,
-			var(--theme-content-bg) 1%,
-			var(--theme-content-bg) 49%,
-			var(--theme-border) 49%,
-			var(--theme-border) 50%,
-			var(--theme-border) 51%,
-			var(--theme-content-bg) 51%,
-			var(--theme-content-bg) 99%,
-			var(--theme-border) 99%,
-			var(--theme-border) 100%
-		);
-		background-size: 100% 80px;
-		background-repeat: repeat-y;
-	}
-
-	.plot__org {
-		position: absolute;
-		left: -60px;
-		font-size: var(--font-size-small);
-		line-height: 20px;
-		font-weight: 500;
-		color: var(--theme-text-secondary);
-		transform: translateY(10px);
-	}
-
-	.plot__tick {
-		position: absolute;
-		height: 100%;
-		border-left: 1px dotted var(--theme-text);
-	}
-
-	.plot__date {
-		position: absolute;
-		top: calc(100% + 8px);
-		transform: translateX(-50%);
-		text-align: center;
-		width: max-content;
-		color: var(--theme-text-secondary);
-		font-size: var(--font-size-small);
-		line-height: var(--line-height-small);
-		font-weight: 500;
-	}
-
-	.plot__year {
-		color: var(--theme-text);
-	}
-
-	.plot__age {
-		color: var(--theme-text-secondary);
-	}
-
-	.plot__baseline {
-		position: absolute;
-		top: 100%;
-		width: 100%;
-		border-top: 2px solid var(--theme-text);
-	}
-
-	.plot__line {
-		position: absolute;
-		width: calc(100% + 162px);
-		transform: translateX(-162px);
-		border-top: 1px solid var(--theme-text-secondary);
-	}
-
-	.plot__weight {
-		position: absolute;
-		left: -162px;
-		font-size: var(--font-size-small);
-		line-height: var(--line-height-small);
-		transform: translateY(6px);
-		width: 100px;
-		font-weight: 500;
-	}
-
-	.plot__reign {
-		position: absolute;
-		height: 20px;
-	}
-
-	.plot__bout {
-		position: absolute;
-		height: 20px;
-		width: 20px;
-		border-radius: 50%;
-		transform: translate(-10px, 10px);
-		/* background-color: rgba(0, 178, 0); */
-		z-index: 1;
-		box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px, inset 0px 0px 0px 2px white;
-		/* background-image: radial-gradient(circle, rgba(255, 255, 255, 0) 33%, var(--theme-content-bg) 33%, var(--theme-content-bg) 99%, rgba(255, 255, 255, 0) 100%); */
-		/* background-image: radial-gradient(circle, rgba(255, 255, 255, 0) 55%, rgb(255, 255, 255) 55%, rgb(255, 255, 255) 99%, rgba(255, 255, 255, 0) 100%); */
-		/* background-image: radial-gradient(circle, rgba(255, 255, 255, 0) 55%, black 55%, black 99%, rgba(255, 255, 255, 0) 100%); */
-		/* border: 2px solid white; */
-	}
-
-	.plot__bout:hover {
-		box-shadow: none;
-		background-color: var(--theme-content-bg);
-	}
-
-	.plot--scheduled {
-		background-color: var(--theme-content-bg);
-	}
-
-	.plot--draw {
-		background-color: #c0c0c0;
-	}
-
-	.plot--no-contest {
-		background-color: #c0c0c0;
-	}
-
-	.plot--won {
-		/* background-color: #a5eea0; */
-		background-color: #77dd77;
-	}
-
-	.plot--lost {
-		/* background-color: #ff9688; */
-		background-color: #ff6961;
-	}
-
-	.plot--tooltip:before {
-		display: none;
-		position: absolute;
-		content: attr(data-text);
-		transform: translateX(calc(-100% + 20px));
-		width: max-content;
-		/* background-color: rgba(255, 255, 255, 1); */
-		/* background-color: var(--theme-highlight-bg);
-		color: var(--theme-highlight-text); */
-
-		/* background-color: white; */
-		height: 20px;
-		line-height: 20px;
-		font-size: var(--font-size-medium);
-		padding: 0 12px 0 4px;
-		box-shadow: rgb(0 0 0 / 16%) 0px 2px 5px;
-		/* background-color: rgb(62, 67, 74); */
-		background-color: var(--theme-content-bg);
-		/* color: rgb(202, 219, 216); */
-		color: var(--theme-text);
-		border-radius: 0 10px 10px 0;
-	}
-
-	.plot--tooltip:hover:before {
-		/* display: block; */
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.plot__age {
-		display: none;
-	}
-
-	@media (min-width: 1024px) {
-		.plot__age {
-			display: initial;
-		}
-	}
-</style>

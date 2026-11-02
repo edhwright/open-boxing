@@ -30,95 +30,17 @@
 
 <svelte:window on:click={() => (search = "")} />
 
-<div class="search" on:click|stopPropagation>
-	<input class="search__input" type="text" bind:value={search} bind:this={searchInput} on:input={handleInput} />
+<div class="grow" role="button" tabindex="0" on:click|stopPropagation on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && e.stopPropagation()}>
+	<input class="w-full h-14 z-10 pl-4 bg-neutral-800 text-neutral-100 outline-hidden" type="text" bind:value={search} bind:this={searchInput} on:input={handleInput} />
 	{#if filteredSearchIndex && search.length > 1}
-		<nav class="search__nav">
-			<ul class="search__list">
+		<nav class="w-full absolute z-50 md:max-w-[calc(100%-56px)] xl:max-w-[calc(1280px-56px)]">
+			<ul>
 				{#each filteredSearchIndex.slice(0, 20) as i}
-					<li class="search__item">
-						<a class="search__link" tabindex="0" href="/{i.slug}/">{i.name}</a>
+					<li class="border-b border-neutral-700 bg-neutral-800 text-sm last:border-0 last:rounded-b hover:bg-neutral-700 hover:underline">
+						<a class="py-1 pl-4 leading-7 w-full block" tabindex="0" href="/{i.slug}/">{i.name}</a>
 					</li>
 				{/each}
 			</ul>
 		</nav>
 	{/if}
 </div>
-
-<style>
-	.search {
-		flex-grow: 1;
-	}
-
-	.search__input {
-		width: 100%;
-		height: 56px;
-		z-index: 1;
-		padding: 0 0 0 16px;
-		border: 0;
-		outline: none;
-		background-color: var(--theme-content-bg);
-		border-bottom: 1px solid var(--theme-content-bg);
-		box-sizing: border-box;
-	}
-
-	.search__input:focus {
-		border-bottom: 2px solid var(--theme-gold);
-	}
-
-	.search__nav {
-		width: 100%;
-		margin: 0;
-		position: absolute;
-		padding: 0;
-		z-index: 9999;
-	}
-
-	.search__list {
-		padding: 0;
-		list-style: none;
-	}
-
-	.search__item {
-		border-bottom: 1px solid var(--theme-border);
-		background-color: var(--theme-content-bg);
-	}
-
-	.search__item:last-child {
-		border-radius: 0 0 4px 4px;
-	}
-
-	.search__item:hover {
-		background-color: var(--theme-border);
-		text-decoration: underline;
-	}
-
-	.search__item:last-child {
-		border-bottom: none;
-	}
-
-	.search__link {
-		padding: 4px 0 4px 16px;
-		line-height: 28px;
-		/* font-size: 14px; */
-		/* background-color: white; */
-		width: 100%;
-		display: block;
-		font-size: var(--font-size-medium);
-		color: var(--theme-text);
-		text-decoration: none;
-		/* font-weight: 600; */
-	}
-
-	@media (min-width: 768px) {
-		.search__nav {
-			max-width: calc(100% - 56px);
-		}
-	}
-
-	@media (min-width: 1280px) {
-		.search__nav {
-			max-width: calc(1280px - 56px);
-		}
-	}
-</style>

@@ -29,4 +29,4 @@ A man of undoubted influence with Rickard some days ago aired the idea of placin
 
 Lincoln was quite right. You may not be able to fool all of the people all of the time, merely about 80,000 of them. We mention this figure because it represents the estimated capacity of the Polo Grounds on the night of the Dempsey-Firpo bout. Once a customer, always a customer.
 
-The customer figures and not with out justification, that a man of Firpo's size and hitting ability always has a chance. He, the customer, wants to be there to see him, the challenger, make the most of it. Failing in this, the customer will then be able to indulge in the ghoulish pleasure incidental to watching a tremendous, hairy, berserk super man knocked for a latin semicolon. Anyway it would be too good to miss.
+The customer figures and not with out justification, that a man of Firpo's size and hitting ability always has a chance. He, the customer, wants to be there to see him, the challenger, make the most of it. Anyway it would be too good to miss.

@@ -16,16 +16,16 @@ const { timelineDate } = Astro.props;
 	{
 		timelineDate.events.bouts &&
 			timelineDate.events.bouts.map((bout) => (
-				<div class="bout">
-					<p class="bout__result">
+				<div class="p-3">
+					<p class="mb-1.5 text-sm">
 						<BoutResultString bout={bout} />
 					</p>
-					<p class="bout__weight">
-						<a class="bout__link" href={`${Astro.url.origin}/${slugify(bout.weight.class)}/`}>
+					<p class="mb-1 text-xs font-medium">
+						<a class="text-neutral-400 hover:underline" href={`${Astro.url.origin}/${slugify(bout.weight.class)}/`}>
 							{bout.weight.class} ({bout.weight.lb + " lb"})
 						</a>
 					</p>
-					<ul class="bout__titles">
+					<ul class="flex flex-wrap items-end">
 						<TitleTags titles={bout.titles} includeLinks={true} />
 					</ul>
 				</div>
@@ -34,7 +34,7 @@ const { timelineDate } = Astro.props;
 	{
 		timelineDate.events.titleReignsBegin &&
 			[...group(timelineDate.events.titleReignsBegin, (r) => r.champion.championId)].map(([championId, championReigns]) => (
-				<p class="reign__starts">
+				<p class="p-3 text-sm">
 					{[...group(championReigns, (r) => r.title.weight.class)].map(([weightClass, weightClassReigns]) => (
 						<>
 							{`${championReigns[0].champion.name.first} ${championReigns[0].champion.name.last}`} becomes the
@@ -55,7 +55,7 @@ const { timelineDate } = Astro.props;
 			timelineDate.events.bouts === null &&
 			timelineDate.events.titleReignsBegin === null &&
 			[...group(timelineDate.events.titleReignsEnd, (r) => r.champion.championId)].map(([championId, championReigns]) => (
-				<p class="reign__ends">
+				<p class="p-3 text-sm">
 					{[...group(championReigns, (r) => r.title.weight.class)].map(([weightClass, weightClassReigns]) => (
 						<>
 							{`${championReigns[0].champion.name.first} ${championReigns[0].champion.name.last}'s`}{" "}
@@ -72,47 +72,3 @@ const { timelineDate } = Astro.props;
 			))
 	}
 </>
-
-<style>
-	.bout {
-		padding: 12px;
-	}
-
-	.bout__result {
-		font-size: var(--font-size-medium);
-		line-height: var(--line-height-medium);
-		margin: 0 0 6px 0;
-	}
-
-	.bout__weight {
-		font-size: var(--font-size-small);
-		line-height: var(--line-height-small);
-		margin: 0 0 4px 0;
-		font-weight: 500;
-	}
-
-	.bout__link {
-		text-decoration: none;
-		color: var(--theme-text-secondary);
-	}
-
-	.bout__link:hover {
-		text-decoration: underline;
-	}
-
-	.bout__titles {
-		display: flex;
-		align-items: flex-end;
-		flex-wrap: wrap;
-		list-style-type: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	.reign__starts,
-	.reign__ends {
-		padding: 12px;
-		font-size: var(--font-size-medium);
-		line-height: var(--line-height-medium);
-	}
-</style>

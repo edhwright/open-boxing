@@ -2,7 +2,7 @@
 	import dayjs from "dayjs";
 	import isBetween from "dayjs/plugin/isBetween";
 	dayjs.extend(isBetween);
-	import { orgs } from "../../../../utils";
+	import { orgs, orgColours } from "../../../../utils";
 	import type { Reign } from "../../../../types";
 	import type { TimelineDate } from "../../../../utils";
 	export let reigns: Reign[];
@@ -22,56 +22,30 @@
 			orgReignsAtTimelineDate.push(null);
 		}
 	});
+
+	// two stripes, for a belt held twice at once or a reign beginning as another continues
+	const striped = "bg-[linear-gradient(to_right,rgb(255_255_255/0.15)_0%,transparent_50%,rgb(255_255_255/0.15)_50%,transparent_100%)]";
+	const belt = (orgReign: Reign[]) => `ml-0.5 w-5 ${orgColours[orgReign[0].title.org.name.abbreviation].bg}`;
 </script>
 
 {#each orgReignsAtTimelineDate as orgReign}
 	{#if orgReign}
 		{#if orgReign.map((reign) => reign.period.begins).includes(timelineDate.date)}
 			{#if orgReign.every((reign) => reign.period.begins === timelineDate.date)}
-				<li
-					class="belt__active belt--begins {orgReign.length > 1 ? 'belt--double' : ''}"
-					style="background-color: var(--{orgReign[0].title.org.name.abbreviation.toLowerCase()}-bg)"
-				/>
+				<li class="{belt(orgReign)} rounded-t {orgReign.length > 1 ? striped : ''}" />
 			{:else}
-				<li class="belt__active belt--beginsAndContinues" style="background-color: var(--{orgReign[0].title.org.name.abbreviation.toLowerCase()}-bg)" />
+				<li class="{belt(orgReign)} {striped}" />
 			{/if}
 		{:else if orgReign.map((reign) => reign.period.ends).includes(timelineDate.date)}
 			{#if orgReign.every((reign) => reign.period.ends === timelineDate.date)}
-				<li
-					class="belt__active belt--ends {orgReign.length > 1 ? 'belt--double' : ''}"
-					style="background-color: var(--{orgReign[0].title.org.name.abbreviation.toLowerCase()}-bg)"
-				/>
+				<li class="{belt(orgReign)} h-1 rounded-b {orgReign.length > 1 ? striped : ''}" />
 			{:else}
-				<li class="belt__active belt--endsAndContinues" style="background-color: var(--{orgReign[0].title.org.name.abbreviation.toLowerCase()}-bg)" />
+				<li class="{belt(orgReign)} {striped}" />
 			{/if}
 		{:else}
-			<li class="belt__active {orgReign.length > 1 ? 'belt--double' : ''}" style="background-color: var(--{orgReign[0].title.org.name.abbreviation.toLowerCase()}-bg)" />
+			<li class="{belt(orgReign)} {orgReign.length > 1 ? striped : ''}" />
 		{/if}
 	{:else}
-		<li class="belt__inactive" />
+		<li class="ml-0.5 w-5" />
 	{/if}
 {/each}
-
-<style>
-	li {
-		width: 20px;
-		margin-left: 2px;
-	}
-
-	.belt--begins {
-		border-radius: 4px 4px 0 0;
-	}
-
-	.belt--beginsAndContinues {
-		background-image: linear-gradient(to right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0) 100%);
-	}
-
-	.belt--ends {
-		height: 4px;
-		border-radius: 0 0 4px 4px;
-	}
-
-	.belt--double {
-		background-image: linear-gradient(to right, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0) 100%);
-	}
-</style>

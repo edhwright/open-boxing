@@ -8,6 +8,10 @@ interface Props {
 }
 
 const { timelineDate, boutArticleIds } = Astro.props;
+
+const referenceClass = "mr-1 mb-1 inline-block rounded p-2 text-xs";
+const internalClass = `${referenceClass} bg-neutral-950`;
+const externalClass = `${referenceClass} border border-neutral-700 bg-neutral-800`;
 ---
 
 <>
@@ -16,8 +20,8 @@ const { timelineDate, boutArticleIds } = Astro.props;
 			timelineDate.events.bouts.map((bout) => (
 				<>
 					{boutArticleIds.includes(bout.boutId) && (
-						<li class="reference__internal">
-							<a href={`${Astro.url.origin}/articles/${bout.date}-${slugify(boutNameFromBout(bout))}/`}>{boutNameFromBout(bout)}</a>
+						<li class={internalClass}>
+							<a class="hover:underline" href={`${Astro.url.origin}/articles/${bout.date}-${slugify(boutNameFromBout(bout))}/`}>{boutNameFromBout(bout)}</a>
 						</li>
 					)}
 				</>
@@ -30,8 +34,8 @@ const { timelineDate, boutArticleIds } = Astro.props;
 				<>
 					{bout.references.length > 0 &&
 						bout.references.map((reference) => (
-							<li class="reference__external">
-								<a href={reference.link.url} target="_blank" rel="noreferrer">
+							<li class={externalClass}>
+								<a class="hover:underline" href={reference.link.url} target="_blank" rel="noreferrer">
 									{reference.link.text}
 								</a>
 							</li>
@@ -48,8 +52,8 @@ const { timelineDate, boutArticleIds } = Astro.props;
 						reign.references.map((reference) => (
 							<>
 								{reference.eventDate === reign.period.begins && (
-									<li class="reference__external">
-										<a href={reference.link.url} target="_blank" rel="noreferrer">
+									<li class={externalClass}>
+										<a class="hover:underline" href={reference.link.url} target="_blank" rel="noreferrer">
 											{reference.link.text}
 										</a>
 									</li>
@@ -68,8 +72,8 @@ const { timelineDate, boutArticleIds } = Astro.props;
 						reign.references.map((reference) => (
 							<>
 								{reference.eventDate === reign.period.ends && (
-									<li class="reference__external">
-										<a href={reference.link.url} target="_blank" rel="noreferrer">
+									<li class={externalClass}>
+										<a class="hover:underline" href={reference.link.url} target="_blank" rel="noreferrer">
 											{reference.link.text}
 										</a>
 									</li>
@@ -80,43 +84,3 @@ const { timelineDate, boutArticleIds } = Astro.props;
 			))
 	}
 </>
-
-<style>
-	.reference__internal,
-	.reference__external {
-		display: inline-block;
-		font-size: var(--font-size-small);
-		line-height: var(--line-height-small);
-		padding: 8px;
-		margin: 0 4px 4px 0;
-	}
-
-	.reference__internal {
-		background-color: var(--theme-callout-bg);
-		border-radius: 4px;
-	}
-
-	.reference__internal > a {
-		color: var(--theme-callout-text);
-		text-decoration: none;
-	}
-
-	.reference__internal > a:hover {
-		text-decoration: underline;
-	}
-
-	.reference__external {
-		background-color: var(--theme-content-bg);
-		border: 1px solid var(--theme-border);
-		border-radius: 4px;
-	}
-
-	.reference__external > a {
-		color: var(--theme-text);
-		text-decoration: none;
-	}
-
-	.reference__external > a:hover {
-		text-decoration: underline;
-	}
-</style>

@@ -6,11 +6,11 @@ interface Props {
 const { type } = Astro.props;
 ---
 
-<div class={`alert ${type === "INFO" ? "alert--info" : "alert--warning"}`}>
+<div class="flex rounded bg-neutral-950 text-neutral-100 xl:mx-auto xl:max-w-240">
 	{
 		type === "INFO" ? (
 			<svg
-				class="alert__icon"
+				class="m-4 min-w-7.5 self-center"
 				xmlns="http://www.w3.org/2000/svg"
 				width="24"
 				height="24"
@@ -28,7 +28,7 @@ const { type } = Astro.props;
 			</svg>
 		) : (
 			<svg
-				class="alert__icon"
+				class="m-4 min-w-7.5 self-center"
 				xmlns="http://www.w3.org/2000/svg"
 				width="24"
 				height="24"
@@ -46,42 +46,7 @@ const { type } = Astro.props;
 		)
 	}
 
-	<div class={`alert__body ${type === "INFO" ? "info--border" : "warning--border"}`}>
+	<div class="my-auto py-4 pr-4 [&_a]:text-white [&_a]:hover:underline">
 		<slot />
 	</div>
 </div>
-
-<style>
-	.alert {
-		display: flex;
-		border-radius: 4px;
-		color: var(--theme-callout-text);
-		background-color: var(--theme-callout-bg);
-		/* background-color: var(--theme-content-bg);
-		border: 1px solid var(--theme-border);
-		color: var(--theme-text); */
-	}
-
-	.alert__icon {
-		margin: 1rem;
-		min-width: 30px;
-		align-self: center;
-		justify-self: center;
-	}
-
-	.alert__body {
-		margin: auto 0;
-		padding: 1rem 1rem 1rem 0;
-	}
-
-	.alert__body :global(a) {
-		color: rgb(255, 255, 255);
-	}
-
-	@media (min-width: 1280px) {
-		.alert {
-			max-width: 956px;
-			margin: 0 auto;
-		}
-	}
-</style>

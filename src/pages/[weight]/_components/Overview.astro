@@ -28,92 +28,43 @@ const firstDate = least([...reigns.map((reign) => reign.period.begins), ...bouts
 const lastDate = greatest([...reigns.map((reign) => reign.period.ends), ...bouts.map((bout) => bout.date)]) as string;
 ---
 
-<ul class="overview">
-	<li class="overview__item">
-		<h3 class="overview__heading">Status</h3>
+<ul class="mb-4 grid grid-cols-12 gap-4">
+	<li class="col-span-12 md:col-span-6 lg:col-span-3">
+		<h3 class="pt-1 pb-0.5 text-sm/4 font-semibold md:border-t-2 md:border-neutral-400">Status</h3>
 		{
 			isActive ? (
-				<p class="overview__body">
+				<p class="text-sm/4">
 					Active ({target === "WEIGHT" ? "orgs active " : ""}since {dayjs(firstDate).format("YYYY")})
 				</p>
 			) : (
-				<p class="overview__body">Inactive (since {dayjs(lastDate).format("YYYY")})</p>
+				<p class="text-sm/4">Inactive (since {dayjs(lastDate).format("YYYY")})</p>
 			)
 		}
 	</li>
-	<li class="overview__item">
-		<h3 class="overview__heading">
+	<li class="col-span-12 md:col-span-6 lg:col-span-3">
+		<h3 class="pt-1 pb-0.5 text-sm/4 font-semibold md:border-t-2 md:border-neutral-400">
 			{target === "WEIGHT" ? "Total world champions" : "Total champions"}
 		</h3>
-		<p class="overview__body">
+		<p class="text-sm/4">
 			{[...new Set(reigns.map((reign) => reign.champion.championId))].length}
 		</p>
 	</li>
-	<li class="overview__item">
-		<h3 class="overview__heading">
+	<li class="col-span-12 md:col-span-6 lg:col-span-3">
+		<h3 class="pt-1 pb-0.5 text-sm/4 font-semibold md:border-t-2 md:border-neutral-400">
 			{target === "WEIGHT" ? "Total world title bouts" : "Total bouts"}
 		</h3>
-		<p class="overview__body">
+		<p class="text-sm/4">
 			{bouts.filter((bout) => bout.status === "FINISHED").length}
 		</p>
 	</li>
-	<li class="overview__item">
-		<h3 class="overview__heading">
+	<li class="col-span-12 md:col-span-6 lg:col-span-3">
+		<h3 class="pt-1 pb-0.5 text-sm/4 font-semibold md:border-t-2 md:border-neutral-400">
 			{target === "WEIGHT" ? "Most world title bouts" : "Most bouts"}
 		</h3>
-		<p class="overview__body">
-			<span class="overview__boxer"><BoxerName boxer={championWithMostBouts} useShortName={false} useTwoLines={false} /></span>
+		<p class="text-sm/4">
+			<span class="inline-block"><BoxerName boxer={championWithMostBouts} useShortName={false} useTwoLines={false} /></span>
 			({championWithMostBoutsRecord.w}-{championWithMostBoutsRecord.l}-{championWithMostBoutsRecord.d})
 			{championWithMostBoutsRecord.nc > 0 ? `${championWithMostBoutsRecord.nc} NC` : ""}
 		</p>
 	</li>
 </ul>
-
-<style>
-	.overview {
-		display: grid;
-		gap: 1rem;
-		grid-template-columns: repeat(12, 1fr);
-		list-style: none;
-		padding: 0;
-		margin-bottom: 1rem;
-	}
-
-	.overview__item {
-		grid-column: span 12;
-	}
-
-	.overview__heading {
-		font-size: var(--font-size-h3);
-		line-height: var(--line-height-h3);
-		padding-top: 4px;
-		padding-bottom: 2px;
-	}
-
-	.overview__body {
-		font-size: var(--font-size-medium);
-		line-height: var(--line-height-medium);
-	}
-
-	.overview__boxer {
-		display: inline-block;
-		color: var(--theme-text);
-		text-decoration: none;
-	}
-
-	@media (min-width: 768px) {
-		.overview__item {
-			grid-column: span 6;
-		}
-
-		.overview__heading {
-			border-top: 2px solid var(--theme-text-secondary);
-		}
-	}
-
-	@media (min-width: 1024px) {
-		.overview__item {
-			grid-column: span 3;
-		}
-	}
-</style>

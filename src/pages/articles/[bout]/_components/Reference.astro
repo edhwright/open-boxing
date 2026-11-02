@@ -31,26 +31,10 @@ if (dayjs(publicationDate).isSame(bout.date, "day")) {
 }
 ---
 
-<p>
+<p class="text-sm">
 	<time datetime={dayjs(publicationDate).format("YYYY-MM-DD")}>
 		{dayjs(publicationDate).format("D MMMM YYYY")}
 	</time> ({relativeTimeString})
 </p>
-<p>{author && <>{`${author}, `}</>}{publication}</p>
-<p><a target="_blank" href={link.url}>{link.text}</a></p>
-
-<style>
-	p {
-		font-size: 13px;
-		line-height: 17px;
-	}
-
-	a {
-		color: var(--theme-text);
-		text-decoration: none;
-	}
-
-	a:hover {
-		text-decoration: underline;
-	}
-</style>
+<p class="text-sm">{author && <>{`${author}, `}</>}{publication}</p>
+<p class="text-sm"><a class="hover:underline" target="_blank" href={link.url}>{link.text}</a></p>

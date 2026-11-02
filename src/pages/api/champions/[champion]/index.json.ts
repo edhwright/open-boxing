@@ -1,12 +1,12 @@
 import { getAllChampions, getChampion, getChampionReigns, getChampionBouts } from "../../../../db";
 import type { APIRoute } from "astro";
 
-const champions = getAllChampions();
+const champions = await getAllChampions();
 
-export const get: APIRoute = ({ params }) => {
-	const champion = getChampion(parseInt(params.champion as string));
-	const championReigns = getChampionReigns(champion.championId);
-	const championBouts = getChampionBouts(champion.championId);
+export const GET: APIRoute = async ({ params }) => {
+	const champion = await getChampion(parseInt(params.champion as string));
+	const championReigns = await getChampionReigns(champion.championId);
+	const championBouts = await getChampionBouts(champion.championId);
 
 	const championReignsWithoutReferences = championReigns.map((championReign) => {
 		const { references, ...championReignWithoutReferences } = { ...championReign };
@@ -18,19 +18,19 @@ export const get: APIRoute = ({ params }) => {
 		return championBoutWithoutReferences;
 	});
 
-	return {
-		body: JSON.stringify({
+	return new Response(
+		JSON.stringify({
 			champion: champion,
 			reigns: championReignsWithoutReferences,
 			bouts: championBoutsWithoutReferences,
 		}),
-	};
+	);
 };
 
 export function getStaticPaths() {
 	return champions.map((champion) => ({
 		params: {
-			champion: champion.championId,
+			champion: String(champion.championId),
 		},
 	}));
 }

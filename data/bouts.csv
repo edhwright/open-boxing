@@ -1,4 +1,4 @@
-bout_id,date,boxer_a_champion_id,boxer_a_name,boxer_b_champion_id,boxer_b_name,status,winner,method_of_victory,total_rounds,scheduled_rounds,weight_class,weight_lb,titles,location_id,
+bout_id,date,boxer_a_champion_id,boxer_a_name,boxer_b_champion_id,boxer_b_name,status,winner,method_of_victory,total_rounds,scheduled_rounds,weight_class,weight_lb,titles,location_id,location_venue
 1,1912-06-24,7,Frank Klaus,25,Georges Carpentier,FINISHED,BOXER A,DQ,19,20,Middleweight,160,NYSAC-Middleweight-160,,
 2,1912-07-04,1,Jack Johnson,,Fireman Jim Flynn,FINISHED,BOXER A,DQ,9,45,Heavyweight,175+,NYSAC-Heavyweight-200+,,
 3,1913-02-17,13,Bob Moha,,Cyclone Johnny Thompson,FINISHED,BOXER A,NWS,10,10,Light Heavyweight,175,NYSAC-Light Heavyweight-175,,

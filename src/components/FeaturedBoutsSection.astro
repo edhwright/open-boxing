@@ -1,0 +1,20 @@
+---
+import FeaturedBouts from "./FeaturedBouts.astro";
+import type { FeaturedBoutPreview } from "../utils";
+
+interface Props {
+	featuredBoutPreviews: FeaturedBoutPreview[];
+}
+
+const { featuredBoutPreviews } = Astro.props;
+---
+
+<!-- the band runs to the edges of the screen on small screens (-mx-3 undoes the page's mx-3) -->
+<section class="-mx-3 my-8 border-t border-neutral-700 bg-linear-to-b from-featured to-neutral-900 px-3 pt-4 pb-8 xl:mx-0 xl:px-0">
+	<div class="xl:mx-auto xl:max-w-240">
+		<h2 class="mb-3 text-lg">
+			<a class="hover:underline" href={`${Astro.url.origin}/articles#featured-bouts`}>Featured bouts</a>
+		</h2>
+		<FeaturedBouts featuredBoutPreviews={featuredBoutPreviews} />
+	</div>
+</section>

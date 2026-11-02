@@ -1,14 +1,12 @@
 import dayjs from "dayjs";
 import { getLatestTitleReign, getBout, getAllTitles } from "./db";
 import type { Reign, Bout, Champion, Challenger, Title } from "./types";
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import { group } from "d3-array";
 
 // order of weight classes and orgs are important
 // display weight classes from heaviest to lightest
 // display orgs from oldest to newest (WBA belts are grouped together, The Ring belt goes at the end as it's not a governing body)
-
-// putting weight classes and orgs in json files would probably be nicer. This works for now
 
 export const weightClasses = [
 	{ class: "Heavyweight", lb: "200+" },
@@ -31,7 +29,26 @@ export const weightClasses = [
 	{ class: "Minimumweight", lb: "105" },
 ];
 
+// export const current
+
+// export const weightClasses = [
+
+// ];
+
 export const orgs = ["IBU", "NYSAC", "WBA", "WBAR", "WBAS", "WBC", "IBF", "WBO", "RING"];
+
+// full class names, so Tailwind can find them when scanning the source
+export const orgColours: Record<string, { text: string; bg: string }> = {
+	IBU: { text: "text-ibuText", bg: "bg-ibuBg" },
+	NYSAC: { text: "text-nysacText", bg: "bg-nysacBg" },
+	WBA: { text: "text-wbaText", bg: "bg-wbaBg" },
+	WBAR: { text: "text-wbaText", bg: "bg-wbaBg" },
+	WBAS: { text: "text-wbaText", bg: "bg-wbaBg" },
+	WBC: { text: "text-wbcText", bg: "bg-wbcBg" },
+	IBF: { text: "text-ibfText", bg: "bg-ibfBg" },
+	WBO: { text: "text-wboText", bg: "bg-wboBg" },
+	RING: { text: "text-ringText", bg: "bg-ringBg" },
+};
 
 export interface WeightClassCurrentChampions {
 	weight: {
@@ -44,7 +61,7 @@ export interface WeightClassCurrentChampions {
 
 const currentChampionOrgs = ["WBAR", "WBAS", "WBC", "IBF", "WBO", "RING"];
 
-export function getCurrentChampions(): WeightClassCurrentChampions[] {
+export const getCurrentChampions = async (): Promise<WeightClassCurrentChampions[]> => {
 	const currentChampions = [];
 
 	for (const weightClass of weightClasses) {
@@ -52,7 +69,7 @@ export function getCurrentChampions(): WeightClassCurrentChampions[] {
 		for (const org of currentChampionOrgs) {
 			// getLatestTitleReign will return null if title doesn't exist.
 			// e.g. as The Ring has never had a minimumweight champion, getLatestTitleReign("Minimumweight", "RING") will return null
-			orgChampions.push(getLatestTitleReign(weightClass.class, org));
+			orgChampions.push(await getLatestTitleReign(weightClass.class, org));
 		}
 		currentChampions.push({
 			weight: weightClass,
@@ -62,10 +79,10 @@ export function getCurrentChampions(): WeightClassCurrentChampions[] {
 	}
 
 	return currentChampions;
-}
+};
 
-export function getCurrentWeightClassChampions(weightClass: string): WeightClassCurrentChampions {
-	const orgChampions = currentChampionOrgs.map((org) => getLatestTitleReign(weightClass, org));
+export async function getCurrentWeightClassChampions(weightClass: string): Promise<WeightClassCurrentChampions> {
+	const orgChampions = await Promise.all(currentChampionOrgs.map((org) => getLatestTitleReign(weightClass, org)));
 	return {
 		weight: weightClasses.find((wc) => wc.class === weightClass) as {
 			class: string;
@@ -124,16 +141,17 @@ export async function getAllBoutArticlesIds() {
 
 export async function getAllFeaturedBoutPreviews(): Promise<FeaturedBoutPreview[]> {
 	const allFeaturedBoutArticles = await getCollection("bouts", ({ data }) => data.featured);
-	return [...group(allFeaturedBoutArticles, (a) => a.data.boutId)]
-		.map(([boutId, articles]) => {
-			const bout = getBout(boutId);
+	const featuredBoutPreviews = await Promise.all(
+		[...group(allFeaturedBoutArticles, (a) => a.data.boutId)].map(async ([boutId, articles]) => {
+			const bout = await getBout(boutId);
 			return {
 				name: boutNameFromBout(bout),
 				thumbnail: articles[0].data.thumbnail,
 				bout: bout,
 			};
-		})
-		.sort((a, b) => a.bout.date.localeCompare(b.bout.date));
+		}),
+	);
+	return featuredBoutPreviews.sort((a, b) => a.bout.date.localeCompare(b.bout.date));
 }
 
 export function filterFeaturedBoutPreviewsByWeightClass(featuredBoutPreviews: FeaturedBoutPreview[], weightClass: string) {
@@ -142,7 +160,7 @@ export function filterFeaturedBoutPreviewsByWeightClass(featuredBoutPreviews: Fe
 
 export function filterFeaturedBoutPreviewsByTitle(featuredBoutPreviews: FeaturedBoutPreview[], weightClass: string, org: string) {
 	return featuredBoutPreviews.filter(
-		(boutPreview) => boutPreview.bout.titles.filter((title) => title.weight.class === weightClass && title.org.name.abbreviation === org).length > 0
+		(boutPreview) => boutPreview.bout.titles.filter((title) => title.weight.class === weightClass && title.org.name.abbreviation === org).length > 0,
 	);
 }
 
@@ -150,7 +168,7 @@ export function filterFeaturedBoutPreviewsByChampion(featuredBoutPreviews: Featu
 	return featuredBoutPreviews.filter(
 		(boutPreview) =>
 			(isChampion(boutPreview.bout.boxers.boxerA) && boutPreview.bout.boxers.boxerA.championId === championId) ||
-			(isChampion(boutPreview.bout.boxers.boxerB) && boutPreview.bout.boxers.boxerB.championId === championId)
+			(isChampion(boutPreview.bout.boxers.boxerB) && boutPreview.bout.boxers.boxerB.championId === championId),
 	);
 }
 
@@ -227,7 +245,7 @@ export interface ReignsPlotData {
 	endDate: string;
 }
 
-export function getReignsPlotData(champion: Champion, championReigns: Reign[], championBouts: Bout[], championTimeline: TimelineDate[]): ReignsPlotData {
+export async function getReignsPlotData(champion: Champion, championReigns: Reign[], championBouts: Bout[], championTimeline: TimelineDate[]): Promise<ReignsPlotData> {
 	const earliestDate = championTimeline[0].date;
 	const isCurrentChampion = championReigns.map((reign) => reign.period.current).includes(true);
 	const latestDate =
@@ -252,7 +270,7 @@ export function getReignsPlotData(champion: Champion, championReigns: Reign[], c
 		});
 	}
 
-	const allTitles = getAllTitles();
+	const allTitles = await getAllTitles();
 	const titleData: {
 		title: Title;
 		reigns: Reign[] | null;

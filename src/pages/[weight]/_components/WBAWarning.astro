@@ -13,7 +13,7 @@ const { title } = Astro.props;
 <Alert type="INFO">
 	{
 		title.org.name.abbreviation === "WBA" && (
-			<p>
+			<p class="text-sm/4">
 				The WBA timeline stops on the introduction of the WBA Super title. See also: <a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbar/`}>WBA Regular</a>,
 				<a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbas/`}>WBA Super</a>
 			</p>
@@ -21,7 +21,7 @@ const { title } = Astro.props;
 	}
 	{
 		title.org.name.abbreviation === "WBAR" && (
-			<p>
+			<p class="text-sm/4">
 				The WBA Regular timeline starts on the introduction of the WBA Super title. See also: <a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wba/`}>WBA</a>,
 				<a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbas/`}>WBA Super</a>
 			</p>
@@ -29,25 +29,10 @@ const { title } = Astro.props;
 	}
 	{
 		title.org.name.abbreviation === "WBAS" && (
-			<p>
+			<p class="text-sm/4">
 				The WBA timeline stops on the introduction of the WBA Super title. See also: <a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wba/`}>WBA</a>,{" "}
 				<a href={`${Astro.url.origin}/${slugify(title.weight.class)}/wbar/`}>WBA Regular</a>
 			</p>
 		)
 	}
 </Alert>
-
-<style>
-	p {
-		font-size: var(--font-size-medium);
-		line-height: var(--line-height-medium);
-	}
-
-	a {
-		text-decoration: none;
-	}
-
-	a:hover {
-		text-decoration: underline;
-	}
-</style>

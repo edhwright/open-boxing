@@ -1,0 +1,594 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "8e5f6e85-e56a-4b24-a138-ddb7848b70c6",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "Bout": {
+      "name": "Bout",
+      "columns": {
+        "bout_id": {
+          "name": "bout_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date": {
+          "name": "date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "boxer_a_id": {
+          "name": "boxer_a_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "boxer_a_name": {
+          "name": "boxer_a_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "boxer_b_id": {
+          "name": "boxer_b_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "boxer_b_name": {
+          "name": "boxer_b_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "winner": {
+          "name": "winner",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "method_of_victory": {
+          "name": "method_of_victory",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "total_rounds": {
+          "name": "total_rounds",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "scheduled_rounds": {
+          "name": "scheduled_rounds",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "weight_class": {
+          "name": "weight_class",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "weight_lb": {
+          "name": "weight_lb",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "location_id": {
+          "name": "location_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "location_venue": {
+          "name": "location_venue",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Bout_boxer_a_id_Champion_champion_id_fk": {
+          "name": "Bout_boxer_a_id_Champion_champion_id_fk",
+          "tableFrom": "Bout",
+          "tableTo": "Champion",
+          "columnsFrom": [
+            "boxer_a_id"
+          ],
+          "columnsTo": [
+            "champion_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Bout_boxer_b_id_Champion_champion_id_fk": {
+          "name": "Bout_boxer_b_id_Champion_champion_id_fk",
+          "tableFrom": "Bout",
+          "tableTo": "Champion",
+          "columnsFrom": [
+            "boxer_b_id"
+          ],
+          "columnsTo": [
+            "champion_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Bout_location_id_Location_location_id_fk": {
+          "name": "Bout_location_id_Location_location_id_fk",
+          "tableFrom": "Bout",
+          "tableTo": "Location",
+          "columnsFrom": [
+            "location_id"
+          ],
+          "columnsTo": [
+            "location_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "BoutTitle": {
+      "name": "BoutTitle",
+      "columns": {
+        "bout_id": {
+          "name": "bout_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title_id": {
+          "name": "title_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "weight_lb": {
+          "name": "weight_lb",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "BoutTitle_bout_id_Bout_bout_id_fk": {
+          "name": "BoutTitle_bout_id_Bout_bout_id_fk",
+          "tableFrom": "BoutTitle",
+          "tableTo": "Bout",
+          "columnsFrom": [
+            "bout_id"
+          ],
+          "columnsTo": [
+            "bout_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "BoutTitle_title_id_Title_title_id_fk": {
+          "name": "BoutTitle_title_id_Title_title_id_fk",
+          "tableFrom": "BoutTitle",
+          "tableTo": "Title",
+          "columnsFrom": [
+            "title_id"
+          ],
+          "columnsTo": [
+            "title_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "Champion": {
+      "name": "Champion",
+      "columns": {
+        "champion_id": {
+          "name": "champion_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "short_name": {
+          "name": "short_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "born": {
+          "name": "born",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "Location": {
+      "name": "Location",
+      "columns": {
+        "location_id": {
+          "name": "location_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "latest_venue_name": {
+          "name": "latest_venue_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "locality": {
+          "name": "locality",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "latitude": {
+          "name": "latitude",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "longitude": {
+          "name": "longitude",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "Reference": {
+      "name": "Reference",
+      "columns": {
+        "reference_id": {
+          "name": "reference_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "headline": {
+          "name": "headline",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "author": {
+          "name": "author",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "publication": {
+          "name": "publication",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "publication_date": {
+          "name": "publication_date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "bout_id": {
+          "name": "bout_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "reign_id": {
+          "name": "reign_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "event_date": {
+          "name": "event_date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "link_text": {
+          "name": "link_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "link": {
+          "name": "link",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Reference_bout_id_Bout_bout_id_fk": {
+          "name": "Reference_bout_id_Bout_bout_id_fk",
+          "tableFrom": "Reference",
+          "tableTo": "Bout",
+          "columnsFrom": [
+            "bout_id"
+          ],
+          "columnsTo": [
+            "bout_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Reference_reign_id_Reign_reign_id_fk": {
+          "name": "Reference_reign_id_Reign_reign_id_fk",
+          "tableFrom": "Reference",
+          "tableTo": "Reign",
+          "columnsFrom": [
+            "reign_id"
+          ],
+          "columnsTo": [
+            "reign_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "Reign": {
+      "name": "Reign",
+      "columns": {
+        "reign_id": {
+          "name": "reign_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "begins": {
+          "name": "begins",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ends": {
+          "name": "ends",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "champion_id": {
+          "name": "champion_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "is_current_champion": {
+          "name": "is_current_champion",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title_id": {
+          "name": "title_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "weight_lb": {
+          "name": "weight_lb",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Reign_champion_id_Champion_champion_id_fk": {
+          "name": "Reign_champion_id_Champion_champion_id_fk",
+          "tableFrom": "Reign",
+          "tableTo": "Champion",
+          "columnsFrom": [
+            "champion_id"
+          ],
+          "columnsTo": [
+            "champion_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Reign_title_id_Title_title_id_fk": {
+          "name": "Reign_title_id_Title_title_id_fk",
+          "tableFrom": "Reign",
+          "tableTo": "Title",
+          "columnsFrom": [
+            "title_id"
+          ],
+          "columnsTo": [
+            "title_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "Title": {
+      "name": "Title",
+      "columns": {
+        "title_id": {
+          "name": "title_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "org_full_name": {
+          "name": "org_full_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "org_short_name": {
+          "name": "org_short_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "org_abbreviation": {
+          "name": "org_abbreviation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "active": {
+          "name": "active",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "weight_class": {
+          "name": "weight_class",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "latest_weight_lb": {
+          "name": "latest_weight_lb",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}

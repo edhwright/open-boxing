@@ -7,76 +7,17 @@ interface Props {
 }
 
 const { latestReigns } = Astro.props;
+
+// show as many as fill whole rows: 8 on small screens, 9 on medium, 6 on large, 8 on extra large
+const visibility = (i: number) => (i < 6 ? "" : i < 8 ? "lg:hidden xl:block" : i < 9 ? "hidden md:block lg:hidden" : "hidden");
 ---
 
-<div class="champions">
+<div class="grid grid-cols-12 gap-4 xl:grid-cols-16">
 	{
-		latestReigns.map((reign) => (
-			<div class="champions__champion">
+		latestReigns.map((reign, i) => (
+			<div class={`col-span-6 overflow-hidden rounded border border-neutral-700 bg-neutral-800 p-3 md:col-span-4 lg:col-span-2 ${visibility(i)}`}>
 				<ChampionContent reign={reign} dateFormat="D MMM YYYY" includeWeightClass={true} isUndisputed={false} />
 			</div>
 		))
 	}
 </div>
-
-<style>
-	.champions {
-		display: grid;
-		gap: 1rem;
-		grid-template-columns: repeat(12, 1fr);
-		grid-template-rows: repeat(2, 1fr);
-	}
-
-	.champions__champion {
-		grid-column: span 6;
-		background-color: var(--theme-content-bg);
-		padding: 12px;
-		overflow: hidden;
-		border: 1px solid var(--theme-border);
-		border-radius: 4px;
-		height: 134px;
-	}
-
-	.champions__champion:nth-of-type(n + 9) {
-		display: none;
-	}
-
-	@media (min-width: 768px) {
-		.champions__champion {
-			grid-column: span 4;
-		}
-
-		.champions__champion:nth-of-type(9) {
-			display: initial;
-		}
-	}
-
-	@media (min-width: 1024px) {
-		.champions {
-			grid-template-rows: 1fr;
-		}
-
-		.champions__champion {
-			grid-column: span 2;
-		}
-
-		.champions__champion:nth-of-type(n + 7) {
-			display: none;
-		}
-	}
-
-	@media (min-width: 1280px) {
-		.champions {
-			grid-template-columns: repeat(16, 1fr);
-		}
-
-		.champions__champion:nth-of-type(7),
-		.champions__champion:nth-of-type(8) {
-			display: initial;
-		}
-
-		.champions__champion:nth-of-type(n + 9) {
-			display: none;
-		}
-	}
-</style>
