@@ -4,6 +4,7 @@ import { boutNameFromBout, slugify } from "../../../utils";
 import Layout from "../../../layouts/Layout.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import Reference from "./_components/Reference.astro";
+import LocationGlobe from "../../../components/LocationGlobe.svelte";
 import { type CollectionEntry, getCollection, render } from "astro:content";
 import { getBout } from "../../../db";
 import { group } from "d3-array";
@@ -40,6 +41,9 @@ export async function getStaticPaths() {
 
 const { boutName, thumbnail, bout, articles } = Astro.props;
 
+const { location } = bout;
+const place = [location.venue, location.locality, location.country].filter(Boolean).join(", ");
+
 const articleComponents = await Promise.all(
 	articles.map(async (a) => {
 		const { Content, headings } = await render(a);
@@ -69,6 +73,17 @@ const articleComponents = await Promise.all(
 						{dayjs(bout.date).format("dddd, D MMMM, YYYY")}
 					</time>
 				</p>
+				{
+					place &&
+						(location.latitude !== null && location.longitude !== null ? (
+							<div class="mb-2 flex items-center justify-center gap-3">
+								<LocationGlobe latitude={location.latitude} longitude={location.longitude} label={place} />
+								<p>{place}</p>
+							</div>
+						) : (
+							<p class="mb-2">{place}</p>
+						))
+				}
 				<p class="mb-2">{bout.weight.class} ({bout.weight.lb} lb)</p>
 				<div>
 					{
