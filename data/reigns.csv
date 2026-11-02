@@ -143,7 +143,7 @@ reign_id,begins,ends,champion_id,name,current,title
 142,1926-07-16,1927-07-26,56,Jack Delaney,,WBA-Light Heavyweight-175
 143,1926-09-21,1930-02-18,57,Mushy Callahan,,NYSAC-Super Lightweight-140
 144,1926-09-21,1930-02-18,57,Mushy Callahan,,RING-Super Lightweight-140
-145,1926-09-21,1930-02-18,57,Mushy Callahan,,WBA-Super Lightweight-140
+145,1926-09-21,1930-02-03,57,Mushy Callahan,,WBA-Super Lightweight-140
 146,1926-09-23,1928-07-31,58,Gene Tunney,,IBU-Heavyweight-175+
 147,1926-09-23,1928-07-31,58,Gene Tunney,,NYSAC-Heavyweight-175+
 148,1926-09-23,1928-07-31,58,Gene Tunney,,RING-Heavyweight-175+
@@ -174,12 +174,12 @@ reign_id,begins,ends,champion_id,name,current,title
 173,1928-02-06,1929-03-02,68,Frankie Genaro,,WBA-Flyweight-112
 174,1928-02-10,1928-09-28,65,Tony Canzoneri,,WBA-Featherweight-126
 175,1928-05-23,1929-01-01,69,Bushy Graham,,NYSAC-Bantamweight-118
-176,1928-05-23,1928-10-16,69,Bushy Graham,,WBA-Bantamweight-118
+176,1928-05-23,1929-10-08,69,Bushy Graham,,WBA-Bantamweight-118
 177,1928-09-28,1929-09-23,70,Andre Routis,,IBU-Featherweight-126
 178,1928-09-28,1929-09-23,70,Andre Routis,,NYSAC-Featherweight-126
 179,1928-09-28,1929-09-23,70,Andre Routis,,RING-Featherweight-126
 180,1928-09-28,1929-09-23,70,Andre Routis,,WBA-Featherweight-126
-181,1928-10-16,1934-05-01,71,Panama Al Brown,,WBA-Bantamweight-118
+181,1929-10-08,1930-02-03,71,Panama Al Brown,,WBA-Bantamweight-118
 182,1929-03-02,1929-04-18,72,Emile Pladner,,IBU-Flyweight-112
 183,1929-03-02,1929-04-18,72,Emile Pladner,,WBA-Flyweight-112
 184,1929-03-25,1930-05-09,73,Jackie Fields,,WBA-Welterweight-147
@@ -200,14 +200,14 @@ reign_id,begins,ends,champion_id,name,current,title
 199,1930-02-10,1930-06-25,61,Jimmy Slattery,,NYSAC-Light Heavyweight-175
 200,1930-02-18,1931-04-24,76,Jack Kid Berg,,NYSAC-Super Lightweight-140
 201,1930-02-18,1932-02-01,76,Jack Kid Berg,,RING-Super Lightweight-140
-202,1930-02-18,1931-04-24,76,Jack Kid Berg,,WBA-Super Lightweight-140
+202,1931-01-23,1931-04-24,76,Jack Kid Berg,,WBA-Super Lightweight-140
 203,1930-03-21,1935-09-16,77,Midget Wolgast,,NYSAC-Flyweight-112
 204,1930-05-09,1930-09-05,78,Jack Thompson,,IBU-Welterweight-147
 205,1930-05-09,1930-09-05,78,Jack Thompson,,NYSAC-Welterweight-147
 206,1930-05-09,1930-09-05,78,Jack Thompson,,RING-Welterweight-147
 207,1930-05-09,1930-09-05,78,Jack Thompson,,WBA-Welterweight-147
 208,1930-06-12,1932-06-21,79,Max Schmeling,,IBU-Heavyweight-175+
-209,1930-06-12,1932-06-21,79,Max Schmeling,,NYSAC-Heavyweight-175+
+209,1930-06-12,1931-01-07,79,Max Schmeling,,NYSAC-Heavyweight-175+
 210,1930-06-12,1932-06-21,79,Max Schmeling,,RING-Heavyweight-175+
 211,1930-06-12,1932-06-21,79,Max Schmeling,,WBA-Heavyweight-175+
 212,1930-06-25,1934-11-16,80,Maxie Rosenbloom,,NYSAC-Light Heavyweight-175
@@ -240,7 +240,7 @@ reign_id,begins,ends,champion_id,name,current,title
 239,1931-10-23,1932-01-28,84,Lou Brouillard,,WBA-Welterweight-147
 240,1931-10-26,1932-10-31,85,Young Perez,,IBU-Flyweight-112
 241,1931-10-26,1932-10-31,85,Young Perez,,WBA-Flyweight-112
-242,1932-01-18,1932-09-01,86,Johnny Jadick,,NYSAC-Super Lightweight-140
+242,1932-01-18,1933-02-06,86,Johnny Jadick,,NYSAC-Super Lightweight-140
 243,1932-01-18,1932-09-20,86,Johnny Jadick,,WBA-Super Lightweight-140
 244,1932-01-25,1932-06-11,87,Gorilla Jones,,IBU-Middleweight-160
 245,1932-01-25,1932-06-11,87,Gorilla Jones,,WBA-Middleweight-160
@@ -305,7 +305,7 @@ reign_id,begins,ends,champion_id,name,current,title
 304,1934-09-17,1935-05-28,98,Jimmy McLarnin,,WBA-Welterweight-147
 305,1934-11-16,1935-10-31,106,Bob Olin,,NYSAC-Light Heavyweight-175
 306,1934-11-16,1935-10-31,106,Bob Olin,,RING-Light Heavyweight-175
-307,1934-11-16,1935-10-31,107,Billy Conn,,WBA-Light Heavyweight-175
+307,1934-11-16,1935-10-31,106,Bob Olin,,WBA-Light Heavyweight-175
 308,1934-12-08,1935-05-06,103,Max Baer,,IBU-Heavyweight-175+
 309,1935-02-01,1936-05-11,94,Freddie Miller,,RING-Featherweight-126
 310,1935-05-10,1936-09-03,65,Tony Canzoneri,,IBU-Lightweight-135
@@ -382,7 +382,7 @@ reign_id,begins,ends,champion_id,name,current,title
 381,1938-11-29,1939-02-03,135,Tiger Jack Fox,,NYSAC-Light Heavyweight-175
 382,1939-02-03,1939-07-13,136,Melio Bettina,,NYSAC-Light Heavyweight-175
 383,1939-04-18,1940-05-20,132,Joey Archibald,,RING-Featherweight-126
-384,1939-04-18,1940-04-01,132,Joey Archibald,,WBA-Featherweight-126
+384,1939-10-29,1940-03-29,132,Joey Archibald,,WBA-Featherweight-126
 385,1939-06-27,1940-07-19,130,Al Hostak,,WBA-Middleweight-160
 386,1939-07-13,1941-06-03,107,Billy Conn,,NYSAC-Light Heavyweight-175
 387,1939-07-13,1941-05-01,107,Billy Conn,,RING-Light Heavyweight-175
@@ -692,7 +692,7 @@ reign_id,begins,ends,champion_id,name,current,title
 691,1963-06-08,1966-08-01,217,Emile Griffith,,NYSAC-Welterweight-147
 692,1963-06-08,1966-04-25,217,Emile Griffith,,RING-Welterweight-147
 693,1963-06-08,1966-06-11,217,Emile Griffith,,WBA-Welterweight-147
-694,1963-06-08,1966-04-25,217,Emile Griffith,,WBC-Welterweight-147
+694,1963-06-08,1966-08-01,217,Emile Griffith,,WBC-Welterweight-147
 695,1963-06-15,1965-01-18,219,Eddie Perkins,,RING-Super Lightweight-140
 696,1963-06-15,1965-01-18,219,Eddie Perkins,,WBA-Super Lightweight-140
 697,1963-06-15,1965-01-18,219,Eddie Perkins,,WBC-Super Lightweight-140
@@ -710,7 +710,7 @@ reign_id,begins,ends,champion_id,name,current,title
 709,1964-01-23,1965-04-23,212,Pone Kingpetch,,WBC-Flyweight-112
 710,1964-02-25,1967-04-28,232,Muhammad Ali,,NYSAC-Heavyweight-175+
 711,1964-02-25,1970-02-03,232,Muhammad Ali,,RING-Heavyweight-175+
-712,1964-02-25,1964-06-19,232,Muhammad Ali,,WBA-Heavyweight-175+
+712,1964-02-25,1964-09-14,232,Muhammad Ali,,WBA-Heavyweight-175+
 713,1964-02-25,1969-03-03,232,Muhammad Ali,,WBC-Heavyweight-175+
 714,1964-09-26,1967-10-14,233,Vicente Saldivar,,RING-Featherweight-126
 715,1964-09-26,1967-10-14,233,Vicente Saldivar,,WBA-Featherweight-126
@@ -738,7 +738,7 @@ reign_id,begins,ends,champion_id,name,current,title
 737,1965-10-21,1966-04-25,223,Dick Tiger,,WBC-Middleweight-160
 738,1965-11-13,1968-06-29,206,Carlos Ortiz,,RING-Lightweight-135
 739,1965-11-13,1968-06-29,206,Carlos Ortiz,,WBA-Lightweight-135
-740,1965-11-13,1968-06-29,206,Carlos Ortiz,,WBC-Lightweight-135
+740,1965-11-13,1966-10-25,206,Carlos Ortiz,,WBC-Lightweight-135
 741,1966-03-01,1968-10-02,240,Horacio Accavallo,,WBA-Flyweight-112
 742,1966-03-01,1968-10-02,240,Horacio Accavallo,,WBC-Flyweight-112
 743,1966-04-25,1967-04-17,217,Emile Griffith,,RING-Middleweight-160
@@ -752,7 +752,7 @@ reign_id,begins,ends,champion_id,name,current,title
 751,1966-06-25,1968-05-26,243,Kim Ki-soo,,WBC-Super Welterweight-154
 752,1966-08-24,1969-04-18,244,Curtis Cokes,,NYSAC-Welterweight-147
 753,1966-08-24,1969-04-18,244,Curtis Cokes,,WBA-Welterweight-147
-754,1966-08-24,1969-04-18,244,Curtis Cokes,,WBC-Welterweight-147
+754,1966-11-28,1969-04-18,244,Curtis Cokes,,WBC-Welterweight-147
 755,1966-11-28,1969-04-18,244,Curtis Cokes,,RING-Welterweight-147
 756,1966-12-16,1968-05-24,223,Dick Tiger,,RING-Light Heavyweight-175
 757,1966-12-16,1968-05-24,223,Dick Tiger,,WBA-Light Heavyweight-175
@@ -764,7 +764,7 @@ reign_id,begins,ends,champion_id,name,current,title
 763,1967-04-17,1967-09-29,239,Nino Benvenuti,,WBC-Middleweight-160
 764,1967-04-30,1968-12-12,246,Takeshi Fuji,,RING-Super Lightweight-140
 765,1967-04-30,1968-12-12,246,Takeshi Fuji,,WBA-Super Lightweight-140
-766,1967-04-30,1968-01-01,246,Takeshi Fuji,,WBC-Super Lightweight-140
+766,1967-04-30,1968-11-14,246,Takeshi Fuji,,WBC-Super Lightweight-140
 767,1967-06-15,1967-12-14,247,Yoshiaki Numata,,RING-Super Featherweight-130
 768,1967-06-15,1967-12-14,247,Yoshiaki Numata,,WBA-Super Featherweight-130
 769,1967-06-15,1967-12-14,247,Yoshiaki Numata,,WBC-Super Featherweight-130
@@ -785,7 +785,7 @@ reign_id,begins,ends,champion_id,name,current,title
 784,1968-03-28,1968-09-27,252,Raul Rojas,,WBA-Featherweight-126
 785,1968-04-27,1970-02-16,253,Jimmy Ellis,,WBA-Heavyweight-175+
 786,1968-05-24,1974-09-16,254,Bob Foster,,RING-Light Heavyweight-175
-787,1968-05-24,1970-09-09,254,Bob Foster,,WBA-Light Heavyweight-175
+787,1968-05-24,1970-12-09,254,Bob Foster,,WBA-Light Heavyweight-175
 788,1968-05-24,1974-09-16,254,Bob Foster,,WBC-Light Heavyweight-175
 789,1968-05-26,1968-11-01,229,Sandro Mazzinghi,,WBA-Super Welterweight-154
 790,1968-05-26,1968-11-01,229,Sandro Mazzinghi,,WBC-Super Welterweight-154
@@ -879,7 +879,7 @@ reign_id,begins,ends,champion_id,name,current,title
 878,1972-06-03,1972-09-29,288,Betulio Gonzalez,,WBC-Flyweight-112
 879,1972-06-16,1974-08-03,289,Hedgemon Lewis,,NYSAC-Welterweight-147
 880,1972-06-26,1979-02-02,290,Roberto Duran,,RING-Lightweight-135
-881,1972-06-26,1979-01-31,290,Roberto Duran,,WBA-Lightweight-135
+881,1972-06-26,1979-02-02,290,Roberto Duran,,WBA-Lightweight-135
 882,1972-07-29,1973-01-20,291,Enrique Pinder,,WBA-Bantamweight-118
 883,1972-07-29,1973-01-05,291,Enrique Pinder,,WBC-Bantamweight-118
 884,1972-07-30,1973-01-20,291,Enrique Pinder,,RING-Bantamweight-118
@@ -991,7 +991,7 @@ reign_id,begins,ends,champion_id,name,current,title
 990,1977-11-26,1978-05-07,303,Hong Soo-hwan,,WBA-Super Bantamweight-122
 991,1977-12-17,1978-04-15,349,Cecilio Lastra,,WBA-Featherweight-126
 992,1978-01-07,1978-12-02,350,Mate Parlov,,WBC-Light Heavyweight-175
-993,1978-01-21,1979-01-01,290,Roberto Duran,,WBC-Lightweight-135
+993,1978-01-21,1979-02-07,290,Roberto Duran,,WBC-Lightweight-135
 994,1978-01-28,1980-01-01,309,Alexis Arguello,,WBC-Super Featherweight-130
 995,1978-02-15,1978-09-15,351,Leon Spinks,,RING-Heavyweight-175+
 996,1978-02-15,1978-09-15,351,Leon Spinks,,WBA-Heavyweight-175+
@@ -1268,7 +1268,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1267,1986-09-27,1991-03-15,518,Brian Mitchell,,WBA-Super Featherweight-130
 1268,1986-09-27,1987-10-28,517,Lloyd Honeyghan,,IBF-Welterweight-147
 1269,1986-09-27,1987-10-27,517,Lloyd Honeyghan,,RING-Welterweight-147
-1270,1986-09-27,1986-12-01,517,Lloyd Honeyghan,,WBA-Welterweight-147
+1270,1986-09-27,1987-01-05,517,Lloyd Honeyghan,,WBA-Welterweight-147
 1271,1986-09-27,1987-10-28,517,Lloyd Honeyghan,,WBC-Welterweight-147
 1272,1986-10-25,1987-05-15,519,Ricky Parkey,,IBF-Cruiserweight-190
 1273,1986-10-30,1987-03-04,520,Joe Manley,,IBF-Super Lightweight-140
@@ -1292,7 +1292,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1291,1987-04-06,1987-05-27,374,Sugar Ray Leonard,,WBC-Middleweight-160
 1292,1987-05-08,1988-01-27,482,Jeff Fenech,,WBC-Super Bantamweight-122
 1293,1987-05-15,1988-07-09,533,Kelvin Seabrooks,,IBF-Bantamweight-118
-1294,1987-05-15,1988-01-01,512,Evander Holyfield,,IBF-Cruiserweight-190
+1294,1987-05-15,1988-12-04,512,Evander Holyfield,,IBF-Cruiserweight-190
 1295,1987-05-16,1987-08-08,400,Santos Laciar,,WBC-Super Flyweight-115
 1296,1987-05-17,1987-10-17,534,Chang Tae-il,,IBF-Super Flyweight-115
 1297,1987-05-23,1987-09-05,535,Leslie Stewart,,WBA-Light Heavyweight-175
@@ -1341,7 +1341,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1340,1988-03-29,1989-02-04,517,Lloyd Honeyghan,,RING-Welterweight-147
 1341,1988-03-29,1989-02-04,517,Lloyd Honeyghan,,WBC-Welterweight-147
 1342,1988-04-08,1989-11-07,503,Gilberto Roman,,WBC-Super Flyweight-115
-1343,1988-04-09,1989-04-09,512,Evander Holyfield,,WBC-Cruiserweight-195
+1343,1988-04-09,1988-12-04,512,Evander Holyfield,,WBC-Cruiserweight-195
 1344,1988-04-23,1991-05-01,563,Simon Brown,,IBF-Welterweight-147
 1345,1988-05-09,1988-08-14,564,Khaokor Galaxy,,WBA-Bantamweight-118
 1346,1988-05-21,1989-03-10,565,Jose Sanabria,,IBF-Super Bantamweight-122
@@ -1380,7 +1380,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1379,1989-02-04,1990-08-19,544,Marlon Starling,,WBC-Welterweight-147
 1380,1989-02-05,1989-07-15,587,Darrin Van Horn,,IBF-Super Welterweight-154
 1381,1989-02-11,1989-07-08,588,Rene Jacquot,,WBC-Super Welterweight-154
-1382,1989-02-18,1992-01-01,589,Pernell Whitaker,,IBF-Lightweight-135
+1382,1989-02-18,1992-02-28,589,Pernell Whitaker,,IBF-Lightweight-135
 1383,1989-02-21,1989-06-24,506,Dennis Andries,,WBC-Light Heavyweight-175
 1384,1989-02-24,1989-12-01,290,Roberto Duran,,WBC-Middleweight-160
 1385,1989-03-03,1990-03-01,590,Elvis Alvarez,,WBO-Flyweight-112
@@ -1413,7 +1413,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1412,1989-07-09,1990-04-04,431,Edwin Rosario,,WBA-Lightweight-135
 1413,1989-07-15,1994-09-17,547,Gianfranco Rosi,,IBF-Super Welterweight-154
 1414,1989-08-20,1990-04-01,589,Pernell Whitaker,,RING-Lightweight-135
-1415,1989-08-20,1992-01-01,589,Pernell Whitaker,,WBC-Lightweight-135
+1415,1989-08-20,1992-04-13,589,Pernell Whitaker,,WBC-Lightweight-135
 1416,1989-08-30,1993-01-01,611,Rafael Torres,,WBO-Minimumweight-105
 1417,1989-09-21,1990-02-22,612,Eric Chavez,,IBF-Minimumweight-105
 1418,1989-09-30,1990-03-10,613,Jesus Rojas,,WBA-Flyweight-112
@@ -1456,7 +1456,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1455,1990-07-28,1991-09-11,506,Dennis Andries,,WBC-Light Heavyweight-175
 1456,1990-07-29,1991-03-14,640,Leopard Tamakuma,,WBA-Flyweight-112
 1457,1990-07-29,1994-02-19,641,Michael Carbajal,,IBF-Light Flyweight-108
-1458,1990-08-11,1991-10-05,589,Pernell Whitaker,,WBA-Lightweight-135
+1458,1990-08-11,1992-04-20,589,Pernell Whitaker,,WBA-Lightweight-135
 1459,1990-08-17,1991-06-14,642,Loreto Garza,,WBA-Super Lightweight-140
 1460,1990-08-18,1992-03-18,643,Isidro Perez,,WBO-Flyweight-112
 1461,1990-08-19,1991-03-18,644,Maurice Blocker,,WBC-Welterweight-147
@@ -1858,7 +1858,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1857,1999-08-07,1999-11-13,896,Stefano Zoff,,WBA-Lightweight-135
 1858,1999-08-07,2004-01-15,895,Acelino Freitas,,WBO-Super Featherweight-130
 1859,1999-08-20,2003-06-26,897,Paul Spadafora,,IBF-Lightweight-135
-1860,1999-08-21,2004-01-01,768,Kostya Tszyu,,WBC-Super Lightweight-140
+1860,1999-08-21,2003-10-09,768,Kostya Tszyu,,WBC-Super Lightweight-140
 1861,1999-09-01,2000-02-11,898,On Doowiset,,WBC-Minimumweight-105
 1862,1999-09-03,2000-08-05,899,Sornpichai Kratingdaenggym,,WBA-Flyweight-112
 1863,1999-09-17,2000-05-19,900,Boonsai Sangsurat,,WBC-Flyweight-112
@@ -1949,7 +1949,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1948,2001-09-29,2005-07-16,776,Bernard Hopkins,,RING-Middleweight-160
 1949,2001-09-29,2005-07-16,776,Bernard Hopkins,,WBAS-Middleweight-160
 1950,2001-10-08,2002-01-05,954,Raul Horacio Balbi,,WBA-Lightweight-135
-1951,2001-10-12,2004-06-05,809,Winky Wright,,IBF-Super Welterweight-154
+1951,2001-10-12,2004-04-19,809,Winky Wright,,IBF-Super Welterweight-154
 1952,2001-10-14,2002-04-19,955,Eidy Moya,,WBA-Bantamweight-118
 1953,2001-11-03,2005-06-04,768,Kostya Tszyu,,IBF-Super Lightweight-140
 1954,2001-11-03,2005-06-04,768,Kostya Tszyu,,RING-Super Lightweight-140
@@ -3303,3 +3303,7 @@ reign_id,begins,ends,champion_id,name,current,title
 3302,2026-10-24,,1502,O'Shaquie Foster,1,RING-Super Featherweight-130
 3303,2026-10-24,,1502,O'Shaquie Foster,1,WBO-Super Featherweight-130
 3304,2026-10-31,,1201,Canelo Alvarez,1,WBC-Super Middleweight-168
+3305,1930-09-01,1931-06-06,80,Maxie Rosenbloom,,WBA-Light Heavyweight-175
+3306,1967-07-01,1968-06-29,206,Carlos Ortiz,,WBC-Lightweight-135
+3307,1930-10-04,1934-09-18,71,Panama Al Brown,,WBA-Bantamweight-118
+3308,1932-01-22,1932-06-21,79,Max Schmeling,,NYSAC-Heavyweight-175+
