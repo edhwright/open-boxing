@@ -6,7 +6,7 @@ publicationDate: "1923-09-15"
 link: https://web.archive.org/web/20211215135136/https://www.newspapers.com/clip/77858454/the-standard-union/
 boutId: 161
 featured: true
-thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-firpo.jpg
+thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-angel-firpo.jpg
 ---
 
 ## WHAT FIGHTERS AND REFEREE HAVE TO SAY

@@ -45,6 +45,17 @@ CREATE TABLE `Location` (
 	`longitude` real NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE `Ranking` (
+	`ranking_id` integer PRIMARY KEY NOT NULL,
+	`source` text NOT NULL,
+	`date` text NOT NULL,
+	`weight_class` text NOT NULL,
+	`position` integer NOT NULL,
+	`name` text NOT NULL,
+	`champion_id` integer,
+	FOREIGN KEY (`champion_id`) REFERENCES `Champion`(`champion_id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
 CREATE TABLE `Reference` (
 	`reference_id` integer PRIMARY KEY NOT NULL,
 	`headline` text NOT NULL,

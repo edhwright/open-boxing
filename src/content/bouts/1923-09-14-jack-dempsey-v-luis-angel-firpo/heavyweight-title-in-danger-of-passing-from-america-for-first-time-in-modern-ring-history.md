@@ -6,7 +6,7 @@ publicationDate: "1923-09-14"
 link: https://web.archive.org/web/20211210224511/https://www.newspapers.com/clip/77858331/the-standard-union/
 boutId: 161
 featured: true
-thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-firpo.jpg
+thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-angel-firpo.jpg
 ---
 
 ## Heavyweight Title in Danger of Passing From America for First Time in Modern Ring History

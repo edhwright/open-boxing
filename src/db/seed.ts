@@ -6,11 +6,12 @@ import reignsCSV from "../../data/reigns.csv?raw";
 import boutsCSV from "../../data/bouts.csv?raw";
 import titlesCSV from "../../data/titles.csv?raw";
 import referencesCSV from "../../data/references.csv?raw";
+import rankingsCSV from "../../data/rankings.csv?raw";
 import { z } from "zod";
 import { csvParse } from "d3-dsv";
 import { WeightClassEnum } from "./types";
 import * as schema from "./schema";
-import { Bout, BoutTitle, Title, Location, Champion, Reign, Reference } from "./schema";
+import { Bout, BoutTitle, Title, Location, Champion, Reign, Reference, Ranking } from "./schema";
 
 const id = z.string().regex(/^\d+$/, "id must be numeric");
 const optionalId = z.union([z.literal(""), z.string().regex(/^\d+$/)]);
@@ -117,7 +118,8 @@ export default async function seed(db: SqliteRemoteDatabase<typeof schema>) {
 		ends: optionalDate,
 		champion_id: id,
 		name: z.string(),
-		current: z.enum(["0", "1"]),
+		// "1" for a current reign; empty (or "0") otherwise
+		current: z.enum(["", "0", "1"]),
 		title: z.string(),
 	});
 
@@ -223,6 +225,33 @@ export default async function seed(db: SqliteRemoteDatabase<typeof schema>) {
 			event_date: r.event_date,
 			link_text: r.link_text,
 			link: r.link_url,
+		})),
+	);
+
+	// Rankings table
+	const RankingRow = z.object({
+		ranking_id: id,
+		source: z.enum(["TBRB", "The Ring"]),
+		date: date,
+		weight_class: z.union([WeightClassEnum, z.literal("Pound for Pound")]),
+		position: z.string().regex(/^\d+$/, "position must be numeric"),
+		name: z.string(),
+		champion_id: optionalId,
+	});
+
+	const rankingRows = csvParse(rankingsCSV).map((r) => RankingRow.parse(r));
+
+	await insertAll(
+		db,
+		Ranking,
+		rankingRows.map((r) => ({
+			ranking_id: Number(r.ranking_id),
+			source: r.source,
+			date: r.date,
+			weight_class: r.weight_class,
+			position: Number(r.position),
+			name: r.name,
+			champion_id: r.champion_id === "" ? null : Number(r.champion_id),
 		})),
 	);
 }

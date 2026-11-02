@@ -77,6 +77,19 @@ export const Reign = sqliteTable("Reign", {
 	weight_lb: text().notNull(),
 });
 
+// independent rankings (TBRB monthly, The Ring yearly): one row per ranked boxer per ranking
+export const Ranking = sqliteTable("Ranking", {
+	ranking_id: integer().primaryKey(),
+	source: text({ enum: ["TBRB", "The Ring"] }).notNull(),
+	date: text().notNull(),
+	// a weight class, or "Pound for Pound"
+	weight_class: text().notNull(),
+	// 0 is the source's own champion, then 1 to 10 (more in The Ring's early years)
+	position: integer().notNull(),
+	name: text().notNull(),
+	champion_id: integer().references(() => Champion.champion_id),
+});
+
 export const Reference = sqliteTable("Reference", {
 	reference_id: integer().primaryKey(),
 	headline: text().notNull(),

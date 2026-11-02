@@ -6,7 +6,7 @@ publicationDate: "1923-09-15"
 link: https://web.archive.org/web/20211215120138/https://www.newspapers.com/clip/90011712/daily-news/
 boutId: 161
 featured: true
-thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-firpo.jpg
+thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-angel-firpo.jpg
 ---
 
 ## DEMPSEY K.O.'S FIRPO IN SECOND

@@ -6,7 +6,7 @@ publicationDate: "1923-09-15"
 link: https://web.archive.org/web/20211214224739/https://www.newspapers.com/clip/90011680/the-billings-gazette/
 boutId: 161
 featured: true
-thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-firpo.jpg
+thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-angel-firpo.jpg
 ---
 
 ## 21 Months Ago Firpo Left To Whip Dempsey

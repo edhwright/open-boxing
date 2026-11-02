@@ -6,7 +6,7 @@ publicationDate: "1923-09-05"
 link: https://web.archive.org/web/20211127232915/https://www.newspapers.com/clip/84996382/william-slaven-mcnutt-boxer-1923-fight/
 boutId: 161
 featured: true
-thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-firpo.jpg
+thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-angel-firpo.jpg
 ---
 
 ## FIRPO SATISFIED SO LONG AS CRITICS SAY HE IS NO GOOD

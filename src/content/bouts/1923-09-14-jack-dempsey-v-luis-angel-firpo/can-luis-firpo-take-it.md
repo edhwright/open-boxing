@@ -6,7 +6,7 @@ publicationDate: "1923-08-24"
 link: https://web.archive.org/web/20211125130907/https%3A%2F%2Fwww.newspapers.com%2Fclip%2F86046632%2Fthe-minneapolis-star%2F
 boutId: 161
 featured: true
-thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-firpo.jpg
+thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-angel-firpo.jpg
 ---
 
 ## Can Luis Firpo Take It?
