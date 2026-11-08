@@ -1,105 +1,54 @@
 ---
-import { getAllTitles, getScheduledWeightClassBouts, getWeightClassBouts, getWeightClassReigns } from "../../db";
-import {
-	getCurrentWeightClassChampions,
-	geTimelineFromReignsAndBouts,
-	slugify,
-	getAllBoutArticlesIds,
-	getAllFeaturedBoutPreviews,
-	filterFeaturedBoutPreviewsByWeightClass,
-} from "../../utils";
-import type { WeightClassCurrentChampions, TimelineDate, FeaturedBoutPreview } from "../../utils";
-import type { Bout, Reign } from "../../types";
-import Layout from "../../layouts/Layout.astro";
-import Breadcrumbs from "../../components/Breadcrumbs.astro";
-import Overview from "./_components/Overview.astro";
-import Timeline from "./_components/Timeline.astro";
-import FeaturedBoutsSection from "../../components/FeaturedBoutsSection.astro";
-import ScheduledBouts from "./_components/ScheduledBouts.astro";
-import CurrentChampions from "./_components/CurrentChampions.astro";
-
-interface Props {
-	weightClass: string;
-	timeline: TimelineDate[];
-	champions: WeightClassCurrentChampions;
-	scheduledBouts: Bout[];
-	featuredBoutPreviews: FeaturedBoutPreview[];
-	bouts: Bout[];
-	reigns: Reign[];
-	allBoutArticleIds: number[];
-}
+import dayjs from "dayjs";
+import { getCollection } from "astro:content";
+import WeightTitlePage from "./_components/WeightTitlePage.astro";
+import { pageBouts, pageReigns } from "./_components/weight";
+import { getAllTitles, getWeightClassBouts, getWeightClassReigns } from "../../db";
+import { getAllFeaturedBoutPreviews, filterFeaturedBoutPreviewsByWeightClass, slugify, weightClasses } from "../../utils";
+import { undisputedNow } from "../../undisputed";
 
 export async function getStaticPaths() {
-	const allWeightClasses = [...new Set((await getAllTitles()).map((title) => title.weight.class))];
+	const titles = await getAllTitles();
 	const allFeaturedBoutPreviews = await getAllFeaturedBoutPreviews();
-	const allBoutArticleIds = await getAllBoutArticlesIds();
+	const articleCounts: Record<number, number> = {};
+	for (const article of await getCollection("bouts")) articleCounts[article.data.boutId] = (articleCounts[article.data.boutId] ?? 0) + 1;
 
-	const data = await Promise.all(
-		allWeightClasses.map(async (weightClass) => {
-			const weightClassScheduledBouts = await getScheduledWeightClassBouts(weightClass);
-			const weightClassChampions = await getCurrentWeightClassChampions(weightClass);
-			const weightClassReigns = await getWeightClassReigns(weightClass);
-			const weightClassBouts = await getWeightClassBouts(weightClass);
-			const weightClassTimeline = geTimelineFromReignsAndBouts(weightClassReigns, weightClassBouts);
-			const weightClassFeaturedBoutPreviews = filterFeaturedBoutPreviewsByWeightClass(allFeaturedBoutPreviews, weightClass);
-
-			return {
-				params: {
-					weight: slugify(weightClass),
-				},
-				props: {
-					weightClass: weightClass,
-					timeline: weightClassTimeline,
-					champions: weightClassChampions,
-					scheduledBouts: weightClassScheduledBouts,
-					featuredBoutPreviews: weightClassFeaturedBoutPreviews,
-					bouts: weightClassBouts,
-					reigns: weightClassReigns,
-					allBoutArticleIds: allBoutArticleIds,
-				},
-			};
-		}),
+	return Promise.all(
+		[...new Set(titles.map((t) => t.weight.class))].map(async (weightClass) => ({
+			params: { weight: slugify(weightClass) },
+			props: {
+				weightClass,
+				titles,
+				reigns: await getWeightClassReigns(weightClass),
+				bouts: await getWeightClassBouts(weightClass),
+				archive: filterFeaturedBoutPreviewsByWeightClass(allFeaturedBoutPreviews, weightClass).map((p) => ({
+					href: `/articles/${p.bout.date}-${slugify(p.name)}/`,
+					img: p.thumbnail,
+					name: p.name,
+					date: p.bout.date,
+					count: articleCounts[p.bout.boutId] ?? 0,
+				})),
+			},
+		})),
 	);
-
-	return data;
 }
 
-const { weightClass, timeline, champions, scheduledBouts, featuredBoutPreviews, bouts, reigns, allBoutArticleIds } = Astro.props;
-
-const isWeightClassActive = (await getAllTitles()).filter((title) => title.weight.class === weightClass && title.active).length > 0;
+const { weightClass, titles, reigns, bouts, archive } = Astro.props;
+const today = dayjs().format("YYYY-MM-DD");
+const boutData = pageBouts(bouts, weightClass);
+const reignData = pageReigns(reigns, boutData, today);
+const lb = weightClasses.find((wc) => wc.class === weightClass)?.lb ?? "";
 ---
 
-<Layout title={weightClass} description={`${weightClass} current champions, world title reigns and bouts.`} img={null}>
-	<main>
-		<Breadcrumbs route={[[weightClass, `${Astro.url.origin}/${slugify(weightClass)}/`]]} />
-
-		<header class="mx-auto my-8 xl:max-w-240">
-			<h1 class="mb-4 text-3xl">{weightClass}</h1>
-			<Overview isActive={isWeightClassActive} bouts={bouts} reigns={reigns} target="WEIGHT" />
-		</header>
-
-		{
-			featuredBoutPreviews.length > 0 && (
-				<FeaturedBoutsSection featuredBoutPreviews={featuredBoutPreviews} />
-			)
-		}
-		<section class="my-8 xl:mx-auto xl:max-w-240">
-			<h2 class="my-3 text-lg">
-				<a class="hover:underline" href={`${Astro.url.origin}/scheduled-bouts/`}>Scheduled world title bouts</a>
-			</h2>
-			{scheduledBouts.length > 0 ? <ScheduledBouts scheduledBouts={scheduledBouts} /> : <div class="text-sm/4">No scheduled {weightClass} world title bouts</div>}
-		</section>
-
-		<section class="my-8 xl:mx-auto xl:max-w-240">
-			<h2 class="my-3 text-lg">
-				<a class="hover:underline" href={`${Astro.url.origin}/champions/`}>Current champions</a>
-			</h2>
-			<CurrentChampions currentChampions={champions} />
-		</section>
-
-		<section class="my-8 xl:mx-auto xl:max-w-7xl">
-			<h2 id="timeline" class="my-3 text-lg xl:mx-auto xl:max-w-240">Timeline</h2>
-			<Timeline timeline={timeline} boutArticleIds={allBoutArticleIds} target="WEIGHT" />
-		</section>
-	</main>
-</Layout>
+<WeightTitlePage
+	weightClass={weightClass}
+	lb={lb}
+	org={null}
+	active={true}
+	titles={titles}
+	reigns={reignData}
+	bouts={boutData}
+	undisputedNow={undisputedNow(weightClass)}
+	archive={archive}
+	today={today}
+/>
