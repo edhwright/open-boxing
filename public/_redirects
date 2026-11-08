@@ -1,0 +1,4 @@
+/about/ / 301
+/about / 301
+/:weight/wbas/ /:weight/wba/ 301
+/:weight/wbas /:weight/wba/ 301
