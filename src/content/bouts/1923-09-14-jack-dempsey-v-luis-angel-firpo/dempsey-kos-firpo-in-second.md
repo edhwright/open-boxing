@@ -3,7 +3,7 @@ title: Dempsey K.O.’s Firpo in Second
 author: Harry Newman
 publication: Daily News
 publicationDate: "1923-09-15"
-link: https://web.archive.org/web/20211215120138/https://www.newspapers.com/clip/90011712/daily-news/
+link: https://www.newspapers.com/clip/90011712/daily-news/
 boutId: 161
 featured: true
 thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-angel-firpo.jpg

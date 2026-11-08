@@ -3,7 +3,7 @@ title: Firpo Does the Tango After Short Ring Nap
 author: null
 publication: The Journal, Falls City, Nebraska
 publicationDate: "1923-09-15"
-link: https://web.archive.org/web/20211215014526/https://www.newspapers.com/clip/90011811/the-falls-city-journal/
+link: https://www.newspapers.com/clip/90011811/the-falls-city-journal/
 boutId: 161
 featured: true
 thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-angel-firpo.jpg

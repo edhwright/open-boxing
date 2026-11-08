@@ -3,7 +3,7 @@ title: Mayor Jim Johnson Wants Shave Price Following Contest
 author: null
 publication: Great Falls Tribune
 publicationDate: "1923-07-05"
-link: https://web.archive.org/web/20211207013803/https://www.newspapers.com/clip/19095338/dempsey-beats-gibbons-jul-5-1923-front/
+link: https://www.newspapers.com/clip/19095338/dempsey-beats-gibbons-jul-5-1923-front/
 boutId: 155
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-04-jack-dempsey-v-tommy-gibbons.jpg

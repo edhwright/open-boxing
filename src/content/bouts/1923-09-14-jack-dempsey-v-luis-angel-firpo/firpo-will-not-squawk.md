@@ -3,7 +3,7 @@ title: Firpo Will Not Squawk
 author: null
 publication: The Daily Province
 publicationDate: "1923-09-20"
-link: https://web.archive.org/web/20211215151508/https://www.newspapers.com/clip/29630296/the-province/
+link: https://www.newspapers.com/clip/29630296/the-province/
 boutId: 161
 featured: true
 thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-angel-firpo.jpg

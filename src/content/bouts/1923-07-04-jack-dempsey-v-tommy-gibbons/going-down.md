@@ -3,7 +3,7 @@ title: Going Down?
 author: Robert L. Ripley
 publication: The Boston Globe
 publicationDate: "1923-07-11"
-link: https://web.archive.org/web/20211125155423/https://www.newspapers.com/clip/31185895/jack-dempsey-sketch-going-over-the-hill/
+link: https://www.newspapers.com/clip/31185895/jack-dempsey-sketch-going-over-the-hill/
 boutId: 155
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-04-jack-dempsey-v-tommy-gibbons.jpg
@@ -11,7 +11,7 @@ thumbnail: /thumbnails/bouts/1923-07-04-jack-dempsey-v-tommy-gibbons.jpg
 
 ## Going Down?
 
-<img src="/bouts/1923-07-04-jack-dempsey-v-tommy-gibbons/going-down.jpg" alt="Illustration of Jack Dempsey walking over a hill" width="1500" height="1526" style="height:auto;max-width:100%;" loading="lazy">
+![Illustration of Jack Dempsey walking over a hill](./images/going-down.jpg)
 
 Has Dempsey passed the peak?
 

@@ -3,7 +3,7 @@ title: Promoters Make Elaborate Plans for Staging of Dempsey-Gibbons Bout at She
 author: null
 publication: The Boxing Blade
 publicationDate: "1923-04-07"
-link: https://web.archive.org/web/20211125225438/https://digitalcollections.nypl.org/items/31fb75a0-77ce-0136-7270-5de4ff53e210
+link: https://digitalcollections.nypl.org/items/31fb75a0-77ce-0136-7270-5de4ff53e210
 boutId: 155
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-04-jack-dempsey-v-tommy-gibbons.jpg

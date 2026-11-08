@@ -3,7 +3,7 @@ title: Had to Hustle to Save Fight
 author: null
 publication: The Ottawa Journal
 publicationDate: "1923-06-18"
-link: https://web.archive.org/web/20211126235415/https://www.newspapers.com/clip/11571782/the-ottawa-journal/
+link: https://www.newspapers.com/clip/11571782/the-ottawa-journal/
 boutId: 155
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-04-jack-dempsey-v-tommy-gibbons.jpg

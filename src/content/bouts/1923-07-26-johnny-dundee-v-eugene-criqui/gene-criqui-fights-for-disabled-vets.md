@@ -3,7 +3,7 @@ title: Gene Criqui Fights for Disabled Vets
 author: Paul R. Mallen
 publication: The Ottawa Journal
 publicationDate: "1923-07-19"
-link: https://web.archive.org/web/20211214211049/https://www.newspapers.com/clip/11572127/the-ottawa-journal/
+link: https://www.newspapers.com/clip/11572127/the-ottawa-journal/
 boutId: 157
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-26-johnny-dundee-v-eugene-criqui.jpg
@@ -13,7 +13,7 @@ thumbnail: /thumbnails/bouts/1923-07-26-johnny-dundee-v-eugene-criqui.jpg
 
 ### Will Return To France and Fight For Nothing.
 
-<img src="/bouts/1923-07-26-johnny-dundee-v-eugene-criqui/gene-criqui-fights-for-disabled-vets.jpg" alt="Illustration of Gene Criqui's bullet wound" width="1000" height="1181" style="height:auto;max-width:400px;" loading="lazy">
+![Illustration of Gene Criqui's bullet wound](./images/gene-criqui-fights-for-disabled-vets.jpg)
 
 NEW YORK, July 19.-Eugene Criqui is a real champion.
 

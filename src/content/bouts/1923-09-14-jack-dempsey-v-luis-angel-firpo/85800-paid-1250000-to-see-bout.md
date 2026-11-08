@@ -3,7 +3,7 @@ title: 85,800 Paid $1,250,000 to See Bout
 author: null
 publication: The Brooklyn Standard Union
 publicationDate: "1923-09-15"
-link: https://web.archive.org/web/20211215135136/https://www.newspapers.com/clip/77858454/the-standard-union/
+link: https://www.newspapers.com/clip/77858454/the-standard-union/
 boutId: 161
 featured: true
 thumbnail: /thumbnails/bouts/1923-09-14-jack-dempsey-v-luis-angel-firpo.jpg

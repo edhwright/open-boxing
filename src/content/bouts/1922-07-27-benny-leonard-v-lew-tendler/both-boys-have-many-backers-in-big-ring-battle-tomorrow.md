@@ -3,7 +3,7 @@ title: Both Boys Have Many Backers in Big Ring Battle Tomorrow
 author: Sid Mercer
 publication: The Washington Times
 publicationDate: "1922-07-26"
-link: https://web.archive.org/web/20211216011439/https://www.loc.gov/resource/sn84026749/1922-07-26/ed-1/?sp=15
+link: https://www.loc.gov/resource/sn84026749/1922-07-26/ed-1/?sp=15
 boutId: 136
 featured: true
 thumbnail: /thumbnails/bouts/1922-07-27-benny-leonard-v-lew-tendler.jpg

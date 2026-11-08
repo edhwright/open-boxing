@@ -27,7 +27,7 @@ link: https://digitalcollections.nypl.org/items/1b1028b0-77ce-0136-de94-69ac2556
 
 7.—Larney Lichtenstein has his two battlers signed up for a few bouts, Jimmy Clabby, his middleweight will box Tommy Commiskey at Denver, while Jack Eile, his junior featherweight, will face Eddie Anderson at Chicago and Joe Berger at Denver.
 
-8.—Nate Lewis was back in town after a year's stay in New York. He closed some important matters with his [partner], Tom Walsh, regarding matches for both Jock Malone and Joe Burman, then hiked back to Broadway.
+8.—Nate Lewis was back in town after a year's stay in New York. He closed some important matters with his partner, Tom Walsh, regarding matches for both Jock Malone and Joe Burman, then hiked back to Broadway.
 
 9.—Pal Moore, Chicago bantam star, has offers from all parts of the country to box a lot of promising youngsters who think that Moore has gone back, but they will be fooled as Pal is boxing in old time form as he showed by his decisive victory over Frankie Jummatti. He now is matched to box the sensational Harold Smith here on Thanksgiving day.
 

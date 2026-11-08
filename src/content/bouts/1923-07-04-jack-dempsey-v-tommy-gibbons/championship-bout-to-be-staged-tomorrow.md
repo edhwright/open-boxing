@@ -3,7 +3,7 @@ title: Championship Bout to Be Staged Tomorrow
 author: Henry W. Farrell
 publication: The News-Herald
 publicationDate: "1923-07-03"
-link: https://web.archive.org/web/20211126182343/https://www.newspapers.com/clip/11828396/the-news-herald/
+link: https://www.newspapers.com/clip/11828396/the-news-herald/
 boutId: 155
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-04-jack-dempsey-v-tommy-gibbons.jpg

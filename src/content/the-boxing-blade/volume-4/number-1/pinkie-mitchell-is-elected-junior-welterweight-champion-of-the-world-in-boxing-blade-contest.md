@@ -32,7 +32,7 @@ Final standing of ten leaders in Boxing Blade Contest for Junior Welterweight Ch
 | Bobby Harper | 9,000 |
 | Jack Foley | 8,400 |
 
-Pinkie Mitchell is the Junior Welterweight Champion of the World[, the n]ewest title in boxing.
+Pinkie Mitchell is the Junior Welterweight Champion of the World, the newest title in boxing.
 
 The popular Milwaukee boxer won the crown for the world's best 140-pound fighter in a contest conducted by The Boxing Blade.
 
@@ -46,13 +46,13 @@ Thorpe, runner-up to Mitchell, finished with 60,400.
 
 Jack Josephs of Minneapolis was third with 38,100.
 
-Other entries among the first ten [and w]ho finished in the following order were Battling Krause, Bismarck, N. D.; Eddie Fitzsimmons, New York [City]; Ray (Dick) Jones, Minneapolis; Sid Barbarian, De[troit]; Bud Logan, Omaha; Bobby Harper, Seattle, and [J]ack Foley, Chicago.
+Other entries among the first ten and who finished in the following order were Battling Krause, Bismarck, N. D.; Eddie Fitzsimmons, New York City; Ray (Dick) Jones, Minneapolis; Sid Barbarian, Detroit; Bud Logan, Omaha; Bobby Harper, Seattle, and Jack Foley, Chicago.
 
 ### Votes From All Over World.
 
-A total of 766,000 votes were cast in the contest. They [ca]me from all over the globe.
+A total of 766,000 votes were cast in the contest. They came from all over the globe.
 
-[T]he contest judges were forced to throw out a large [num]ber of votes which were sent in, especially early in [the c]ontest, for heavyweights, middleweights, regular [wel]terweights and other ineligible boxers. These votes [were n]ot allowed because only legitimate junior welters [who cou]ld make the weight limit of 140 pounds were eligi[ble c]ontestants.
+The contest judges were forced to throw out a large number of votes which were sent in, especially early in the contest, for heavyweights, middleweights, regular welterweights and other ineligible boxers. These votes were not allowed because only legitimate junior welters who could make the weight limit of 140 pounds were eligible contestants.
 
 Mitchell's selection was world wide. His votes did not come from any particular district. Pinkie, and other contestants as well, received votes from admirers as far away as China, Japan, India, South America, Australia and from every country in Europe.
 

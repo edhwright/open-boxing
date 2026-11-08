@@ -3,7 +3,7 @@ title: The Little Town’s Ambitions Cost It $150,000
 author: null
 publication: Dunkirk Evening Observer
 publicationDate: "1923-07-05"
-link: https://web.archive.org/web/20211210102622/https://www.newspapers.com/clip/17081269/dunkirk-evening-observer/
+link: https://www.newspapers.com/clip/17081269/dunkirk-evening-observer/
 boutId: 155
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-04-jack-dempsey-v-tommy-gibbons.jpg
