@@ -1,6 +1,8 @@
 ---
-import Header from "../components/header/index.svelte";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 import HeadSEO from "../components/HeadSEO.astro";
+import { Font } from "astro:assets";
 import "../styles/global.css";
 interface Props {
 	title: string;
@@ -11,9 +13,16 @@ interface Props {
 		height: string;
 		alt: string;
 	} | null;
+	// the page's background: cream, or grey-pink paper for articles
+	tone?: "cream" | "paper";
+	// structured data for search engines (schema.org JSON-LD), e.g. a page's newspaper articles
+	jsonLd?: object | object[];
+	// keeps the page out of search results, e.g. the 404 page
+	noindex?: boolean;
 }
 
-const { title, description, img } = Astro.props;
+const { title, description, img, tone = "cream", jsonLd, noindex = false } = Astro.props;
+const background = { cream: "bg-cream", paper: "bg-paper" }[tone];
 const currentPath = Astro.url.pathname;
 ---
 
@@ -21,17 +30,30 @@ const currentPath = Astro.url.pathname;
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
+		{/* the logo's O on a cream tile: SVG where browsers take it, else the .ico; a square PNG for phones' home screens */}
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		{/* the fonts (astro.config.mjs). Preloaded: the three nearly every page shows first, for the interface, headings
+		    and intros; the rest load when a page uses them */}
+		<Font cssVariable="--font-inter" preload={[{ weight: 400, style: "normal" }]} />
+		<Font cssVariable="--font-plex-serif" preload={[{ weight: 600, style: "normal" }]} />
+		<Font cssVariable="--font-source-serif" preload={[{ weight: 400, style: "normal" }]} />
+		<Font cssVariable="--font-dm-serif" />
+		<Font cssVariable="--font-plex-mono" />
 		<meta name="generator" content={Astro.generator} />
-		<meta name="robots" content="all" />
-		<HeadSEO title={title} description={description} img={img} />
+		<meta name="robots" content={noindex ? "noindex" : "all"} />
+		<HeadSEO title={title} description={description} img={img} canonical={!noindex} />
+		{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")} />}
 	</head>
-	<body class="min-h-screen grid grid-rows-[auto_1fr_auto] bg-neutral-900 text-neutral-100 antialiased">
-		<Header client:load currentPath={currentPath} />
-		<main class="mx-3 lg:max-w-7xl lg:mx-auto">
+	<body class:list={["flex min-h-screen flex-col font-sans text-ink antialiased", background]}>
+		<Header currentPath={currentPath} background={background} />
+		{/* a full-width band under the header, e.g. The Boxing Blade's issue details */}
+		<slot name="band" />
+		<main class="mx-auto w-full max-w-340 min-w-0 flex-1 px-[clamp(16px,4vw,24px)] pb-24">
 			<slot />
 		</main>
-		<footer class="h-20 w-full"></footer>
+		<Footer />
 	</body>
 </html>
