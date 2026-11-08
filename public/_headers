@@ -1,2 +1,7 @@
 /api/*
   Access-Control-Allow-Origin: *
+
+# Astro's processed files (CSS, scripts, fonts, images) have a hash of their contents in their names, so a changed
+# file gets a new name and these can be kept for a year
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
