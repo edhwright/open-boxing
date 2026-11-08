@@ -1,27 +1,42 @@
 ---
+// The pages above this one, as links above its heading ("Articles / The Boxing Blade"), with `after` in grey after them,
+// e.g. a weight limit. Search engines get the same trail, ending on this page, as a BreadcrumbList.
 interface Props {
-	route: [string, string][];
+	items: { name: string; href: string }[];
+	// this page's name, the trail's last step for search engines
+	current: string;
+	after?: string;
+	// the links' colour and the separators' and `after`'s, e.g. on The Boxing Blade's band
+	linkClass?: string;
+	mutedClass?: string;
+	class?: string;
 }
 
-const { route } = Astro.props;
-
-const itemClass = "truncate text-sm before:mx-2 before:content-['→'] first:before:hidden";
+const { items, current, after, linkClass = "text-ink", mutedClass = "text-muted", class: className = "mb-2" } = Astro.props;
+const site = Astro.site ?? new URL("https://openboxing.org");
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@type": "BreadcrumbList",
+	itemListElement: [...items, { name: current, href: Astro.url.pathname }].map((item, i) => ({
+		"@type": "ListItem",
+		position: i + 1,
+		name: item.name,
+		item: new URL(item.href, site).href,
+	})),
+};
 ---
 
-<nav class="my-4">
-	<ol class="flex">
-		<li class={itemClass}>
-			<a class="hover:underline" href={Astro.url.origin}>Home</a>
-		</li>
-		{
-			route.map(([name, url], i) =>
-				i === route.length - 1 ? (
-					<li class={itemClass}>{name}</li>
-				) : (
-					// prettier-ignore
-					<li class={itemClass}><a class="hover:underline" href={url}>{name}</a></li>
-				)
-			)
-		}
-	</ol>
+<nav aria-label="Breadcrumb" class:list={[className, "text-sm leading-5", mutedClass]}>
+	{
+		items.map((item, i) => (
+			<>
+				{i > 0 && " / "}
+				<a href={item.href} class:list={[linkClass, "underline decoration-gold decoration-2 underline-offset-4"]}>
+					{item.name}
+				</a>
+			</>
+		))
+	}
+	{after && <span>{items.length ? " · " : ""}{after}</span>}
+	{items.length > 0 && <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")} />}
 </nav>
