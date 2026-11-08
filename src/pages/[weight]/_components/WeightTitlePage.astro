@@ -1,0 +1,345 @@
+---
+import { Image } from "astro:assets";
+import dayjs from "dayjs";
+import Layout from "../../../layouts/Layout.astro";
+import OrgTags from "../../../components/OrgTags.svelte";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import { tints } from "../../../components/orgTags";
+import WorldTitleReigns from "./WorldTitleReigns.astro";
+import TitleTimeline from "./TitleTimeline.astro";
+import { fullDate, holders, lengthOf, longestReigns, longDate, mainLineLanes, orgOrder, plural, span, summary, timelineEvents, titleHref, wbaChanges, type Org, type PageBout, type PageReign } from "./weight";
+import { slugify } from "../../../utils";
+import type { Title } from "../../../types";
+
+// One template for a weight class page and a world title page (when `org` is given).
+interface Props {
+	weightClass: string;
+	lb: string;
+	org: Org | null;
+	active: boolean;
+	titles: Title[];
+	reigns: PageReign[];
+	bouts: PageBout[];
+	undisputedNow: string[];
+	archive: { href: string; img: ImageMetadata | undefined; name: string; date: string; count: number }[];
+	today: string;
+}
+
+const { weightClass, lb, org, active, titles, reigns, bouts, undisputedNow, archive, today } = Astro.props;
+const weightLower = weightClass.toLowerCase();
+const forTitle = org !== null;
+
+// "WBA Super" next to a "Super" weight class reads as one name, so then the weight class comes after
+const ambiguous = org && org.abbreviation === "WBA" && weightClass.startsWith("Super");
+const heading = org ? (ambiguous ? `${org.short} world title at ${weightLower}` : `${org.short} ${weightLower} world title`) : weightClass;
+const about = summary(weightClass, org, reigns, bouts, active);
+
+// the WBA's titles: the WBA page holds the WBA world title and WBA Super, which carried it on; WBA Regular, the WBA's
+// secondary title, has its own page
+const hasTitle = (abbreviation: string) => titles.some((t) => t.weight.class === weightClass && t.org.name.abbreviation === abbreviation);
+const changes = org?.abbreviation === "WBA" ? wbaChanges(reigns) : [];
+const toSuper = changes.find((c) => c.to.abbreviation === "WBAS");
+
+const current = forTitle ? [] : holders(weightClass, titles, reigns, undisputedNow, today);
+const latest = reigns.at(-1);
+
+const scheduled = bouts.filter((b) => b.outcome === "scheduled");
+// the timeline's lanes: the WBA's main line (WBA, then WBA Super, then WBA again) is one lane, as on a WBA world title page
+const lanes = forTitle
+	? [{ org: org!, href: null, includes: org!.abbreviation === "WBA" ? ["WBA", "WBAS"] : undefined }]
+	: mainLineLanes(
+			[...new Map(reigns.map((r) => [r.org.abbreviation, r.org])).values()].sort((a, b) => orgOrder.indexOf(a.abbreviation) - orgOrder.indexOf(b.abbreviation)),
+			weightClass,
+		);
+const ranked = longestReigns(reigns, forTitle);
+const stripeTints: Record<string, string> = {
+	IBU: "bg-ibu-tint",
+	NYSAC: "bg-nysac-tint",
+	WBA: "bg-wba-tint",
+	WBAS: "bg-wba-tint",
+	WBAR: "bg-wba-tint",
+	WBC: "bg-wbc-tint",
+	IBF: "bg-ibf-tint",
+	WBO: "bg-wbo-tint",
+	RING: "bg-ring-tint",
+};
+const events = timelineEvents(weightClass, reigns, bouts);
+const articles = Object.fromEntries(archive.map((a) => [a.date, { href: a.href, count: a.count }]));
+---
+
+<Layout title={org ? `${heading[0].toUpperCase()}${heading.slice(1)}` : weightClass} description={about.description(heading.replace(/^The /, "")).replace(/^The The /, "The ")} img={null}>
+	{/* the line above the heading sits in the top padding, so the heading lines up with other pages' */}
+	<section class="pt-[max(16px,calc(clamp(32px,6vw,56px)-28px))] pb-10">
+		{/* where this page sits: the weight class (linked from a world title page) and its weight limit */}
+		<Breadcrumbs
+			items={org ? [{ name: weightClass, href: `/${slugify(weightClass)}/` }] : []}
+			current={org ? `${heading[0].toUpperCase()}${heading.slice(1)}` : weightClass}
+			after={`${lb} lb`}
+		/>
+		<h1 class="mb-4 font-heading text-[clamp(40px,7vw,56px)] leading-[1.08] font-semibold tracking-[-0.01em]">{heading[0].toUpperCase() + heading.slice(1)}</h1>
+		<p class="mb-8 max-w-205 font-serif text-[clamp(19px,3vw,22px)] leading-[1.45] text-ink-soft">
+			{
+				about.orgs ? (
+					<>
+						Data covering{" "}
+						{about.orgs.map((o, i, all) => (
+							<>
+								<a href={titleHref(weightClass, o.abbreviation)} class={`org whitespace-nowrap ${tints[o.abbreviation]}`}>
+									{o.short}
+								</a>
+								{i === all.length - 1 ? "" : i === all.length - 2 ? " and " : ", "}
+							</>
+						))}{" "}
+						world title bouts and reigns.
+					</>
+				) : (
+					about.text
+				)
+			}
+		</p>
+		{
+			toSuper && (
+				<p class="-mt-4 mb-8 max-w-205 text-sm leading-5.5 text-muted">
+					In {dayjs(toSuper.date).year()}, the WBA world title became the WBA Super world title. This page covers the WBA and WBA Super world titles.
+					{hasTitle("WBAR") && (
+						<>
+							{" "}
+							The WBA's secondary world title,{" "}
+							<a href={titleHref(weightClass, "WBAR")} class="text-ink underline decoration-gold decoration-2 underline-offset-4">
+								WBA Regular
+							</a>
+							, has its own separate page.
+						</>
+					)}
+				</p>
+			)
+		}
+		{
+			org?.abbreviation === "WBAR" && hasTitle("WBA") && (
+				<p class="-mt-4 mb-8 max-w-205 text-sm leading-5.5 text-muted">
+					WBA Regular is the WBA's secondary world title. See also the{" "}
+					<a href={titleHref(weightClass, "WBA")} class="text-ink underline decoration-gold decoration-2 underline-offset-4">
+						{weightClass.startsWith("Super") ? `WBA world title at ${weightLower}` : `WBA ${weightLower} world title`}
+					</a>{" "}
+					for the main title.
+				</p>
+			)
+		}
+		{/* figures first, labels after, all top-aligned so the figures share a baseline however long a label is */}
+		{/* a figure never squeezes narrower than itself: the rows wrap first */}
+		<dl class="flex flex-wrap gap-x-8 gap-y-4 border-t border-ink pt-4">
+			{
+				about.stats.map((s) => (
+					<div class="flex flex-[1_1_200px] flex-col justify-start">
+						<dt class="order-2 text-[13px] leading-4.5 text-muted">{s.label}</dt>
+						<dd class="order-1 font-heading text-[32px] leading-10 font-semibold whitespace-nowrap">{s.value}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</section>
+
+	{
+		!forTitle && current.length > 0 && (
+			<section aria-labelledby="current" class="mb-18">
+				<h2 id="current" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">
+					Current world champions
+				</h2>
+				{/* a column per world title; phones a row per title */}
+				<ul class="grid grid-cols-(--columns) max-[760px]:grid-cols-1" style={`--columns: repeat(${current.length}, minmax(0, 1fr))`}>
+					{current.map((c, i) => (
+						<li
+							class:list={[
+								"flex flex-col gap-2.5 border-b border-rule py-4 max-[760px]:grid max-[760px]:grid-cols-[112px_minmax(0,1fr)] max-[760px]:gap-3 max-[760px]:px-2 max-[760px]:py-3",
+								// the first column sits on the page's edge, unless it is gold and needs room inside its edge
+								i === 0 && !c.gold ? "pr-3" : "px-3",
+								c.gold && "bg-gold/40",
+							]}
+						>
+							<span class="text-[13px]">
+								<a href={c.href} class:list={["px-1 italic", stripeTints[c.org.abbreviation]]}>
+									{c.org.short}
+								</a>
+							</span>
+							<span class="min-w-0 text-sm">
+								{c.reign ? (
+									<>
+										{c.reign.vacant ? (
+											<span class="block text-muted italic">Vacant</span>
+										) : (
+											<a href={`/champions/${c.reign.championId}/`} class="block font-semibold">
+												{c.reign.name}
+											</a>
+										)}
+										<span class="mt-1.5 block w-max max-w-full">
+											<span class="block text-xs text-muted tabular-nums">since {c.reign.since}</span>
+											<span aria-hidden="true" class="mt-1 block h-0.5 bg-ink" style={`width: ${c.reign.held}%`} />
+										</span>
+									</>
+								) : (
+									<span class="block text-muted italic">No champion</span>
+								)}
+							</span>
+						</li>
+					))}
+				</ul>
+			</section>
+		)
+	}
+
+	{
+		forTitle && latest && (
+			<section aria-labelledby="current" class="mb-18">
+				<h2 id="current" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">
+					{active || !latest.ends ? "Current champion" : "Last champion"}
+				</h2>
+				{!latest.ends ? (
+					<>
+						<div class="flex flex-wrap items-baseline gap-x-6 gap-y-1 pt-4">
+							<a href={`/champions/${latest.championId}/`} class="font-heading text-[32px] leading-10 font-semibold">
+								{latest.name}
+							</a>
+							<span class="text-sm text-muted">
+								{latest.org.abbreviation !== org!.abbreviation && `${latest.org.short} · `}Since {longDate(latest.begins)} · {lengthOf(latest.begins, today)} ·{" "}
+								{plural(latest.defences, "successful defence")}
+							</span>
+						</div>
+						<span
+							aria-hidden="true"
+							class="mt-2 block h-0.5 max-w-80 bg-ink"
+							style={`width: ${Math.round(Math.min(1, dayjs(today).diff(latest.begins, "day") / (8 * 365.25)) * 100)}%`}
+						/>
+					</>
+				) : active ? (
+					<div class="flex flex-wrap items-baseline gap-x-6 gap-y-1 pt-4">
+						<span class="font-serif text-[32px] leading-10 text-muted italic">Vacant</span>
+						<span class="text-sm text-muted">Since {longDate(latest.ends)}</span>
+					</div>
+				) : (
+					<div class="flex flex-wrap items-baseline gap-x-6 gap-y-1 pt-4">
+						<a href={`/champions/${latest.championId}/`} class="font-heading text-[32px] leading-10 font-semibold">
+							{latest.name}
+						</a>
+						<span class="text-sm text-muted">
+							{latest.org.abbreviation !== org!.abbreviation && `${latest.org.short} · `}
+							{span(latest)}
+						</span>
+					</div>
+				)}
+			</section>
+		)
+	}
+
+	{
+		scheduled.length > 0 && (
+			<section aria-labelledby="upcoming" class="mb-18">
+				<h2 id="upcoming" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">
+					Upcoming world title bouts
+				</h2>
+				<ol>
+					{scheduled.map((b) => (
+						<li class="flex flex-wrap gap-x-6 gap-y-1 border-b border-rule py-5 last:border-b-0">
+							<time datetime={b.date} class="shrink-0 grow-0 basis-60 font-heading text-xl font-semibold">{fullDate(b.date)}</time>
+							<div class="min-w-0 shrink grow basis-100">
+								<p class="text-[15px] leading-6">
+									{b.parts.map((p) =>
+										p.href ? (
+											<a href={p.href} class="font-semibold">
+												{p.text}
+											</a>
+										) : (
+											p.text
+										),
+									)}
+								</p>
+								<p class="mt-0.5 text-[13px] leading-5.5 text-muted">
+									{weightClass} · <OrgTags orgs={b.orgs} gold={b.gold} />
+								</p>
+							</div>
+						</li>
+					))}
+				</ol>
+			</section>
+		)
+	}
+
+	{
+		reigns.length > 0 && (
+			<WorldTitleReigns
+				heading={forTitle ? "Reigns and world title bouts" : "World title reigns"}
+				weightClass={weightClass}
+				lanes={lanes}
+				reigns={reigns}
+				bouts={bouts}
+				today={today}
+				forTitle={forTitle}
+				contested={!forTitle || active}
+			/>
+		)
+	}
+
+	{
+		ranked.length > 0 && (
+			<section aria-labelledby="longest" class="mb-18">
+				<h2 id="longest" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">
+					{forTitle ? "Reigns by length" : "Longest reigns"}
+				</h2>
+				<ol>
+					{ranked.map((k) => (
+						<li class="grid grid-cols-[24px_280px_minmax(0,1fr)] items-center gap-3 border-b border-rule py-2.5 last:border-b-0 max-[760px]:grid-cols-[24px_150px_minmax(0,1fr)]">
+							<span class="text-right text-xs tabular-nums leading-5 text-[#8a8a7e]">{k.rank}</span>
+							<span class="min-w-0 text-sm">
+								<a href={`/champions/${k.championId}/`} class="font-semibold">
+									{k.name}
+								</a>
+								<span class="block text-xs leading-5 text-muted">
+									<OrgTags orgs={k.orgs} /> {k.years}
+								</span>
+							</span>
+							<span class="min-w-0">
+								<span aria-hidden="true" class="relative block" style={`height: ${k.stripes.length * 12 - 2}px`}>
+									{k.stripes.map((st, i) => (
+										<span
+											title={st.title}
+											class:list={["absolute h-2.5 rounded-r-[3px] shadow-[inset_0_0_0_1px_rgb(26_26_23/0.25)]", stripeTints[st.org]]}
+											style={`top: ${i * 12}px; left: ${st.left}%; width: ${st.width}%`}
+										/>
+									))}
+								</span>
+								<span class="mt-1 block text-xs text-muted">
+									{k.length} · {k.defences}
+								</span>
+							</span>
+						</li>
+					))}
+				</ol>
+			</section>
+		)
+	}
+
+	{
+		archive.length > 0 && (
+			<section aria-labelledby="archive" class="mb-18">
+				<h2 id="archive" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">
+					From the archive
+				</h2>
+				<ul class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-8 pt-6">
+					{archive.map((a) => (
+						<li>
+							<a href={a.href} class="group block hover:no-underline">
+								{a.img && <Image src={a.img} alt={a.name} widths={[480, 960]} sizes="(max-width: 760px) calc(100vw - 32px), 440px" class="block aspect-video h-auto w-full border border-ink object-cover grayscale" />}
+								<p class="mt-3 mb-0.5 text-[13px] text-muted"><time datetime={a.date}>{fullDate(a.date)}</time></p>
+								<h3 class="font-heading text-[22px] leading-7 font-semibold group-hover:underline">{a.name}</h3>
+								<p class="mt-1 text-sm underline decoration-gold decoration-2 underline-offset-4 group-hover:decoration-ink">
+									Read {a.count} {a.count === 1 ? "article" : "articles"}
+								</p>
+							</a>
+						</li>
+					))}
+				</ul>
+			</section>
+		)
+	}
+
+	{events.length > 0 && <TitleTimeline weightClass={weightClass} reigns={reigns} events={events} articles={articles} />}
+</Layout>
