@@ -2,19 +2,11 @@
 import Layout from "../../layouts/Layout.astro";
 ---
 
-<Layout title="Page Not Found" description="Page not found!" img={null}>
-	<main class="xl:mx-auto xl:max-w-240">
-		<header class="my-8">
-			<h1 class="text-3xl">Sorry, the page you requested was not found</h1>
-		</header>
-
-		<iframe
-			class="max-w-full border-0"
-			width="560"
-			height="315"
-			src="https://www.youtube-nocookie.com/embed/pWIqZKhNY90"
-			title="YouTube video player"
-			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-			allowfullscreen></iframe>
-	</main>
+<Layout title="Page not found" description="Page not found." img={null} noindex>
+	<section class="pt-[clamp(32px,6vw,56px)] pb-10">
+		<h1 class="mb-4 font-heading text-[clamp(40px,7vw,56px)] leading-[1.08] font-semibold tracking-[-0.01em]">Page not found</h1>
+		<p class="max-w-205 font-serif text-[clamp(19px,3vw,22px)] leading-[1.45] text-ink-soft">
+			Sorry, the page you're looking for isn't here.
+		</p>
+	</section>
 </Layout>
