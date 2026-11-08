@@ -137,6 +137,11 @@ export async function getAllChampions() {
 	return (await api.getAllChampions()).map(toChampion);
 }
 
+// a champion's places in a source's rankings, oldest first; position 0 is the source's own champion
+export async function getChampionRankings(championId: number, source: "TBRB" | "The Ring") {
+	return (await api.getChampionRankings(championId, source)).map((r) => ({ date: r.date, weightClass: r.weight_class, position: r.position }));
+}
+
 export async function getChampion(championId: number) {
 	return toChampion(await api.getChampion(championId));
 }

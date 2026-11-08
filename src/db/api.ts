@@ -1,7 +1,7 @@
 import { eq, desc, inArray, and, or, type SQL, type InferSelectModel } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/sqlite-core';
 import { db } from './client';
-import { Champion, Title, Reign, Bout, BoutTitle, Location, Reference } from './schema';
+import { Champion, Title, Reign, Bout, BoutTitle, Location, Reference, Ranking } from './schema';
 import type { WeightClass } from "./types";
 
 export async function getAllChampions() {
@@ -16,6 +16,15 @@ export async function getChampion(id: number) {
 
 export async function getAllTitles() {
     return await db.select().from(Title).orderBy(Title.title_id).all();
+}
+
+export async function getChampionRankings(championId: number, source: "TBRB" | "The Ring") {
+    return await db
+        .select()
+        .from(Ranking)
+        .where(and(eq(Ranking.champion_id, championId), eq(Ranking.source, source)))
+        .orderBy(Ranking.date, Ranking.ranking_id)
+        .all();
 }
 
 export async function getAllReferences() {

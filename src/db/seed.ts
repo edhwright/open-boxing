@@ -8,15 +8,10 @@ import titlesCSV from "../../data/titles.csv?raw";
 import referencesCSV from "../../data/references.csv?raw";
 import rankingsCSV from "../../data/rankings.csv?raw";
 import { z } from "zod";
-import { csvParse } from "d3-dsv";
 import { WeightClassEnum } from "./types";
+import { assertValid, date, id, link, optionalDate, optionalId, org, parseCSV, pounds, title, titles } from "./validate";
 import * as schema from "./schema";
 import { Bout, BoutTitle, Title, Location, Champion, Reign, Reference, Ranking } from "./schema";
-
-const id = z.string().regex(/^\d+$/, "id must be numeric");
-const optionalId = z.union([z.literal(""), z.string().regex(/^\d+$/)]);
-const date = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "invalid date format (YYYY-MM-DD)");
-const optionalDate = z.union([z.literal(""), date]);
 
 // SQLite caps the number of bound parameters per statement, so insert in batches
 async function insertAll<T extends SQLiteTable>(db: SqliteRemoteDatabase<typeof schema>, table: T, rows: T["$inferInsert"][]) {
@@ -26,6 +21,7 @@ async function insertAll<T extends SQLiteTable>(db: SqliteRemoteDatabase<typeof 
 }
 
 export default async function seed(db: SqliteRemoteDatabase<typeof schema>) {
+	// every file is checked first, so a build with bad data stops with all of its problems listed (see validate.ts)
 	// Champions table
 	const ChampionRow = z.object({
 		champion_id: id,
@@ -35,7 +31,101 @@ export default async function seed(db: SqliteRemoteDatabase<typeof schema>) {
 		born: date,
 	});
 
-	const championRows = csvParse(championsCSV).map((r) => ChampionRow.parse(r));
+	const championRows = parseCSV("champions.csv", championsCSV, ChampionRow);
+
+	// Titles table
+	const TitleRow = z.object({
+		title_id: id,
+		org_full_name: z.string(),
+		org_short_name: z.string(),
+		org_abbreviation: org,
+		active: z.enum(["0", "1"]),
+		weight_class: WeightClassEnum,
+		latest_weight_lb: pounds,
+	});
+
+	const titleRows = parseCSV("titles.csv", titlesCSV, TitleRow);
+
+	// Location table
+	const LocationRow = z.object({
+		location_id: id,
+		latest_venue_name: z.string(),
+		locality: z.string(),
+		country: z.string(),
+		latitude: z.string().regex(/^-?\d+(\.\d+)?$/, "must be a valid number"),
+		longitude: z.string().regex(/^-?\d+(\.\d+)?$/, "must be a valid number"),
+	});
+
+	const locationRows = parseCSV("locations.csv", locationsCSV, LocationRow);
+
+	// Reigns table
+	const ReignRow = z.object({
+		reign_id: id,
+		begins: date,
+		ends: optionalDate,
+		champion_id: id,
+		name: z.string(),
+		// "1" for a current reign; empty (or "0") otherwise
+		current: z.enum(["", "0", "1"]),
+		title: title,
+	});
+
+	const reignRows = parseCSV("reigns.csv", reignsCSV, ReignRow);
+
+	// Bouts table
+	const BoutRow = z.object({
+		bout_id: id,
+		date: date,
+		boxer_a_champion_id: optionalId,
+		boxer_a_name: z.string(),
+		boxer_b_champion_id: optionalId,
+		boxer_b_name: z.string(),
+		status: z.enum(["SCHEDULED", "FINISHED"]),
+		winner: z.enum(["BOXER A", "BOXER B", "DRAW", "NO CONTEST", ""]),
+		// empty for a bout still to come
+		method_of_victory: z.enum(["KO", "TKO", "RTD", "UD", "SD", "MD", "TD", "PTS", "NWS", "DQ", "NC", ""]),
+		total_rounds: optionalId,
+		scheduled_rounds: z.string().regex(/^\d+$/, "scheduled rounds must be numeric"),
+		weight_class: WeightClassEnum,
+		weight_lb: pounds,
+		titles: titles,
+		location_id: optionalId,
+		location_venue: z.string(),
+	});
+
+	const boutRows = parseCSV("bouts.csv", boutsCSV, BoutRow);
+
+	// References table
+	const ReferenceRow = z.object({
+		reference_id: id,
+		headline: z.string(),
+		author: z.string(),
+		publication: z.string(),
+		// empty where the source gives no date
+		publication_date: optionalDate,
+		bout_id: optionalId,
+		reign_id: optionalId,
+		event_date: date,
+		link_text: z.string(),
+		link_url: link,
+	});
+
+	const referenceRows = parseCSV("references.csv", referencesCSV, ReferenceRow);
+
+	// Rankings table
+	const RankingRow = z.object({
+		ranking_id: id,
+		source: z.enum(["TBRB", "The Ring"]),
+		date: date,
+		weight_class: z.union([WeightClassEnum, z.literal("Pound for Pound")]),
+		position: z.string().regex(/^\d+$/, "position must be numeric"),
+		name: z.string(),
+		champion_id: optionalId,
+	});
+
+	const rankingRows = parseCSV("rankings.csv", rankingsCSV, RankingRow);
+
+	assertValid();
 
 	await insertAll(
 		db,
@@ -48,19 +138,6 @@ export default async function seed(db: SqliteRemoteDatabase<typeof schema>) {
 			born: r.born,
 		})),
 	);
-
-	// Titles table
-	const TitleRow = z.object({
-		title_id: id,
-		org_full_name: z.string(),
-		org_short_name: z.string(),
-		org_abbreviation: z.string(),
-		active: z.enum(["0", "1"]),
-		weight_class: WeightClassEnum,
-		latest_weight_lb: z.string(),
-	});
-
-	const titleRows = csvParse(titlesCSV).map((r) => TitleRow.parse(r));
 
 	await insertAll(
 		db,
@@ -86,18 +163,6 @@ export default async function seed(db: SqliteRemoteDatabase<typeof schema>) {
 		return { title_id: titleId, weight_lb: weightLb };
 	}
 
-	// Location table
-	const LocationRow = z.object({
-		location_id: id,
-		latest_venue_name: z.string(),
-		locality: z.string(),
-		country: z.string(),
-		latitude: z.string().regex(/^-?\d+(\.\d+)?$/, "must be a valid number"),
-		longitude: z.string().regex(/^-?\d+(\.\d+)?$/, "must be a valid number"),
-	});
-
-	const locationRows = csvParse(locationsCSV).map((r) => LocationRow.parse(r));
-
 	await insertAll(
 		db,
 		Location,
@@ -110,20 +175,6 @@ export default async function seed(db: SqliteRemoteDatabase<typeof schema>) {
 			longitude: Number(r.longitude),
 		})),
 	);
-
-	// Reigns table
-	const ReignRow = z.object({
-		reign_id: id,
-		begins: date,
-		ends: optionalDate,
-		champion_id: id,
-		name: z.string(),
-		// "1" for a current reign; empty (or "0") otherwise
-		current: z.enum(["", "0", "1"]),
-		title: z.string(),
-	});
-
-	const reignRows = csvParse(reignsCSV).map((r) => ReignRow.parse(r));
 
 	await insertAll(
 		db,
@@ -138,28 +189,6 @@ export default async function seed(db: SqliteRemoteDatabase<typeof schema>) {
 			...parseTitleString(r.title),
 		})),
 	);
-
-	// Bouts table
-	const BoutRow = z.object({
-		bout_id: id,
-		date: date,
-		boxer_a_champion_id: optionalId,
-		boxer_a_name: z.string(),
-		boxer_b_champion_id: optionalId,
-		boxer_b_name: z.string(),
-		status: z.enum(["SCHEDULED", "FINISHED"]),
-		winner: z.enum(["BOXER A", "BOXER B", "DRAW", "NO CONTEST", ""]),
-		method_of_victory: z.string(),
-		total_rounds: optionalId,
-		scheduled_rounds: z.string().regex(/^\d+$/, "scheduled rounds must be numeric"),
-		weight_class: WeightClassEnum,
-		weight_lb: z.string(),
-		titles: z.string(),
-		location_id: optionalId,
-		location_venue: z.string(),
-	});
-
-	const boutRows = csvParse(boutsCSV).map((r) => BoutRow.parse(r));
 
 	await insertAll(
 		db,
@@ -195,22 +224,6 @@ export default async function seed(db: SqliteRemoteDatabase<typeof schema>) {
 		),
 	);
 
-	// References table
-	const ReferenceRow = z.object({
-		reference_id: id,
-		headline: z.string(),
-		author: z.string(),
-		publication: z.string(),
-		publication_date: date,
-		bout_id: optionalId,
-		reign_id: optionalId,
-		event_date: date,
-		link_text: z.string(),
-		link_url: z.string(),
-	});
-
-	const referenceRows = csvParse(referencesCSV).map((r) => ReferenceRow.parse(r));
-
 	await insertAll(
 		db,
 		Reference,
@@ -227,19 +240,6 @@ export default async function seed(db: SqliteRemoteDatabase<typeof schema>) {
 			link: r.link_url,
 		})),
 	);
-
-	// Rankings table
-	const RankingRow = z.object({
-		ranking_id: id,
-		source: z.enum(["TBRB", "The Ring"]),
-		date: date,
-		weight_class: z.union([WeightClassEnum, z.literal("Pound for Pound")]),
-		position: z.string().regex(/^\d+$/, "position must be numeric"),
-		name: z.string(),
-		champion_id: optionalId,
-	});
-
-	const rankingRows = csvParse(rankingsCSV).map((r) => RankingRow.parse(r));
 
 	await insertAll(
 		db,
