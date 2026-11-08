@@ -1,0 +1,33 @@
+---
+import TimelineSection from "../../../timeline/TimelineSection.astro";
+import { reignsTimeline, type PageBout, type PageReign, type TimelineLane } from "./weight";
+
+// Every reign and world title bout on one time axis: a lane per world title (one on a world title page). It opens on
+// the five years up to the latest events (see src/timeline/TimelineSection.astro). The timeline further down lists the same events as text.
+interface Props {
+	heading: string;
+	weightClass: string;
+	lanes: TimelineLane[];
+	reigns: PageReign[];
+	bouts: PageBout[];
+	today: string;
+	forTitle: boolean;
+	// false for a world title no longer contested
+	contested?: boolean;
+}
+
+const { heading, lanes, reigns, bouts, today, forTitle, contested = true } = Astro.props;
+const model = reignsTimeline(lanes, reigns, bouts, today, forTitle, contested);
+model.heading = `<h2 id="reigns" class="font-heading text-[28px] leading-8 font-semibold">${heading}</h2>`;
+// the starting view ends a couple of months after the last thing that happened: today while a title is held, otherwise
+// the last reign or bout, so a title no longer contested opens on its last champion rather than on empty years. The
+// full range still runs to today
+const latest = [...reigns.map((r) => r.ends ?? today), ...bouts.map((b) => b.date)].sort().at(-1) ?? today;
+const after = new Date(`${latest}T00:00:00Z`);
+after.setUTCMonth(after.getUTCMonth() + 2);
+const end = after.toISOString().slice(0, 10) < model.full[1] ? after.toISOString().slice(0, 10) : model.full[1];
+const start = new Date(Date.parse(end) - 5 * 365.25 * 86400000).toISOString().slice(0, 10);
+const initial: [string, string] = [start < model.full[0] ? model.full[0] : start, end];
+---
+
+<TimelineSection model={model} initial={initial} />
