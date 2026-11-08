@@ -868,11 +868,11 @@ reign_id,begins,ends,champion_id,name,current,title
 867,1972-02-18,1972-09-15,262,Mando Ramos,,WBC-Lightweight-135
 868,1972-03-10,1972-10-28,284,Alfonso Frazer,,RING-Super Lightweight-140
 869,1972-03-10,1972-10-28,284,Alfonso Frazer,,WBA-Super Lightweight-140
-870,1972-03-19,1972-07-30,285,Rafael Herrera,,RING-Bantamweight-118
+870,1972-03-19,1972-07-29,285,Rafael Herrera,,RING-Bantamweight-118
 871,1972-03-19,1972-07-29,285,Rafael Herrera,,WBA-Bantamweight-118
 872,1972-03-19,1972-07-29,285,Rafael Herrera,,WBC-Bantamweight-118
 873,1972-04-07,1974-09-16,254,Bob Foster,,WBA-Light Heavyweight-175
-874,1972-04-25,1973-03-13,286,Ben Villaflor,,RING-Super Featherweight-130
+874,1972-04-25,1973-03-12,286,Ben Villaflor,,RING-Super Featherweight-130
 875,1972-04-25,1973-03-12,286,Ben Villaflor,,WBA-Super Featherweight-130
 876,1972-05-19,1972-12-16,287,Clemente Sanchez,,RING-Featherweight-126
 877,1972-05-19,1972-12-16,287,Clemente Sanchez,,WBC-Featherweight-126
@@ -882,7 +882,7 @@ reign_id,begins,ends,champion_id,name,current,title
 881,1972-06-26,1979-02-02,290,Roberto Duran,,WBA-Lightweight-135
 882,1972-07-29,1973-01-20,291,Enrique Pinder,,WBA-Bantamweight-118
 883,1972-07-29,1973-01-05,291,Enrique Pinder,,WBC-Bantamweight-118
-884,1972-07-30,1973-01-20,291,Enrique Pinder,,RING-Bantamweight-118
+884,1972-07-29,1973-01-20,291,Enrique Pinder,,RING-Bantamweight-118
 885,1972-08-19,1974-02-16,292,Ernesto Marcel,,WBA-Featherweight-126
 886,1972-09-15,1972-11-10,293,Chango Carmona,,WBC-Lightweight-135
 887,1972-09-29,1973-07-11,294,Venice Borkhorsor,,WBC-Flyweight-112
@@ -897,7 +897,7 @@ reign_id,begins,ends,champion_id,name,current,title
 896,1973-01-22,1974-10-30,298,George Foreman,,WBC-Heavyweight-175+
 897,1973-02-09,1973-07-10,294,Venice Borkhorsor,,RING-Flyweight-112
 898,1973-03-12,1973-10-17,277,Kuniaki Shibata,,WBA-Super Featherweight-130
-899,1973-03-13,1973-10-17,277,Kuniaki Shibata,,RING-Super Featherweight-130
+899,1973-03-12,1973-10-17,277,Kuniaki Shibata,,RING-Super Featherweight-130
 900,1973-04-14,1974-12-07,285,Rafael Herrera,,WBC-Bantamweight-118
 901,1973-05-05,1974-06-17,215,Eder Jofre,,WBC-Featherweight-126
 902,1973-05-17,1974-10-18,245,Chartchai Chionoi,,WBA-Flyweight-112
@@ -988,7 +988,7 @@ reign_id,begins,ends,champion_id,name,current,title
 987,1977-11-05,1978-04-22,301,Rodrigo Valdes,,WBC-Middleweight-160
 988,1977-11-19,1980-08-29,348,Jorge Lujan,,RING-Bantamweight-118
 989,1977-11-19,1980-08-29,348,Jorge Lujan,,WBA-Bantamweight-118
-990,1977-11-26,1978-05-07,303,Hong Soo-hwan,,WBA-Super Bantamweight-122
+990,1977-11-26,1978-05-06,303,Hong Soo-hwan,,WBA-Super Bantamweight-122
 991,1977-12-17,1978-04-15,349,Cecilio Lastra,,WBA-Featherweight-126
 992,1978-01-07,1978-12-02,350,Mate Parlov,,WBC-Light Heavyweight-175
 993,1978-01-21,1979-02-07,290,Roberto Duran,,WBC-Lightweight-135
@@ -1003,7 +1003,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1002,1978-04-22,1979-06-30,355,Hugo Corro,,WBA-Middleweight-160
 1003,1978-04-22,1979-06-30,355,Hugo Corro,,WBC-Middleweight-160
 1004,1978-05-06,1978-09-30,356,Netrnoi Sor Vorasingh,,WBC-Light Flyweight-108
-1005,1978-05-07,1980-05-04,357,Ricardo Cardona,,WBA-Super Bantamweight-122
+1005,1978-05-06,1980-05-04,357,Ricardo Cardona,,WBA-Super Bantamweight-122
 1006,1978-06-09,1983-12-11,358,Larry Holmes,,WBC-Heavyweight-175+
 1007,1978-08-09,1979-10-24,359,Masashi Kudo,,RING-Super Welterweight-154
 1008,1978-08-09,1979-10-24,359,Masashi Kudo,,WBA-Super Welterweight-154
@@ -1323,7 +1323,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1322,1987-10-29,1988-06-06,388,Thomas Hearns,,WBC-Middleweight-160
 1323,1987-11-12,1989-05-13,427,Roger Mayweather,,WBC-Super Lightweight-140
 1324,1987-11-21,1988-10-29,467,Julio Cesar Chavez,,WBA-Lightweight-135
-1325,1987-11-22,1991-02-23,554,Julian Jackson,,WBA-Super Welterweight-154
+1325,1987-11-21,1991-02-23,554,Julian Jackson,,WBA-Super Welterweight-154
 1326,1987-11-27,1988-11-07,555,Donny Lalonde,,WBC-Light Heavyweight-175
 1327,1987-11-28,1988-02-27,556,Julio Gervacio,,WBA-Super Bantamweight-122
 1328,1987-12-06,1988-05-23,465,Park Chong-pal,,WBA-Super Middleweight-168
@@ -1443,7 +1443,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1442,1990-03-30,1991-04-05,629,Christophe Tiozzo,,WBA-Super Middleweight-168
 1443,1990-03-31,1993-12-18,630,Terry Norris,,WBC-Super Welterweight-154
 1444,1990-04-04,1990-08-11,631,Juan Nazario,,WBA-Lightweight-135
-1445,1990-04-07,1990-01-01,574,Jorge Paez,,WBO-Featherweight-126
+1445,1990-04-07,1991-01-25,574,Jorge Paez,,WBO-Featherweight-126
 1446,1990-04-21,1993-01-16,632,Robert Quiroga,,IBF-Super Flyweight-115
 1447,1990-04-23,1990-11-05,633,Paul Banke,,WBC-Super Bantamweight-122
 1448,1990-04-29,1990-11-18,634,Nigel Benn,,WBO-Middleweight-160
@@ -1477,7 +1477,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1476,1991-02-02,1992-10-14,653,Choi Hi-yong,,WBA-Minimumweight-105
 1477,1991-02-03,1991-06-14,654,Kiyoshi Hatanaka,,WBC-Super Bantamweight-122
 1478,1991-02-15,1992-06-23,599,Muangchai Kittikasem,,WBC-Flyweight-112
-1479,1991-02-23,1991-05-19,522,Greg Haugen,,WBO-Super Lightweight-140
+1479,1991-02-23,1991-05-18,522,Greg Haugen,,WBO-Super Lightweight-140
 1480,1991-02-23,1991-10-01,655,Gilbert Dele,,WBA-Super Welterweight-154
 1481,1991-02-25,1991-09-19,656,Greg Richardson,,WBC-Bantamweight-118
 1482,1991-03-08,1993-08-05,516,Bobby Czyz,,WBA-Cruiserweight-190
@@ -1490,7 +1490,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1489,1991-05-09,1994-09-10,660,Leeonzer Barber,,WBO-Light Heavyweight-175
 1490,1991-05-10,1993-02-13,661,James Toney,,IBF-Middleweight-160
 1491,1991-05-18,1992-01-10,587,Darrin Van Horn,,IBF-Super Middleweight-168
-1492,1991-05-19,1992-06-01,435,Hector Camacho,,WBO-Super Lightweight-140
+1492,1991-05-18,1992-06-01,435,Hector Camacho,,WBO-Super Lightweight-140
 1493,1991-05-24,1992-10-15,662,Jesse Benavides,,WBO-Super Bantamweight-122
 1494,1991-06-01,1992-09-26,571,Kim Yong-kang,,WBA-Flyweight-112
 1495,1991-06-03,1991-08-12,663,Troy Dorsey,,IBF-Featherweight-126
@@ -1504,7 +1504,7 @@ reign_id,begins,ends,champion_id,name,current,title
 1503,1991-08-12,1993-02-26,666,Manuel Medina,,IBF-Featherweight-126
 1504,1991-09-07,1992-07-30,667,James Warring,,IBF-Cruiserweight-190
 1505,1991-09-11,1994-07-23,608,Jeff Harding,,WBC-Light Heavyweight-175
-1506,1991-09-13,1991-01-01,518,Brian Mitchell,,IBF-Super Featherweight-130
+1506,1991-09-13,1992-02-21,518,Brian Mitchell,,IBF-Super Featherweight-130
 1507,1991-09-19,1992-09-17,668,Joichiro Tatsuyoshi,,WBC-Bantamweight-118
 1508,1991-09-21,1995-03-18,649,Chris Eubank,,WBO-Super Middleweight-168
 1509,1991-10-01,1992-12-21,538,Vinny Pazienza,,WBA-Super Welterweight-154
@@ -2022,7 +2022,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2021,2003-03-31,2004-10-02,797,Rosendo Alvarez,,RING-Light Flyweight-108
 2022,2003-04-05,2004-06-05,903,Markus Beyer,,WBC-Super Middleweight-168
 2023,2003-04-26,2003-09-01,661,James Toney,,IBF-Cruiserweight-190
-2024,2003-04-26,2003-11-08,988,Antonio Tarver,,IBF-Light Heavyweight-175
+2024,2003-04-26,2003-11-01,988,Antonio Tarver,,IBF-Light Heavyweight-175
 2025,2003-04-26,2003-11-08,988,Antonio Tarver,,WBC-Light Heavyweight-175
 2026,2003-05-03,2007-08-25,989,Ivan Calderon,,WBO-Minimumweight-105
 2027,2003-05-31,2003-10-04,990,Edgar Cardenas,,IBF-Minimumweight-105
@@ -2197,7 +2197,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2196,2006-10-04,2008-11-21,1072,Celestino Caballero,,WBA-Super Bantamweight-122
 2197,2006-10-07,2008-09-13,922,Joel Casamayor,,RING-Lightweight-135
 2198,2006-10-07,2007-02-01,922,Joel Casamayor,,WBC-Lightweight-135
-2199,2006-10-14,2007-11-04,1024,Mikkel Kessler,,WBAS-Super Middleweight-168
+2199,2006-10-14,2007-11-03,1024,Mikkel Kessler,,WBAS-Super Middleweight-168
 2200,2006-10-14,2007-11-03,1024,Mikkel Kessler,,WBC-Super Middleweight-168
 2201,2006-10-19,2007-04-28,998,Silvio Branco,,WBAR-Light Heavyweight-175
 2202,2006-10-28,2008-04-12,1073,Kermit Cintron,,IBF-Welterweight-147
@@ -2266,7 +2266,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2265,2007-10-13,2008-08-02,1105,Dmitry Kirillov,,IBF-Super Flyweight-115
 2266,2007-10-19,2012-05-26,1106,Lucian Bute,,IBF-Super Middleweight-168
 2267,2007-11-03,2008-06-28,839,Joe Calzaghe,,WBC-Super Middleweight-168
-2268,2007-11-04,2008-10-03,839,Joe Calzaghe,,WBAS-Super Middleweight-168
+2268,2007-11-03,2008-10-03,839,Joe Calzaghe,,WBAS-Super Middleweight-168
 2269,2007-11-10,2008-05-23,1107,David Haye,,RING-Cruiserweight-200
 2270,2007-11-10,2008-05-12,1107,David Haye,,WBAS-Cruiserweight-200
 2271,2007-11-10,2008-05-12,1107,David Haye,,WBC-Cruiserweight-200
@@ -2380,7 +2380,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2379,2009-11-03,2009-11-21,1024,Mikkel Kessler,,WBAS-Super Middleweight-168
 2380,2009-11-07,2011-07-02,1107,David Haye,,WBA-Heavyweight-200+
 2381,2009-11-13,2011-05-19,1167,Juergen Braehmer,,WBO-Light Heavyweight-175
-2382,2009-11-14,2010-06-06,1168,Yuri Foreman,,WBAR-Super Welterweight-154
+2382,2009-11-14,2010-06-05,1168,Yuri Foreman,,WBAR-Super Welterweight-154
 2383,2009-11-14,2012-06-09,872,Manny Pacquiao,,WBO-Welterweight-147
 2384,2009-11-20,2014-01-13,1169,Moruti Mthalane,,IBF-Flyweight-112
 2385,2009-11-21,2010-01-13,1005,Zsolt Erdei,,WBC-Cruiserweight-200
@@ -2415,7 +2415,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2414,2010-05-29,2011-04-30,1181,Luis Alberto Lazarte,,IBF-Light Flyweight-108
 2415,2010-05-29,2011-02-26,1182,Miguel Acosta,,WBAR-Lightweight-135
 2416,2010-06-05,2011-10-01,1090,Steve Cunningham,,IBF-Cruiserweight-200
-2417,2010-06-06,2010-09-10,1019,Miguel Cotto,,WBAR-Super Welterweight-154
+2417,2010-06-05,2010-09-10,1019,Miguel Cotto,,WBAR-Super Welterweight-154
 2418,2010-06-12,2011-07-16,1183,Julio Cesar Miranda,,WBO-Flyweight-112
 2419,2010-06-19,2010-11-06,1066,Omar Nino Romero,,WBC-Light Flyweight-108
 2420,2010-07-31,2012-08-25,1185,Dmitry Pirog,,WBO-Middleweight-160
@@ -2426,7 +2426,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2425,2010-08-28,2011-09-19,1150,Giovani Segura,,RING-Light Flyweight-108
 2426,2010-08-28,2011-02-04,1093,Juan Carlos Reveco,,WBAR-Light Flyweight-108
 2427,2010-08-28,2010-11-26,1150,Giovani Segura,,WBAS-Light Flyweight-108
-2428,2010-08-28,2011-04-01,1150,Giovani Segura,,WBO-Light Flyweight-108
+2428,2010-08-28,2011-04-22,1150,Giovani Segura,,WBO-Light Flyweight-108
 2429,2010-09-01,2011-05-19,1088,Mzonke Fana,,IBF-Super Featherweight-130
 2430,2010-09-04,2012-09-01,996,Felix Sturm,,WBAS-Middleweight-160
 2431,2010-09-04,2011-09-10,1188,Ricky Burns,,WBO-Super Featherweight-130
@@ -2462,7 +2462,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2461,2011-03-05,2011-07-23,913,Zab Judah,,IBF-Super Lightweight-140
 2462,2011-03-05,2013-09-14,1201,Canelo Alvarez,,WBC-Super Welterweight-154
 2463,2011-03-26,2012-03-24,1202,Takalani Ndlovu,,IBF-Super Bantamweight-122
-2464,2011-04-01,2011-04-30,1203,Jesus Geles,,WBO-Light Flyweight-108
+2464,2011-04-22,2011-04-30,1203,Jesus Geles,,WBO-Light Flyweight-108
 2465,2011-04-02,2012-11-17,1204,Hernan Marquez,,WBA-Flyweight-112
 2466,2011-04-08,2012-09-15,1047,Jhonny Gonzalez,,WBC-Featherweight-126
 2467,2011-04-16,2013-01-19,1075,Orlando Salido,,WBO-Featherweight-126
@@ -2585,11 +2585,11 @@ reign_id,begins,ends,champion_id,name,current,title
 2584,2013-04-13,2015-10-30,1230,Guillermo Rigondeaux,,WBAS-Super Bantamweight-122
 2585,2013-04-13,2015-10-28,1230,Guillermo Rigondeaux,,WBO-Super Bantamweight-122
 2586,2013-04-19,2014-03-22,1260,Merlito Sabillo,,WBO-Minimumweight-105
-2587,2013-04-20,2013-08-25,1261,Victor Terrazas,,WBC-Super Bantamweight-122
+2587,2013-04-20,2013-08-24,1261,Victor Terrazas,,WBC-Super Bantamweight-122
 2588,2013-04-20,2013-09-14,1201,Canelo Alvarez,,RING-Super Welterweight-154
 2589,2013-04-20,2013-09-14,1201,Canelo Alvarez,,WBAR-Super Welterweight-154
 2590,2013-05-03,2014-05-31,1262,Srisaket Sor Rungvisai,,WBC-Super Flyweight-115
-2591,2013-05-04,2013-08-25,1215,Abner Mares,,WBC-Featherweight-126
+2591,2013-05-04,2013-08-24,1215,Abner Mares,,WBC-Featherweight-126
 2592,2013-05-04,2015-09-12,866,Floyd Mayweather Jr,,RING-Welterweight-147
 2593,2013-05-06,2013-12-02,1263,Liborio Solis,,WBAR-Super Flyweight-115
 2594,2013-05-11,2013-10-16,1264,Jamie McDonnell,,IBF-Bantamweight-118
@@ -2602,8 +2602,8 @@ reign_id,begins,ends,champion_id,name,current,title
 2601,2013-08-17,2016-11-19,1269,Sergey Kovalev,,WBO-Light Heavyweight-175
 2602,2013-08-17,2013-12-07,1268,Darren Barker,,IBF-Middleweight-160
 2603,2013-08-17,2014-09-06,1270,Kiko Martinez,,IBF-Super Bantamweight-122
-2604,2013-08-25,2015-03-28,1047,Jhonny Gonzalez,,WBC-Featherweight-126
-2605,2013-08-25,2015-09-01,1236,Leo Santa Cruz,,WBC-Super Bantamweight-122
+2604,2013-08-24,2015-03-28,1047,Jhonny Gonzalez,,WBC-Featherweight-126
+2605,2013-08-24,2015-09-01,1236,Leo Santa Cruz,,WBC-Super Bantamweight-122
 2606,2013-09-03,2014-03-19,1177,Daiki Kameda,,IBF-Super Flyweight-115
 2607,2013-09-05,2016-02-27,1271,Scott Quigg,,WBAR-Super Bantamweight-122
 2608,2013-09-14,2014-10-11,1272,Carlos Molina,,IBF-Super Welterweight-154
@@ -2735,7 +2735,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2734,2016-02-27,2016-04-08,1300,Carl Frampton,,WBAS-Super Bantamweight-122
 2735,2016-02-27,2016-09-16,1341,Hugo Ruiz,,WBC-Super Bantamweight-122
 2736,2016-03-04,2017-05-20,1342,Ganigan Lopez,,WBC-Light Flyweight-108
-2737,2016-03-06,2016-11-05,1287,Jessie Vargas,,WBO-Welterweight-147
+2737,2016-03-05,2016-11-05,1287,Jessie Vargas,,WBO-Welterweight-147
 2738,2016-03-19,2016-06-29,1343,Byron Rojas,,WBA-Minimumweight-105
 2739,2016-04-09,2019-06-01,1344,Anthony Joshua,,IBF-Heavyweight-200+
 2740,2016-04-09,2019-05-13,1345,Gilberto Ramirez,,WBO-Super Middleweight-168
@@ -2768,12 +2768,12 @@ reign_id,begins,ends,champion_id,name,current,title
 2767,2016-08-31,2016-12-10,1195,Luis Concepcion,,WBAR-Super Flyweight-115
 2768,2016-09-03,2022-02-26,1358,Jerwin Ancajas,,IBF-Super Flyweight-115
 2769,2016-09-09,2018-07-28,1359,Robert Easter Jr,,IBF-Lightweight-135
-2770,2016-09-10,2017-03-19,1130,Roman Gonzalez,,WBC-Super Flyweight-115
+2770,2016-09-10,2017-03-18,1130,Roman Gonzalez,,WBC-Super Flyweight-115
 2771,2016-09-16,2017-08-15,1225,Shinsuke Yamanaka,,RING-Bantamweight-118
 2772,2016-09-16,2016-12-09,1035,Hozumi Hasegawa,,WBC-Super Bantamweight-122
 2773,2016-09-17,2019-06-05,1360,Oleksandr Usyk,,WBO-Cruiserweight-200
 2774,2016-09-17,2017-05-19,1201,Canelo Alvarez,,WBO-Super Welterweight-154
-2775,2016-09-24,2018-05-13,1100,Jorge Linares,,RING-Lightweight-135
+2775,2016-09-24,2018-05-12,1100,Jorge Linares,,RING-Lightweight-135
 2776,2016-09-24,2018-05-12,1100,Jorge Linares,,WBAR-Lightweight-135
 2777,2016-10-01,2017-08-26,1209,Nathan Cleverly,,WBAR-Light Heavyweight-175
 2778,2016-11-05,2017-07-28,1361,Shiming Zou,,WBO-Flyweight-112
@@ -2803,7 +2803,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2802,2017-03-03,2017-05-19,1375,Juan Hernandez,,WBC-Flyweight-112
 2803,2017-03-04,2018-04-24,1311,Keith Thurman,,WBC-Welterweight-147
 2804,2017-03-11,2017-10-22,1275,Demetrius Andrade,,WBAR-Super Welterweight-154
-2805,2017-03-19,2019-04-26,1262,Srisaket Sor Rungvisai,,WBC-Super Flyweight-115
+2805,2017-03-18,2019-04-26,1262,Srisaket Sor Rungvisai,,WBC-Super Flyweight-115
 2806,2017-04-01,2018-01-27,1376,Mairis Briedis,,WBC-Cruiserweight-200
 2807,2017-04-09,2017-09-03,1377,Shun Kubo,,WBAR-Super Bantamweight-122
 2808,2017-04-14,2017-08-27,1378,Tatsuya Fukuhara,,WBO-Minimumweight-105
@@ -2830,7 +2830,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2829,2017-08-26,2017-12-02,1019,Miguel Cotto,,WBO-Super Welterweight-154
 2830,2017-08-27,2018-07-13,1390,Ryuya Yamanaka,,WBO-Minimumweight-105
 2831,2017-09-03,2019-04-26,1391,Daniel Roman,,WBAR-Super Bantamweight-122
-2832,2017-09-09,2019-02-24,1392,David Benavidez,,WBC-Super Middleweight-168
+2832,2017-09-08,2018-10-03,1392,David Benavidez,,WBC-Super Middleweight-168
 2833,2017-09-13,2018-08-16,1393,Ryosuke Iwasa,,IBF-Super Bantamweight-122
 2834,2017-09-23,2019-10-09,1394,Dmitry Bivol,,WBAR-Light Heavyweight-175
 2835,2017-09-26,2018-03-01,1225,Shinsuke Yamanaka,,RING-Bantamweight-118
@@ -2867,7 +2867,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2866,2018-05-05,2019-05-18,1412,Emmanuel Rodriguez,,IBF-Bantamweight-118
 2867,2018-05-12,2020-10-17,1293,Vasyl Lomachenko,,WBAS-Lightweight-135
 2868,2018-05-12,2019-11-23,1413,Jaime Munguia,,WBO-Super Welterweight-154
-2869,2018-05-13,2020-10-17,1293,Vasyl Lomachenko,,RING-Lightweight-135
+2869,2018-05-12,2020-10-17,1293,Vasyl Lomachenko,,RING-Lightweight-135
 2870,2018-05-19,2021-01-21,1414,Josh Warrington,,IBF-Featherweight-126
 2871,2018-05-20,2018-07-24,1282,Hekkie Budler,,IBF-Light Flyweight-108
 2872,2018-05-20,2018-12-31,1282,Hekkie Budler,,RING-Light Flyweight-108
@@ -2921,7 +2921,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2920,2019-02-02,2019-12-14,1436,Richard Commey,,IBF-Lightweight-135
 2921,2019-02-09,2019-11-23,1437,Andrew Cancio,,WBAR-Super Featherweight-130
 2922,2019-02-16,2019-07-04,1438,DeeJay Kriel,,IBF-Minimumweight-105
-2923,2019-02-24,2019-09-28,1298,Anthony Dirrell,,WBC-Super Middleweight-168
+2923,2019-02-23,2019-09-28,1298,Anthony Dirrell,,WBC-Super Middleweight-168
 2924,2019-04-26,2020-01-30,1391,Daniel Roman,,IBF-Super Bantamweight-122
 2925,2019-04-26,2020-01-30,1391,Daniel Roman,,WBAS-Super Bantamweight-122
 2926,2019-04-26,2024-06-29,1258,Juan Francisco Estrada,,RING-Super Flyweight-115
@@ -2969,7 +2969,7 @@ reign_id,begins,ends,champion_id,name,current,title
 2968,2019-11-02,2019-12-17,1201,Canelo Alvarez,,WBO-Light Heavyweight-175
 2969,2019-11-07,2023-01-14,1286,Naoya Inoue,,WBAS-Bantamweight-118
 2970,2019-11-23,2021-01-02,1452,Rene Alvarado,,WBAR-Super Featherweight-130
-2971,2019-11-24,2020-10-31,1236,Leo Santa Cruz,,WBAS-Super Featherweight-130
+2971,2019-11-23,2020-10-31,1236,Leo Santa Cruz,,WBAS-Super Featherweight-130
 2972,2019-11-30,2022-05-03,1238,John Riel Casimero,,WBO-Bantamweight-118
 2973,2019-12-04,2021-02-13,1453,Patrick Teixeira,,WBO-Super Welterweight-154
 2974,2019-12-07,2021-09-25,1344,Anthony Joshua,,IBF-Heavyweight-200+
@@ -3169,7 +3169,7 @@ reign_id,begins,ends,champion_id,name,current,title
 3168,2024-07-12,2026-06-30,1536,Muslim Gadzhimagomedov,,WBA-Bridgerweight-224
 3169,2024-07-20,,1537,Anthony Olascuaga,1,WBO-Flyweight-112
 3170,2024-07-28,,1447,Pedro Taduran,1,IBF-Minimumweight-105
-3171,2024-08-03,2025-09-13,1283,Terence Crawford,,WBA-Super Welterweight-154
+3171,2024-08-03,2025-09-20,1283,Terence Crawford,,WBA-Super Welterweight-154
 3172,2024-08-03,2025-02-01,1467,David Morrell,,WBAR-Light Heavyweight-175
 3173,2024-08-03,2025-03-01,1538,Jose Valenzuela,,WBAR-Super Lightweight-140
 3174,2024-08-09,2025-03-29,1539,Angel Ayala,,IBF-Flyweight-112
@@ -3230,8 +3230,8 @@ reign_id,begins,ends,champion_id,name,current,title
 3229,2025-09-13,2025-12-23,1283,Terence Crawford,,IBF-Super Middleweight-168
 3230,2025-09-13,2026-06-24,1559,Lewis Crocker,,IBF-Welterweight-147
 3231,2025-09-13,2026-01-27,1283,Terence Crawford,,RING-Super Middleweight-168
-3232,2025-09-13,2026-01-31,1560,Abass Baraou,,WBA-Super Welterweight-154
-3233,2025-09-13,2026-01-01,1283,Terence Crawford,,WBAS-Super Middleweight-168
+3232,2025-09-20,2026-01-31,1560,Abass Baraou,,WBA-Super Welterweight-154
+3233,2025-09-13,2025-12-17,1283,Terence Crawford,,WBAS-Super Middleweight-168
 3234,2025-09-13,2025-12-03,1283,Terence Crawford,,WBC-Super Middleweight-168
 3235,2025-09-13,2025-12-21,1283,Terence Crawford,,WBO-Super Middleweight-168
 3236,2025-09-14,2026-06-01,1561,Ryusei Matsumoto,,WBAR-Minimumweight-105
@@ -3307,3 +3307,4 @@ reign_id,begins,ends,champion_id,name,current,title
 3306,1967-07-01,1968-06-29,206,Carlos Ortiz,,WBC-Lightweight-135
 3307,1930-10-04,1934-09-18,71,Panama Al Brown,,WBA-Bantamweight-118
 3308,1932-01-22,1932-06-21,79,Max Schmeling,,NYSAC-Heavyweight-175+
+3309,2026-11-07,,1591,Willy Hutchinson,1,WBC-Light Heavyweight-175
