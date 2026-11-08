@@ -1,37 +1,34 @@
 ---
 import dayjs from "dayjs";
-import { boutNameFromBout, slugify } from "../../../utils";
-import Layout from "../../../layouts/Layout.astro";
-import Breadcrumbs from "../../../components/Breadcrumbs.astro";
-import Reference from "./_components/Reference.astro";
-import LocationGlobe from "../../../components/LocationGlobe.svelte";
 import { type CollectionEntry, getCollection, render } from "astro:content";
+import Layout from "../../../layouts/Layout.astro";
+import OrgTags from "../../../components/OrgTags.astro";
+import LocationGlobe from "../../../components/LocationGlobe.astro";
+import ArticleNav from "../../../components/ArticleNav.astro";
+import { boutNameFromBout, isChampion, slugify, thumbnailImage } from "../../../utils";
 import { getBout } from "../../../db";
-import { group } from "d3-array";
-import type { Bout } from "../../../types";
+import { undisputedTitles } from "../../../undisputed";
+import { dayMonth, fullDate, weekdayDate } from "../../../dates";
+import type { Bout, Boxer } from "../../../types";
 
 interface Props {
 	boutName: string;
-	thumbnail: string | undefined;
+	thumbnail: ImageMetadata | undefined;
 	bout: Bout;
 	articles: CollectionEntry<"bouts">[];
 }
 
 export async function getStaticPaths() {
 	const boutArticles = await getCollection("bouts");
-	const articlesByBout = group(boutArticles, (a) => a.data.boutId);
-
-	return await Promise.all(
-		[...articlesByBout].map(async ([boutId, articles]) => {
+	return Promise.all(
+		[...Map.groupBy(boutArticles, (a) => a.data.boutId)].map(async ([boutId, articles]) => {
 			const bout = await getBout(boutId);
 			return {
-				params: {
-					bout: `${bout.date}-${slugify(boutNameFromBout(bout))}`,
-				},
+				params: { bout: `${bout.date}-${slugify(boutNameFromBout(bout))}` },
 				props: {
 					boutName: boutNameFromBout(bout),
-					thumbnail: articles[0].data.thumbnail,
-					bout: bout,
+					thumbnail: thumbnailImage(articles[0].data.thumbnail),
+					bout,
 					articles: articles.sort((a, b) => a.data.publicationDate.localeCompare(b.data.publicationDate)),
 				},
 			};
@@ -40,96 +37,204 @@ export async function getStaticPaths() {
 }
 
 const { boutName, thumbnail, bout, articles } = Astro.props;
-
+// the thumbnail as the page's social image: the original 1280px JPEG, which every site that shows previews takes
+const social = thumbnail ? { src: thumbnail.src, width: thumbnail.width, height: thumbnail.height } : null;
 const { location } = bout;
+const where = [location.locality, location.venue && !location.locality ? location.venue : null].filter(Boolean).join(", ");
 const place = [location.venue, location.locality, location.country].filter(Boolean).join(", ");
 
-const articleComponents = await Promise.all(
+// the result, from the winner's side: "Jack Dempsey beats Tommy Gibbons via points decision 15/15"
+const methods: Record<string, string> = {
+	KO: "knockout",
+	TKO: "technical knockout",
+	RTD: "corner retirement",
+	UD: "unanimous decision",
+	SD: "split decision",
+	MD: "majority decision",
+	DQ: "disqualification",
+	TD: "technical decision",
+	PTS: "points decision",
+	NWS: "newspaper decision",
+};
+const name = (b: Boxer) => (isChampion(b) ? `${b.name.first} ${b.name.last}` : b.name);
+const { boxerA, boxerB } = bout.boxers;
+const [winner, loser] = bout.result.winner === "BOXER B" ? [boxerB, boxerA] : [boxerA, boxerB];
+const how = [bout.result.methodOfVictory && bout.result.methodOfVictory !== "NC" ? `via ${methods[bout.result.methodOfVictory] ?? bout.result.methodOfVictory}` : null, bout.result.totalRounds ? `${bout.result.totalRounds}/${bout.scheduledRounds}` : null]
+	.filter(Boolean)
+	.join(" ");
+const verb = bout.result.winner === "DRAW" ? "draw" : bout.result.winner === "NO CONTEST" ? "no contest" : "beats";
+
+const orgs = bout.titles.map((t) => ({ abbreviation: t.org.name.abbreviation, short: t.org.name.short }));
+const ids = [boxerA, boxerB].filter(isChampion).map((b) => b.championId);
+const gold = undisputedTitles(ids, bout.titles[0]?.weight.class ?? bout.weight.class, bout.date, orgs.map((o) => o.abbreviation));
+
+const rendered = await Promise.all(
 	articles.map(async (a) => {
-		const { Content, headings } = await render(a);
-		return { Content, headingSlug: headings[0].slug, data: a.data };
-	})
+		const { Content } = await render(a);
+		const days = dayjs(a.data.publicationDate).diff(bout.date, "day");
+		const when = days === 0 ? "The day of the bout" : `${Math.abs(days)} ${Math.abs(days) === 1 ? "day" : "days"} ${days < 0 ? "before" : "after"}`;
+		return { Content, data: a.data, id: slugify(a.data.title.toLowerCase().replace(/[^a-z0-9 ]/g, "")), days, when };
+	}),
+).then((list) =>
+	// articles published the same day stack up on the strip below, one above another
+	list.map((a, i) => ({ ...a, stack: list.slice(0, i).filter((b) => b.data.publicationDate === a.data.publicationDate).length })),
 );
+const groups = [
+	{ label: "Before the bout", items: rendered.filter((a) => a.days < 0) },
+	{ label: "The day of the bout", items: rendered.filter((a) => a.days === 0) },
+	{ label: "After the bout", items: rendered.filter((a) => a.days > 0) },
+].filter((g) => g.items.length);
+
+// when the articles were published, on a strip with the bout marked in gold
+const first = dayjs([bout.date, ...articles.map((a) => a.data.publicationDate)].sort()[0]).startOf("month");
+const last = dayjs([bout.date, ...articles.map((a) => a.data.publicationDate)].sort().at(-1)).endOf("month");
+const x = (iso: string | dayjs.Dayjs) => Math.round((dayjs(iso).diff(first, "day") / last.diff(first, "day")) * 10000) / 100;
+const months: dayjs.Dayjs[] = [];
+for (let m = first; m.isBefore(last); m = m.add(1, "month")) months.push(m);
+// for search engines: each transcribed article as a NewsArticle, at its place on this page, based on the scan it was
+// transcribed from. The newspaper is the publisher, and the author where one isn't credited
+const page = new URL(Astro.url.pathname, Astro.site);
+const jsonLd = rendered.map((a) => ({
+	"@context": "https://schema.org",
+	"@type": "NewsArticle",
+	headline: a.data.title,
+	datePublished: a.data.publicationDate,
+	url: `${page.href}#${a.id}`,
+	mainEntityOfPage: page.href,
+	author: a.data.author ? { "@type": "Person", name: a.data.author } : { "@type": "Organization", name: a.data.publication },
+	publisher: { "@type": "Organization", name: a.data.publication },
+	...(social ? { image: new URL(social.src, Astro.site).href } : {}),
+	isBasedOn: a.data.link,
+	about: { "@type": "SportsEvent", name: boutName, startDate: bout.date, sport: "Boxing" },
+	isAccessibleForFree: true,
+}));
+const span = `${dayMonth(articles[0].data.publicationDate)} to ${dayMonth(articles.at(-1)!.data.publicationDate)} ${dayjs(articles.at(-1)!.data.publicationDate).year()}`;
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 ---
 
-<Layout
-	title={boutName}
-	description={`Public domain ${boutName} articles.`}
-	img={thumbnail ? { url: thumbnail, width: "1280", height: "720", alt: `${boutName} thumbnail` } : null}
->
-	<main>
-		<Breadcrumbs
-			route={[
-				["Articles", `${Astro.url.origin}/articles/`],
-				[boutName, `${Astro.url.origin}/articles/${bout.boutId}/`],
-			]}
-		/>
-
-		<header class="my-8">
-			<h1 class="mx-auto mt-12 mb-4 text-center text-4xl">{boutName}</h1>
-			<div class="text-center text-sm">
-				<p class="mb-2">
-					<time datetime={dayjs(bout.date).format("YYYY-MM-DD")}>
-						{dayjs(bout.date).format("dddd, D MMMM, YYYY")}
-					</time>
-				</p>
+<Layout tone="paper" jsonLd={jsonLd} title={boutName} description={`Public domain ${boutName} articles.`} img={social ? { url: new URL(social.src, Astro.site).href, width: String(social.width), height: String(social.height), alt: `${boutName} thumbnail` } : null}>
+	{/* the link above the heading sits in the top padding, so the heading lines up with other pages' */}
+	<section class="border-b border-rule pt-[max(16px,calc(clamp(32px,6vw,56px)-28px))] pb-10">
+		<Breadcrumbs items={[{ name: "Articles", href: "/articles/" }]} current={boutName} />
+		<h1 class="mb-4 font-display text-[clamp(40px,7vw,64px)] leading-[1.05] tracking-[-0.01em]">{boutName}</h1>
+		<div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-10 gap-y-6 max-[760px]:grid-cols-1">
+			<div>
+			<p class="max-w-205 font-serif text-[clamp(19px,3vw,22px)] leading-[1.45] text-ink-soft">
+				<time datetime={bout.date}>{weekdayDate(bout.date)}</time>{where && `, ${where}`}.{" "}
 				{
-					place &&
-						(location.latitude !== null && location.longitude !== null ? (
-							<div class="mb-2 flex items-center justify-center gap-3">
-								<LocationGlobe latitude={location.latitude} longitude={location.longitude} label={place} />
-								<p>{place}</p>
-							</div>
+					[winner, verb, loser].map((part) =>
+						typeof part === "string" ? (
+							` ${part} `
+						) : isChampion(part) ? (
+							<a href={`/champions/${part.championId}/`} class="underline decoration-gold decoration-2 underline-offset-4">
+								{name(part)}
+							</a>
 						) : (
-							<p class="mb-2">{place}</p>
-						))
+							name(part)
+						),
+					)
 				}
-				<p class="mb-2">{bout.weight.class} ({bout.weight.lb} lb)</p>
-				<div>
-					{
-						bout.titles.map((title) => (
-							<p>
-								{title.org.name.full} {title.weight.class} title
-							</p>
-						))
-					}
-				</div>
+				{how && ` ${how}`}.
+			</p>
+				<p class="mt-2.5 text-[13px] leading-5.5 text-muted">
+					<a href={`/${slugify(bout.weight.class)}/`}>{bout.weight.class}</a> · <OrgTags orgs={orgs} gold={gold} />
+				</p>
 			</div>
-		</header>
+			{/* where the bout was held: the venue and address, and a globe centred on it when its coordinates are known */}
+			{
+				place && (
+					<div class="flex w-fit items-center gap-4 border border-ink p-3 pr-5">
+						{location.latitude !== null && location.longitude !== null && (
+							<LocationGlobe latitude={location.latitude} longitude={location.longitude} label={place} />
+						)}
+						<div class="min-w-0 max-w-56 text-sm">
+							{location.venue && <p class="font-semibold">{location.venue}</p>}
+							<p>{[location.locality, location.country].filter(Boolean).join(", ")}</p>
+						</div>
+					</div>
+				)
+			}
+		</div>
 
-		<!-- on small screens the second, zero-width column holds the sticky "Back to top" button -->
-		<div id="articles" class="grid grid-cols-[auto_0px] grid-rows-[auto_auto] gap-y-4 lg:grid-cols-16 lg:grid-rows-none lg:gap-4">
-			<nav class="col-start-1 row-start-1 py-3 md:mx-auto md:w-3/4 lg:sticky lg:top-0 lg:col-span-4 lg:col-start-auto lg:mx-0 lg:max-h-screen lg:w-auto lg:self-start lg:overflow-y-auto xl:max-w-3/4">
-				<h3 class="text-sm font-semibold">Articles</h3>
-				<ul>
-					{
-						articleComponents.map((article) => (
-							<li class="my-3 text-sm">
-								<a class="hover:underline" href={`#${article.headingSlug}`}>
-									{article.data.title}
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</nav>
-
-			<ul class="col-start-1 row-start-2 lg:col-span-12 lg:col-start-auto lg:row-start-auto">
+		<figure class="mt-8" aria-label={`When the ${articles.length} articles were published, ${span}`}>
+			{/* tall enough for the highest stack of same-day articles, with room above for the bout's label */}
+			<div class="relative border-b-2 border-ink" style={`height: ${Math.max(100, 30 + (Math.max(...rendered.map((a) => a.stack)) + 1) * 13)}px`}>
+				<span class="absolute inset-y-0 -ml-px w-0.5 bg-gold" style={`left: ${x(bout.date)}%`}></span>
+				{/* the label reads to the right of the line, or to its left near the end of the strip */}
+				<span
+					class:list={["absolute top-0 text-xs leading-4 font-semibold whitespace-nowrap", x(bout.date) > 60 ? "-translate-x-full pr-1.5" : "pl-1.5"]}
+					style={`left: ${x(bout.date)}%`}>The bout, {dayMonth(bout.date)}</span
+				>
 				{
-					articleComponents.map(({ Content, data }) => (
-						<li class="border-t-4 border-neutral-100 pt-3 pb-8 md:mx-auto md:w-3/4 lg:mx-0 lg:w-5/6 xl:w-2/3">
-							<div>
-								<Reference bout={bout} author={data.author} publication={data.publication} publicationDate={data.publicationDate} link={{ text: "Source", url: data.link }} />
-							</div>
-							<section class="prose max-w-none prose-invert prose-h2:mt-12 prose-h2:mb-4 prose-h2:text-3xl prose-h3:mt-12 prose-h3:mb-4 prose-h3:text-xl prose-h3:font-semibold prose-h4:mt-12 prose-h4:mb-4 prose-h4:text-lg prose-h4:font-semibold prose-p:mt-0 prose-p:mb-4 prose-p:font-serif prose-p:text-lg prose-hr:my-2 prose-hr:border-neutral-700 prose-img:mx-auto prose-img:mt-6 prose-img:mb-4">
-								<Content />
-							</section>
-						</li>
+					rendered.map((a) => (
+						<a
+							href={`#${a.id}`}
+							title={`${dayMonth(a.data.publicationDate)}: ${a.data.title}`}
+							class="absolute size-2.5 -translate-x-1/2 rounded-full bg-ink"
+							style={`left: ${x(a.data.publicationDate)}%; bottom: ${6 + a.stack * 13}px`}
+						/>
 					))
 				}
-			</ul>
+			</div>
+			<div class="relative h-7">
+				{
+					months.map((m) => (
+						<span class="absolute top-2 border-l border-ink pl-1 text-xs leading-4 text-muted" style={`left: ${x(m)}%`}>
+							{m.format("MMM")}
+						</span>
+					))
+				}
+			</div>
+		</figure>
+	</section>
 
-			<div class="sticky bottom-5 col-start-2 row-start-2 mt-[calc(100vh+100px)] place-self-end rounded bg-neutral-950 p-3 text-sm whitespace-nowrap lg:hidden"><p><a class="hover:underline" href="#articles">Back to top</a></p></div>
+	<div class="grid grid-cols-[300px_minmax(0,1fr)] items-start gap-16 max-[1000px]:grid-cols-1 max-[1000px]:gap-0">
+		<nav aria-label="Articles" data-article-nav class="sticky top-6 max-h-[calc(100vh-48px)] overflow-y-auto pt-10 max-[1000px]:static max-[1000px]:max-h-none max-[1000px]:pb-6">
+			<h2 class="text-[15px] leading-5 font-semibold">{articles.length} articles</h2>
+			{
+				groups.map((g) => (
+					<>
+						<h3 class="mt-5 mb-1 text-[13px] leading-5 font-semibold text-muted">{g.label}</h3>
+						<ol>
+							{g.items.map((a) => (
+								<li class="border-b border-rule">
+									{/* the whole row is the link; the title underlines and the row darkens on hover */}
+									<a href={`#${a.id}`} class="group block py-2 pr-2 hover:bg-ink/5 hover:no-underline">
+										<span class="block text-sm leading-[19px] font-medium group-hover:underline">{a.data.title}</span>
+										<span class="mt-0.5 block text-xs text-muted">
+											<span>{dayMonth(a.data.publicationDate)}</span> · {a.data.publication}
+										</span>
+									</a>
+								</li>
+							))}
+						</ol>
+					</>
+				))
+			}
+		</nav>
+		<div class="min-w-0">
+			{
+				rendered.map(({ Content, data, id, when }) => (
+					<article id={id} class="scroll-mt-6 border-t-2 border-ink pt-10 pb-12">
+						<p class="mb-3 flex flex-wrap gap-x-3 gap-y-1 text-[13px] leading-5 text-muted">
+							<span>{fullDate(data.publicationDate)}</span>
+							<span>{when}</span>
+						</p>
+						<h2 class="mb-2 max-w-[24ch] font-display text-4xl leading-[1.15]">{data.title}</h2>
+						<p class="mb-7 text-sm leading-5 text-ink-soft">
+							{data.author && `${data.author}, `}
+							<em>{data.publication}</em> ·{" "}
+							<a href={data.link} target="_blank" rel="noreferrer" class="underline decoration-gold decoration-2 underline-offset-4">
+								Source
+							</a>
+						</p>
+						<div class="article-prose">
+							<Content />
+						</div>
+					</article>
+				))
+			}
 		</div>
-	</main>
+	</div>
+	<ArticleNav />
 </Layout>
