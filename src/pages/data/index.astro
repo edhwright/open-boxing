@@ -1,53 +1,157 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Breadcrumbs from "../../components/Breadcrumbs.astro";
-import { group } from "d3-array";
 import { getAllTitles } from "../../db";
-import { weightClasses, slugify } from "../../utils";
+import OrgTags from "../../components/OrgTags.svelte";
+import { slugify, weightClasses } from "../../utils";
+import { tints } from "../../components/orgTags";
+import championsCSV from "../../../data/champions.csv?raw";
+import reignsCSV from "../../../data/reigns.csv?raw";
+import boutsCSV from "../../../data/bouts.csv?raw";
+import titlesCSV from "../../../data/titles.csv?raw";
+import rankingsCSV from "../../../data/rankings.csv?raw";
+import undisputedCSV from "../../../data/undisputed-periods.csv?raw";
+import locationsCSV from "../../../data/locations.csv?raw";
+import referencesCSV from "../../../data/references.csv?raw";
 
 const titles = await getAllTitles();
-const titlesByWeightClass = group(titles, (t) => t.weight.class);
+const count = (n: number) => n.toLocaleString("en-GB");
+// a CSV's rows, less its header
+const rows = (csv: string) => csv.trim().split("\n").length - 1;
+const files = [
+	["champions.csv", championsCSV, "Every world champion"],
+	["reigns.csv", reignsCSV, "Every world title reign: the champion, the world title and the dates"],
+	["bouts.csv", boutsCSV, "Every world title bout: the boxers, the result and the world titles at stake"],
+	["titles.csv", titlesCSV, "Every world title: the organisation, the weight class and whether it is still contested"],
+	["rankings.csv", rankingsCSV, "Rankings: The Ring's annual ratings and the Transnational Boxing Rankings Board's monthly rankings"],
+	["undisputed-periods.csv", undisputedCSV, "Every period a champion was undisputed, and the world titles that counted at the time (being added)"],
+	["locations.csv", locationsCSV, "Venues for world title bouts (being added)"],
+	["references.csv", referencesCSV, "Sources for the data (being added)"],
+] as const;
+const orgOrder = ["IBU", "NYSAC", "WBA", "WBAS", "WBAR", "WBC", "IBF", "WBO", "RING"];
+const org = (abbreviation: string, short: string) => ({ abbreviation, short });
+const github = "https://github.com/edhwright/open-boxing/tree/main/data";
+
+// for search engines, e.g. Google Dataset Search: the data as a dataset, with each CSV file and the API to download
+const raw = "https://raw.githubusercontent.com/edhwright/open-boxing/main/data";
+const firstDate = reignsCSV.trim().split("\n").slice(1).map((line) => line.split(",")[1]).sort()[0];
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@type": "Dataset",
+	name: "Open Boxing world championship boxing data",
+	description:
+		"Every world title bout, reign and champion in men's professional boxing since 1911, from the IBU, NYSAC, WBA, WBC, IBF, WBO and The Ring, with The Ring's and the Transnational Boxing Rankings Board's rankings. Free to use, as CSV files and a JSON API.",
+	url: new URL("/data/", Astro.site).href,
+	sameAs: "https://github.com/edhwright/open-boxing",
+	keywords: ["boxing", "world champions", "world title bouts", "WBA", "WBC", "IBF", "WBO", "The Ring"],
+	isAccessibleForFree: true,
+	license: "https://creativecommons.org/licenses/by/4.0/",
+	temporalCoverage: `${firstDate}/..`,
+	creator: { "@type": "Organization", name: "Open Boxing", url: Astro.site!.href },
+	distribution: [
+		...files.map(([name, , about]) => ({ "@type": "DataDownload", name, description: about, encodingFormat: "text/csv", contentUrl: `${raw}/${name}` })),
+		{ "@type": "DataDownload", name: "API", description: "The same data as JSON", encodingFormat: "application/json", contentUrl: new URL("/api/", Astro.site).href },
+	],
+};
+
 ---
 
-<Layout title="Data" description="A collection of links where you can easily access all of the resources and information on Open Boxing." img={null}>
-	<main>
-		<Breadcrumbs route={[["Data", `${Astro.url.origin}/data/`]]} />
+<Layout title="Data" description="Open Boxing's world title data: browse by weight class and world title, explore the interactives, use the API, or view and download the CSV files." img={null} jsonLd={jsonLd}>
+	<section class="pt-[clamp(32px,6vw,56px)] pb-10">
+		<h1 class="mb-4 font-heading text-[clamp(40px,7vw,56px)] leading-[1.08] font-semibold tracking-[-0.01em]">Data</h1>
+		<p class="max-w-205 font-serif text-[clamp(19px,3vw,22px)] leading-[1.45] text-ink-soft">
+			Data covering the world titles of the{" "}
+			<OrgTags
+				orgs={[org("IBU", "IBU"), org("NYSAC", "NYSAC"), org("WBA", "WBA"), org("WBC", "WBC"), org("IBF", "IBF"), org("WBO", "WBO"), org("RING", "The Ring")]}
+			/>.
+		</p>
+	</section>
 
-		<h1 class="my-8 text-3xl xl:mx-auto xl:max-w-240">Data</h1>
-
-		<div class="xl:mx-auto xl:max-w-240">
-			<p class="my-4">Below are links to the weight classes and titles we currently track.</p>
-			<p class="my-4">
-				All the data used by Open Boxing can be found on <a
-					class="underline"
-					href="https://github.com/edhwright/open-boxing/tree/main/data"
-					target="_blank"
-					rel="noreferrer">GitHub</a
-				> as CSV files. We also offer an <a class="underline" href={`${Astro.url.origin}/api/`}>API</a> to explore this data.
-			</p>
-		</div>
-
-		<div>
+	{/* every weight class, with links to each of its world titles */}
+	<section aria-labelledby="titles" class="mb-18">
+		<h2 id="titles" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">Weight classes and world titles</h2>
+		<p class="mt-4 mb-2 max-w-205 text-[15px] leading-6 text-ink-soft">
+			Every weight class and world title in the data has its own page, with a timeline of its champions, reigns and bouts.
+		</p>
+		<ul>
 			{
-				weightClasses.map((weightClass) => (
-					<section class="border-b border-neutral-700 py-6 last:border-b-0 xl:mx-auto xl:max-w-240">
-						<h2 class="mb-4 text-lg">
-							<a class="hover:underline" href={`${Astro.url.origin}/${slugify(weightClass.class)}/`}>
-								{weightClass.class}
+				weightClasses.map((wc) => (
+					<li class="grid grid-cols-[280px_minmax(0,1fr)] items-baseline gap-6 border-b border-rule py-3 last:border-b-0 max-[760px]:flex max-[760px]:flex-col max-[760px]:gap-1.5">
+						<span>
+							<a href={`/${slugify(wc.class)}/`} class="font-semibold">
+								{wc.class}
 							</a>
-						</h2>
-						<div>
-							{titlesByWeightClass.get(weightClass.class)!.map((title) => (
-								<p class="border-b border-neutral-700 bg-neutral-800 first:rounded-t last:rounded-b last:border-b-0 hover:bg-neutral-700 hover:underline">
-									<a class="block w-full py-1 pl-4 text-sm leading-7" href={`${Astro.url.origin}/${slugify(weightClass.class)}/${slugify(title.org.name.abbreviation)}/`}>
-										{title.org.name.full}
-									</a>
-								</p>
-							))}
-						</div>
-					</section>
+							<span class="ml-2 text-xs text-muted">{wc.lb} lb</span>
+						</span>
+						<span class="text-[13px] leading-5.5">
+							{titles
+								// WBA Super is on the WBA's page
+								.filter((t) => t.weight.class === wc.class && t.org.name.abbreviation !== "WBAS")
+								.sort((a, b) => orgOrder.indexOf(a.org.name.abbreviation) - orgOrder.indexOf(b.org.name.abbreviation))
+								.map((t) => (
+									<>
+										<a
+											href={`/${slugify(wc.class)}/${slugify(t.org.name.abbreviation)}/`}
+											class={`org mr-1 whitespace-nowrap ${tints[t.org.name.abbreviation]}`}
+											title={t.active ? undefined : "No longer contested"}
+										>
+											{t.org.name.short}
+										</a>{" "}
+									</>
+								))}
+						</span>
+					</li>
 				))
 			}
-		</div>
-	</main>
+		</ul>
+	</section>
+
+	{/* the interactives: tools for exploring the data, each a page of its own */}
+	<section aria-labelledby="interactives" class="mb-18">
+		<h2 id="interactives" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">Interactives</h2>
+		<ul class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8 pt-6 max-[680px]:gap-y-12">
+			<li>
+				<a href="/data/timeline/" class="group block hover:no-underline">
+					<img src="/data/thumbnails/timeline.svg" alt="" width="400" height="225" class="block aspect-video w-full border border-ink" />
+					<h3 class="mt-4 mb-1 font-heading text-2xl leading-7 font-semibold group-hover:underline">Champion timeline comparison</h3>
+					<p class="text-[15px] leading-[22px] text-ink-soft">Compare selected champions' world title reigns and bouts on one timeline.</p>
+				</a>
+			</li>
+			<li>
+				<a href="/data/full-timeline/" class="group block hover:no-underline">
+					<img src="/data/thumbnails/full-timeline.svg" alt="" width="400" height="225" class="block aspect-video w-full border border-ink" />
+					<h3 class="mt-4 mb-1 font-heading text-2xl leading-7 font-semibold group-hover:underline">Full timeline</h3>
+					<p class="text-[15px] leading-[22px] text-ink-soft">Every world title reign and bout on one timeline.</p>
+				</a>
+			</li>
+			<li>
+				<a href="/data/head-to-head/" class="group block hover:no-underline">
+					<img src="/data/thumbnails/head-to-head.svg" alt="" width="400" height="225" class="block aspect-video w-full border border-ink" />
+					<h3 class="mt-4 mb-1 font-heading text-2xl leading-7 font-semibold group-hover:underline">Head to head</h3>
+					<p class="text-[15px] leading-[22px] text-ink-soft">Compare the head to head records of selected world champions in world title bouts.</p>
+				</a>
+			</li>
+		</ul>
+	</section>
+
+	{/* the CSV files, with what each one holds */}
+	<section aria-labelledby="files">
+		<h2 id="files" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">View and download the data</h2>
+		<p class="mt-4 mb-2 max-w-205 text-[15px] leading-6 text-ink-soft">
+			This is the raw data that drives the website and the <a href="/api/" class="text-ink underline decoration-gold decoration-2 underline-offset-4">API</a>. Each file is on{" "}
+			<a href={github} target="_blank" rel="noopener" class="text-ink underline decoration-gold decoration-2 underline-offset-4">GitHub</a>.
+		</p>
+		<ul>
+			{
+				files.map(([name, csv, about]) => (
+					<li class="grid grid-cols-[220px_minmax(0,1fr)_120px] items-baseline gap-6 border-b border-rule py-3.5 last:border-b-0 max-[760px]:grid-cols-[minmax(0,1fr)_auto] max-[760px]:gap-x-3 max-[760px]:gap-y-1">
+						<a href={`${github}/${name}`} class="justify-self-start font-mono text-sm font-medium underline decoration-gold decoration-2 underline-offset-4">
+							{name}
+						</a>
+						<span class="text-sm text-ink-soft max-[760px]:col-span-2 max-[760px]:row-start-2">{about}</span>
+						<span class="text-right text-[13px] whitespace-nowrap tabular-nums text-muted">{count(rows(csv))} {rows(csv) === 1 ? "row" : "rows"}</span>
+					</li>
+				))
+			}
+		</ul>
+	</section>
 </Layout>
