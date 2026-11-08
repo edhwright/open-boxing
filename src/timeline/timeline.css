@@ -1,0 +1,469 @@
+/* The zoomable timeline (timeline.ts): kept short, as a lane can hold hundreds of marks */
+.tl-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 8px 16px;
+	padding-bottom: 10px;
+}
+.tl-range {
+	margin-top: 4px;
+	font-variant-numeric: tabular-nums;
+	font-size: 13px;
+	color: var(--color-muted);
+}
+.tl-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+}
+/* the year picker: a native select, so it works with any input */
+.tl-jump {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin-right: 4px;
+	font-size: 14px;
+	color: var(--color-muted);
+}
+.tl-jump select {
+	height: 36px;
+	padding: 0 28px 0 10px;
+	border: 1px solid var(--color-ink);
+	background: var(--color-cream)
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231a1a17' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+		no-repeat right 10px center;
+	appearance: none;
+	font-variant-numeric: tabular-nums;
+	font-size: 13px;
+	color: var(--color-ink);
+	cursor: pointer;
+}
+.tl-link {
+	min-height: 36px;
+	padding: 0 8px;
+	font-size: 14px;
+	cursor: pointer;
+	text-decoration: underline;
+	text-decoration-color: var(--color-gold);
+	text-decoration-thickness: 2px;
+	text-underline-offset: 4px;
+}
+
+.tl-figure {
+	position: relative;
+	display: grid;
+	grid-template-columns: var(--tl-label) minmax(0, 1fr);
+}
+.tl-label,
+.tl-track {
+	height: var(--tl-lane);
+	border-top: 1px solid var(--color-rule);
+}
+/* the labels sit above the plot; once the view has moved on from the start, a shadow on their edge shows the plot
+   running underneath them */
+.tl-labels {
+	position: relative;
+	z-index: 2;
+	background: var(--color-cream);
+}
+.tl-labels::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: -12px;
+	bottom: 34px;
+	width: 12px;
+	background: linear-gradient(to right, rgb(26 26 23 / 0.16), rgb(26 26 23 / 0));
+	opacity: 0;
+	transition: opacity 0.2s;
+	pointer-events: none;
+}
+.tl-scrolled .tl-labels::after {
+	opacity: 1;
+}
+.tl-label {
+	display: flex;
+	align-items: center;
+	padding-right: 12px;
+	font-size: 13px;
+	line-height: 16px;
+}
+.tl-label:first-child,
+.tl-track:first-child,
+.tl-heavy {
+	border-top: 2px solid var(--color-ink);
+}
+.tl-axis-pad,
+.tl-axis {
+	height: 34px;
+	border-top: 2px solid var(--color-ink);
+}
+.tl-plot {
+	position: relative;
+	overflow: hidden;
+	/* clip, unlike hidden, lets the axis inside stick to the screen in a long figure */
+	overflow: clip;
+	cursor: grab;
+	user-select: none;
+	-webkit-user-select: none;
+}
+.tl-plot:active {
+	cursor: grabbing;
+}
+.tl-track {
+	position: relative;
+}
+.tl-bar {
+	position: absolute;
+	top: 50%;
+	height: 18px;
+	transform: translateY(-50%);
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	box-shadow: inset 0 0 0 1px rgb(26 26 23 / 0.3);
+	/* rounded ends, as the belts on the timeline of world title events; a reign that carries on stays square at the
+	   right */
+	border-radius: 3px;
+}
+.tl-bar.tl-open {
+	border-radius: 3px 0 0 3px;
+}
+.tl-bar[data-bar] {
+	cursor: pointer;
+}
+.tl-bar.tl-strong {
+	box-shadow: inset 0 0 0 1.5px var(--color-ink);
+}
+.tl-bar > span {
+	padding: 0 6px;
+	font-size: 11.5px;
+	font-weight: 600;
+	line-height: 1;
+	white-space: nowrap;
+	pointer-events: none;
+}
+.tl-dot {
+	position: absolute;
+	z-index: 1;
+	top: 50%;
+	width: 12px;
+	height: 12px;
+	border: 1.5px solid var(--color-ink);
+	border-radius: 999px;
+	box-shadow: 0 0 0 2px var(--color-cream);
+	transform: translate(-50%, -50%);
+	cursor: pointer;
+}
+/* an invisible ring round the circle makes it easier to point at, without the bars around it opening anything */
+.tl-dot::before {
+	content: "";
+	position: absolute;
+	inset: -7px;
+	border-radius: 999px;
+}
+.tl-dot.tl-dashed {
+	border-style: dashed;
+}
+.tl-dot.tl-on {
+	outline: 2px solid var(--color-gold);
+	outline-offset: 2px;
+}
+.tl-faded {
+	opacity: 0.25;
+}
+.tl-tick {
+	position: absolute;
+	top: -2px;
+	width: 2px;
+	height: 8px;
+	margin-left: -1px;
+	background: var(--color-ink);
+}
+.tl-tick-label {
+	position: absolute;
+	top: 10px;
+	transform: translateX(-50%);
+	font-size: 12px;
+	color: var(--color-muted);
+	white-space: nowrap;
+}
+.tl-axis {
+	position: relative;
+}
+/* with ages under the dates (a champion's timeline): the date in ink, the age under it */
+.tl-ages .tl-axis,
+.tl-ages .tl-axis-pad {
+	height: 50px;
+}
+/* the label column's shadow stops at the taller axis's line */
+.tl-ages .tl-labels::after {
+	bottom: 50px;
+}
+.tl-ages .tl-tick-label {
+	color: var(--color-ink);
+}
+.tl-tick-age {
+	display: block;
+	color: var(--color-muted);
+}
+/* a marked moment: a dashed line down the lanes, its note in a row above them */
+.tl-notes-pad,
+.tl-notes {
+	height: 26px;
+	/* a thin rule along the top of the figure, above the notes (a long figure's toolbar already has one) */
+	border-top: 1px solid var(--color-rule);
+}
+.tl-sticky .tl-notes-pad,
+.tl-sticky .tl-notes {
+	border-top: 0;
+}
+.tl-markers {
+	position: absolute;
+	inset: 0 0 34px;
+	z-index: 1;
+	pointer-events: none;
+}
+.tl-marker {
+	position: absolute;
+	top: 6px;
+	bottom: 0;
+	border-left: 1.5px dashed var(--color-ink);
+}
+.tl-marker-note {
+	position: absolute;
+	/* clear of the rule along the top; on the page's colour, so a neighbouring marker's line passes behind it */
+	top: 5px;
+	background: var(--color-cream);
+	padding-left: 6px;
+	font-size: 12px;
+	line-height: 16px;
+	font-weight: 500;
+	white-space: nowrap;
+}
+.tl-marker-hidden {
+	visibility: hidden;
+}
+/* a note with too little room: cut short, and whole on hover, over its neighbours */
+.tl-marker-cut {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	pointer-events: auto;
+	cursor: default;
+}
+.tl-marker-cut:hover {
+	z-index: 2;
+	max-width: none !important;
+}
+/* a moment in one lane: a dashed line down it, over the reign bars (the bout circles over it), in a strip wide
+   enough to point at for its details */
+.tl-lane-marker {
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	bottom: 0;
+	width: 13px;
+	margin-left: -6.5px;
+	cursor: pointer;
+}
+.tl-lane-marker::before {
+	content: "";
+	position: absolute;
+	top: 3px;
+	bottom: 3px;
+	left: 6px;
+	border-left: 1.5px dashed var(--color-ink);
+}
+.tl-marker-left {
+	padding: 0 6px 0 0;
+	transform: translateX(-100%);
+}
+
+.tl-tip {
+	position: absolute;
+	z-index: 3;
+	width: 270px;
+	max-width: calc(100vw - 32px);
+	padding: 10px 12px;
+	border: 1px solid var(--color-ink);
+	background: var(--color-cream);
+	box-shadow: 0 4px 12px rgb(26 26 23 / 0.12);
+	/* it can be hovered, and its text selected and copied */
+	cursor: auto;
+	user-select: text;
+	-webkit-user-select: text;
+}
+/* the first time it opens, it fades in; moving from mark to mark, it moves straight across */
+.tl-tip-fade {
+	animation: var(--animate-tip-in);
+}
+@media (prefers-reduced-motion: reduce) {
+	.tl-tip-fade {
+		animation: none;
+	}
+}
+.tl-tip-date {
+	margin-bottom: 4px;
+	font-variant-numeric: tabular-nums;
+	font-size: 12px;
+	color: var(--color-muted);
+}
+.tl-tip-text {
+	font-size: 14px;
+	line-height: 19px;
+	font-weight: 600;
+}
+.tl-tip-detail {
+	margin-top: 6px;
+	/* a line each, e.g. the boxers' ages */
+	white-space: pre-line;
+	font-size: 12px;
+	line-height: 18px;
+	color: var(--color-muted);
+}
+
+.tl-overview-row {
+	display: grid;
+	grid-template-columns: var(--tl-label) minmax(0, 1fr);
+	margin-top: 16px;
+}
+.tl-overview {
+	position: relative;
+	border: 1px solid #deddc8;
+	background: #f4f3e6;
+	cursor: crosshair;
+}
+.tl-overview > svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+.tl-brush .selection {
+	fill: rgb(192 179 141 / 0.25);
+	fill-opacity: 1;
+	stroke: var(--color-ink);
+	stroke-width: 1.5;
+	shape-rendering: crispEdges;
+}
+.tl-brush .handle {
+	fill: var(--color-ink);
+	rx: 2;
+}
+.tl-overview-years {
+	position: relative;
+	height: 22px;
+}
+.tl-overview-years > span {
+	position: absolute;
+	top: 4px;
+	font-variant-numeric: tabular-nums;
+	font-size: 11px;
+	color: var(--color-muted);
+}
+.tl-legend {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 20px;
+	margin-top: 10px;
+	font-size: 13px;
+	color: var(--color-muted);
+}
+.tl-key {
+	display: inline-block;
+	width: 11px;
+	height: 11px;
+	margin-right: 6px;
+	border: 1.5px solid var(--color-ink);
+	border-radius: 999px;
+	vertical-align: -1px;
+}
+
+/* a long figure: the controls stay at the top of the screen, the axis and overview at the bottom, while the lanes
+   scroll between them */
+.tl-sticky .tl-toolbar {
+	position: sticky;
+	top: 0;
+	z-index: 4;
+	padding-top: 10px;
+	border-bottom: 2px solid var(--color-ink);
+	background: var(--color-cream);
+}
+.tl-sticky .tl-label:first-child,
+.tl-sticky .tl-track:first-child {
+	border-top: 0;
+}
+.tl-sticky .tl-axis,
+.tl-sticky .tl-axis-pad {
+	position: sticky;
+	bottom: var(--tl-overview);
+	z-index: 2;
+	background: var(--color-cream);
+}
+.tl-sticky .tl-overview-row {
+	position: sticky;
+	bottom: 0;
+	z-index: 4;
+	margin-top: 0;
+	padding: 4px 0 8px;
+	background: var(--color-cream);
+}
+.tl-sticky .tl-labels::after {
+	bottom: 0;
+}
+
+@media (max-width: 760px) {
+	.tl-label,
+	.tl-track {
+		height: var(--tl-lane-phone);
+	}
+	/* the first row of a weight class has its name over two lines above the organisation, so it is taller */
+	.tl-label.tl-heavy,
+	.tl-track.tl-heavy {
+		height: calc(var(--tl-lane-phone) + 18px);
+	}
+	.tl-figure,
+	.tl-overview-row {
+		grid-template-columns: var(--tl-label-phone) minmax(0, 1fr);
+	}
+	.tl-overview-years > span:nth-child(even) {
+		display: none;
+	}
+	/* the controls on one row: the year picker on the left, smaller buttons (still 32px to tap) on the right, and no
+	   "All years", whose whole span is too squeezed to read on a phone */
+	.tl-buttons {
+		flex-wrap: nowrap;
+		gap: 4px;
+		width: 100%;
+	}
+	.tl-jump {
+		margin-right: auto;
+	}
+	.tl-jump select {
+		height: 32px;
+	}
+	.tl-buttons .zoom-button {
+		width: 32px;
+		height: 32px;
+	}
+	.tl-link[data-act="all"] {
+		display: none;
+	}
+	/* the overview runs the full width, under the labels too */
+	.tl-overview-row {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.tl-overview-row > span:first-child {
+		display: none;
+	}
+}
+
+/* with a row of notes above the lanes, the first lane still has its heavy rule */
+.tl-notes-pad + .tl-label,
+.tl-markers + .tl-track {
+	border-top: 2px solid var(--color-ink);
+}
