@@ -117,14 +117,19 @@
 		// the click that ends a drag is not a click on a card's link
 		justDragged = true;
 		setTimeout(() => (justDragged = false), 0);
-		const thrown = strip.scrollLeft - v * 220;
+		glideTo(strip, strip.scrollLeft - v * 220);
+	};
+	// glides a strip to the card nearest `aim`, never past either end. Eased here, frame by frame, rather than left to
+	// the browser's smooth scrolling: its end can't be told apart from a drag's own scroll events, and Safari's, with the
+	// cards' snapping on, can carry the strip past its start. Snapping comes back only once it has settled, and only if
+	// no new drag has begun
+	const glideTo = (strip: HTMLElement, aim: number) => {
+		cancelAnimationFrame(gliding);
+		strip.style.scrollSnapType = "none";
 		const base = strip.getBoundingClientRect().left - strip.scrollLeft;
 		const starts = [...strip.children].map((c) => c.getBoundingClientRect().left - base);
 		const max = strip.scrollWidth - strip.clientWidth;
-		const target = Math.min(max, starts.reduce((best, x) => (Math.abs(x - thrown) < Math.abs(best - thrown) ? x : best), 0));
-		// the glide is eased here, frame by frame, rather than left to the browser's smooth scrolling, whose end
-		// can't be told apart from the drag's own scroll events; snapping comes back only once it has settled, and
-		// only if no new drag has begun
+		const target = Math.max(0, Math.min(max, starts.reduce((best, x) => (Math.abs(x - aim) < Math.abs(best - aim) ? x : best), 0)));
 		const from = strip.scrollLeft;
 		const started = performance.now();
 		const duration = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : Math.min(600, 260 + Math.abs(target - from) * 0.6);
@@ -136,7 +141,8 @@
 		};
 		gliding = requestAnimationFrame(step);
 	};
-	const scroll = (i: number, by: number) => strips[i]?.scrollBy({ left: strips[i].clientWidth * 0.8 * by, behavior: "smooth" });
+	// the arrows: most of a screen's width earlier or later, settling on a card
+	const scroll = (i: number, by: number) => strips[i] && glideTo(strips[i], strips[i].scrollLeft + strips[i].clientWidth * 0.8 * by);
 	const update = (i: number) => {
 		const s = strips[i];
 		if (s) ends[i] = { start: s.scrollLeft < 2, end: s.scrollLeft + s.clientWidth > s.scrollWidth - 2 };
@@ -239,9 +245,9 @@
 						</ol>
 						<!-- once the strip has moved on from its start, it runs under this shadow, beside the boxer's name; on phones,
 						     where the name is above and the cards run off the screen's edge, it fades out there as on the right -->
-						<span aria-hidden="true" class={["pointer-events-none absolute inset-y-0 left-0 w-3 bg-linear-to-r from-ink/16 to-transparent transition-opacity duration-200 max-[760px]:w-16 max-[760px]:from-cream", ends[i]?.start === false ? "opacity-100" : "opacity-0"]}></span>
+						<span aria-hidden="true" class={["pointer-events-none absolute inset-y-0 left-0 w-3 bg-linear-to-r from-ink/16 to-transparent transition-opacity duration-200 max-[760px]:w-8 max-[760px]:from-cream", ends[i]?.start === false ? "opacity-100" : "opacity-0"]}></span>
 						<!-- and while there are cards past its right edge, it fades out there -->
-						<span aria-hidden="true" class={["pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-cream to-transparent transition-opacity duration-200", ends[i]?.end === false ? "opacity-100" : "opacity-0"]}></span>
+						<span aria-hidden="true" class={["pointer-events-none absolute inset-y-0 right-0 w-10 bg-linear-to-l from-cream max-[760px]:w-8 to-transparent transition-opacity duration-200", ends[i]?.end === false ? "opacity-100" : "opacity-0"]}></span>
 						</div>
 						{#if row.cards.length > 2}
 							<div class="mt-2 hidden justify-end gap-2 max-[760px]:flex">
