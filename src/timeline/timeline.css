@@ -460,6 +460,15 @@
 	.tl-overview-row > span:first-child {
 		display: none;
 	}
+	/* and only shows where the view is: too small to drag or tap on a phone, where a swipe on the lanes moves the view */
+	.tl-brush,
+	.tl-brush * {
+		pointer-events: none;
+	}
+	/* without the handles, which would look draggable */
+	.tl-brush .handle {
+		display: none;
+	}
 }
 
 /* with a row of notes above the lanes, the first lane still has its heavy rule */

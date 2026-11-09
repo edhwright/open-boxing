@@ -200,10 +200,10 @@
 		</div>
 	</div>
 	<!-- the switches for the rankings and the sources: laid over the right of the first year's heading, as on the weight
-	     class and world title pages -->
+	     class and world title pages; on small phones, where both would cover the year, on their own row above it -->
 	{#if referenced || rankings.length > 0}
 		<div class="relative z-1">
-			<div class="absolute top-4.5 -right-2.5 flex bg-cream">
+			<div class="absolute top-4.5 -right-2.5 flex bg-cream max-[480px]:static max-[480px]:-mr-2.5 max-[480px]:justify-end max-[480px]:pt-2">
 				{#if rankings.length > 0}
 					<label class={switchClass}>
 						<input type="checkbox" data-show-rankings checked class="size-4 accent-ink" />

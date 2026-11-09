@@ -9,10 +9,12 @@ import { figureHTML, type Model } from "./timeline";
 interface Props {
 	model: Model;
 	initial: [string, string];
+	// a shorter starting view for phones, where the page's is too squeezed to read; the script switches to it
+	phoneInitial?: [string, string];
 }
 
-const { model, initial } = Astro.props;
-const data = JSON.stringify({ model, initial }).replaceAll("<", "\\u003c");
+const { model, initial, phoneInitial } = Astro.props;
+const data = JSON.stringify({ model, initial, phoneInitial }).replaceAll("<", "\\u003c");
 ---
 
 <section aria-labelledby="reigns" class="mb-18" data-reigns-section>
@@ -24,7 +26,8 @@ const data = JSON.stringify({ model, initial }).replaceAll("<", "\\u003c");
 	import { mount } from "./timeline";
 
 	for (const section of document.querySelectorAll<HTMLElement>("[data-reigns-section]")) {
-		const { model, initial } = JSON.parse(section.querySelector('script[type="application/json"]')!.textContent!);
-		mount(section.querySelector<HTMLElement>("[data-reigns]")!, model, initial);
+		const { model, initial, phoneInitial } = JSON.parse(section.querySelector('script[type="application/json"]')!.textContent!);
+		const phone = phoneInitial && matchMedia("(max-width: 760px)").matches;
+		mount(section.querySelector<HTMLElement>("[data-reigns]")!, model, phone ? phoneInitial : initial);
 	}
 </script>
