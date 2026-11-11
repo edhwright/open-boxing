@@ -10,7 +10,7 @@ openboxing.org is built with [Astro](https://astro.build/) as a static website.
 # Installs dependencies
 npm install
 
-# Starts local dev server at localhost:3000
+# Starts local dev server at localhost:4321
 npm run dev
 
 # Builds production site to ./dist/
