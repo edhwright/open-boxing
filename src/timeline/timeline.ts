@@ -208,6 +208,8 @@ function axisHTML(domain: [number, number], width: number, born?: string) {
 	// years, then short months, then days: "1962", "Oct", "Oct 15" (the scale's ticks fall in local time)
 	const format = (t: Date) =>
 		t.getMonth() === 0 && t.getDate() === 1 ? String(t.getFullYear()) : t.getDate() === 1 ? months[t.getMonth()] : `${months[t.getMonth()]} ${t.getDate()}`;
+	// the age shows on the first tick and then only where it has gone up, so zoomed in to months it reads once a year
+	let lastAge = -1;
 	return sx
 		.ticks(Math.max(3, Math.floor(width / 80)))
 		.map((t) => {
@@ -215,7 +217,9 @@ function axisHTML(domain: [number, number], width: number, born?: string) {
 			// labels at either end stay inside the plot
 			const shift = left < 3 ? "0" : left > 97 ? "-100%" : "-50%";
 			const align = left < 3 ? "left" : left > 97 ? "right" : "center";
-			const age = born ? `<span class="tl-tick-age">age ${ageOn(born, t)}</span>` : "";
+			const years = born ? ageOn(born, t) : -1;
+			const age = born && years !== lastAge ? `<span class="tl-tick-age">age ${years}</span>` : "";
+			lastAge = years;
 			return `<span class="tl-tick" style="left:${left.toFixed(3)}%"></span><span class="tl-tick-label" style="left:${left.toFixed(3)}%;transform:translateX(${shift});text-align:${align}">${format(t)}${age}</span>`;
 		})
 		.join("");
