@@ -1,0 +1,178 @@
+---
+import OrgTags from "../../../components/OrgTags.astro";
+import { tints } from "../../../components/orgTags";
+import { longDate, timelineDecades, type PageReign, type Part, type TimelineEvent } from "./weight";
+
+// The world title events, a decade at a time, oldest first. On wider screens a column per organisation on the left
+// shows when its world title had a champion, and gaps when it was vacant. Static: every decade is in the page, and
+// the decade picker (radio buttons) shows one with CSS. Plain Astro, as Svelte adds hydration markers to static
+// markup and a weight class's timeline is long.
+interface Props {
+	weightClass: string;
+	reigns: PageReign[];
+	events: TimelineEvent[];
+	// bout articles by bout date
+	articles: Record<string, { href: string; count: number }>;
+}
+
+const { weightClass, reigns, events, articles } = Astro.props;
+const { columns, decades } = timelineDecades(reigns, events);
+// the most recent decade is shown first
+const latest = decades.at(-1)?.decade;
+// sources are hidden until "Show references" is ticked; CSS shows them, so no script. Without any, there's no switch
+const referenced = events.filter((e) => e.references.length > 0).length;
+const style = `[data-decade]{display:none}[data-refs]{display:none}[data-timeline]:has([data-show-refs]:checked) [data-refs]{display:block}${decades.map(({ decade }) => `[data-timeline]:has([value="${decade}"]:checked) [data-decade="${decade}"]{display:block}`).join("")}`;
+// 10px bars 4px apart, placed in their organisation's grid column
+const beltColumns = `repeat(${columns.length}, 10px)`;
+const text = (parts: Part[]) => parts;
+---
+
+<section aria-labelledby="timeline" data-timeline>
+	<style set:html={style}></style>
+	<h2 id="timeline" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">Timeline of world title events</h2>
+	{/* a long history is read a decade at a time; phones scroll the decades sideways, and keep them at the top of the
+	     screen while reading down a decade */}
+	<div class="relative max-[760px]:sticky max-[760px]:top-0 max-[760px]:z-10 max-[760px]:-mx-[clamp(16px,4vw,24px)] max-[760px]:bg-cream">
+	<div
+		role="radiogroup"
+		aria-label="Decade"
+		data-decades
+		class="-ml-2.5 flex flex-wrap border-b border-rule text-sm max-[760px]:ml-0 max-[760px]:flex-nowrap max-[760px]:overflow-x-auto max-[760px]:[scrollbar-width:none] max-[760px]:pr-[clamp(16px,4vw,24px)] max-[760px]:pl-1.5"
+	>
+		{
+			decades.map(({ decade }) => (
+				<label class="relative flex min-h-11 shrink-0 cursor-pointer items-center px-2.5 whitespace-nowrap text-muted hover:bg-ink/6 has-checked:font-semibold has-checked:text-ink has-checked:underline has-checked:decoration-gold has-checked:decoration-3 has-checked:underline-offset-6 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-focus">
+					<input type="radio" name="decade" value={decade} checked={decade === latest} class="sr-only" />
+					{decade}s
+				</label>
+			))
+		}
+	</div>
+	{/* while there are decades past either edge they fade out there, as Head to head's cards do on the right (plain
+	    text, so a fade on the left too rather than its shadow). Above the rule, which runs on underneath */}
+	<span aria-hidden="true" data-decades-start class="pointer-events-none absolute top-0 bottom-px left-0 hidden w-16 bg-linear-to-r from-cream to-transparent opacity-0 transition-opacity duration-200 max-[760px]:block"></span>
+	<span aria-hidden="true" data-decades-end class="pointer-events-none absolute top-0 right-0 bottom-px hidden w-16 bg-linear-to-l from-cream to-transparent opacity-0 transition-opacity duration-200 max-[760px]:block"></span>
+	</div>
+	{/* the switch for the sources (news reports, being added): laid over the right of the first year's heading,
+	     so the belts still run straight up to the decades */}
+	{
+		referenced > 0 && (
+			<div class="relative z-1">
+				<label class="absolute top-4.5 -right-2.5 inline-flex min-h-9 cursor-pointer items-center gap-2.5 bg-cream px-2.5 text-sm hover:bg-[color-mix(in_srgb,var(--color-ink)_6%,var(--color-cream))]">
+					<input type="checkbox" data-show-refs class="size-4 accent-ink" />
+					Show references
+				</label>
+			</div>
+		)
+	}
+	{
+		decades.map(({ decade, rows }) => (
+			<ol data-decade={decade} style={`--belts: ${columns.length * 14 - 4}px; --belt-columns: ${beltColumns}`}>
+				{rows.map((row) => (
+					<li class="tl-row">
+						<span aria-hidden="true" class="tl-belts">
+							{row.belts.map((state, i) => state && <span class={`belt belt-${state} ${tints[columns[i]]}`} style={`grid-column:${i + 1}`} />)}
+						</span>
+						{row.kind === "year" ? (
+							<h3 class="col-span-2 pt-7 pb-2 font-heading text-2xl leading-7 font-semibold">{row.label}</h3>
+						) : (
+							<>
+								<time datetime={row.date} class="py-3 text-right text-[13px] tabular-nums leading-5 text-muted">
+									{row.label}
+								</time>
+								<div class="flex min-w-0 flex-col gap-3 py-3">
+									{row.items.map((item) => (
+										<div>
+											<p class="text-[15px] leading-5">
+												{text(item.parts).map((p) =>
+													p.href ? (
+														<a href={p.href} class="font-semibold">
+															{p.text}
+														</a>
+													) : p.bold ? (
+														<span class="font-semibold">{p.text}</span>
+													) : (
+														p.text
+													),
+												)}
+											</p>
+											<p class="mt-1 text-[13px] leading-5.5 text-muted">
+												{weightClass} · <OrgTags orgs={item.orgs} gold={item.gold} />
+												{item.newChampion && <span class="ml-2.5 font-semibold text-ink">{item.newChampion}</span>}
+												{item.scheduled && <span class="ml-2.5 font-semibold whitespace-nowrap">Scheduled</span>}
+												{item.isBout && articles[row.date] && (
+													<a href={articles[row.date].href} class="ml-2.5 whitespace-nowrap text-ink underline decoration-gold decoration-2 underline-offset-4">
+														Read {articles[row.date].count} {articles[row.date].count === 1 ? "article" : "articles"}
+													</a>
+												)}
+											</p>
+											{item.references.length > 0 && (
+												<ul data-refs class="mt-1.5 text-[13px] leading-5.5 text-ink-soft">
+													{item.references.map((ref) => (
+														<li>
+															Source:{" "}
+															<a href={ref.url} target="_blank" rel="noopener" class="underline decoration-gold decoration-2 underline-offset-4">
+																<cite class="not-italic">{ref.headline}</cite>
+																<span class="sr-only">(opens in a new tab)</span>
+															</a>
+															, {ref.publication}
+															{ref.author && `, ${ref.author}`}
+															{ref.date && (
+																<>
+																	, <time datetime={ref.date}>{longDate(ref.date)}</time>
+																</>
+															)}
+														</li>
+													))}
+												</ul>
+											)}
+										</div>
+									))}
+								</div>
+							</>
+						)}
+					</li>
+				))}
+			</ol>
+		))
+	}
+</section>
+
+<script>
+	// On phones the decades scroll sideways, without a scrollbar: fades at the edges show there are more.
+	// They open scrolled to the decade shown, the latest, rather than the 1910s. Picking a decade further down the page,
+	// from the decades kept at the top of the screen, starts that decade from its beginning rather than part way down
+	for (const decades of document.querySelectorAll<HTMLElement>("[data-decades]")) {
+		const section = decades.closest("section")!;
+		const checked = decades.querySelector<HTMLElement>("label:has(:checked)");
+		if (checked && decades.scrollWidth > decades.clientWidth) decades.scrollLeft += checked.getBoundingClientRect().right - decades.getBoundingClientRect().right + 16;
+		// each fade shows only where there are decades out of sight
+		const start = section.querySelector<HTMLElement>("[data-decades-start]")!;
+		const end = section.querySelector<HTMLElement>("[data-decades-end]")!;
+		const ends = () => {
+			start.classList.toggle("opacity-0", decades.scrollLeft < 2);
+			end.classList.toggle("opacity-0", decades.scrollLeft + decades.clientWidth > decades.scrollWidth - 2);
+		};
+		ends();
+		decades.addEventListener("scroll", ends, { passive: true });
+		window.addEventListener("resize", ends);
+		decades.addEventListener("change", () => {
+			// only when it is stuck at the top, i.e. the reader has scrolled into the list
+			if (decades.getBoundingClientRect().top > 0) return;
+			const shown = [...section.querySelectorAll<HTMLElement>("ol[data-decade]")].find((ol) => getComputedStyle(ol).display !== "none");
+			if (shown) window.scrollTo({ top: shown.getBoundingClientRect().top + window.scrollY - decades.offsetHeight });
+		});
+	}
+</script>
+
+<style is:global>
+	@reference "../../../styles/global.css";
+
+	/* the divider runs under the belt columns too; phones leave the belt columns out */
+	.tl-row {
+		@apply grid grid-cols-[var(--belts)_72px_minmax(0,1fr)] gap-x-4 border-b border-rule max-[760px]:grid-cols-[72px_minmax(0,1fr)] max-[760px]:gap-x-3;
+	}
+	.tl-belts {
+		@apply grid grid-cols-(--belt-columns) items-start gap-x-1 max-[760px]:hidden;
+	}
+</style>

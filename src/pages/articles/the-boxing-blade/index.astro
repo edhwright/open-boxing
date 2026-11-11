@@ -1,0 +1,25 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import BladeIssues from "../_components/BladeIssues.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+---
+
+<Layout
+	tone="paper"
+	title="The Boxing Blade"
+	description="An archive of The Boxing Blade, a weekly boxing publication that ran from 1919 to 1926."
+	img={null}
+>
+	{/* the link above the heading sits in the top padding, so the heading lines up with other pages' */}
+	<section class="pt-[max(16px,calc(clamp(32px,6vw,56px)-28px))] pb-10">
+		<Breadcrumbs items={[{ name: "Articles", href: "/articles/" }]} current="The Boxing Blade" />
+		<h1 class="mb-4 font-heading text-[clamp(40px,7vw,56px)] leading-[1.08] font-semibold tracking-[-0.01em]">The Boxing Blade</h1>
+		<p class="max-w-205 font-serif text-[clamp(19px,3vw,22px)] leading-[1.45] text-ink-soft">
+			An archive of <em>The Boxing Blade</em>, a weekly boxing publication that ran from 1919 to 1926.
+		</p>
+	</section>
+	<section aria-labelledby="issues" class="mb-18">
+		<h2 id="issues" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">Issues</h2>
+		<BladeIssues />
+	</section>
+</Layout>

@@ -3,7 +3,7 @@ title: Here’s What Fight Means to Gibbons
 author: null
 publication: San Francisco Chronicle
 publicationDate: "1923-07-05"
-link: https://web.archive.org/web/20211126010446/https://www.newspapers.com/clip/17082264/san-francisco-chronicle/
+link: https://www.newspapers.com/clip/17082264/san-francisco-chronicle/
 boutId: 155
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-04-jack-dempsey-v-tommy-gibbons.jpg

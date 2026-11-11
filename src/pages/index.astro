@@ -1,122 +1,60 @@
 ---
+import dayjs from "dayjs";
 import Layout from "../layouts/Layout.astro";
-import LatestChampions from "./_components/LatestChampions.astro";
-import CurrentChampions from "./_components/CurrentChampions.astro";
-import ScheduledBouts from "./_components/ScheduledBouts.astro";
-import { getScheduledBouts, getLatestReigns } from "../db/index";
+import CurrentChampionsTable from "./_components/CurrentChampionsTable.svelte";
+import MonthList from "./_components/MonthList.svelte";
+import { byMonth, championsTable, columns, titleChanges, upcomingBouts } from "./_components/home";
+import OrgTags from "../components/OrgTags.svelte";
+import { getAllBouts, getAllChampions, getAllReigns } from "../db/index";
 import { getCurrentChampions } from "../utils";
 
-const currentChampions = getCurrentChampions();
-const latestReigns = getLatestReigns(10);
-const scheduledBouts = getScheduledBouts();
+const today = dayjs();
+const [reigns, bouts, champions, currentChampions] = await Promise.all([getAllReigns(), getAllBouts(), getAllChampions(), getCurrentChampions()]);
+
+const finishedBouts = bouts.filter((b) => b.status === "FINISHED");
+const firstYear = dayjs(reigns.map((r) => r.period.begins).sort()[0]).year();
+const count = (n: number) => n.toLocaleString("en-GB");
+
+const rows = championsTable(currentChampions, today);
+const org = (abbreviation: string, short: string) => ({ abbreviation, short });
+
+const upcoming = byMonth(upcomingBouts(bouts));
+const changes = byMonth(titleChanges(reigns, bouts, today.subtract(12, "month").format("YYYY-MM-DD")));
 ---
 
-<Layout title="Open Boxing" description="Open source world championship boxing data and articles." img={null}>
-	<main>
-		<header class="header">
-			<h1 class="header__title">Open Boxing</h1>
-			<p class="header__description">World championship boxing data and articles</p>
-		</header>
-		<div class="champions">
-			<section class="champions__recent">
-				<h2 class="champions__heading">Recently won titles</h2>
-				<LatestChampions latestReigns={latestReigns} />
-			</section>
-			<section class="champions__current">
-				<h2 class="champions__heading">
-					<a class="champions__link" href={`${Astro.url.origin}/champions/`}>Current world champions</a>
-				</h2>
-				<CurrentChampions currentChampions={currentChampions} />
-			</section>
-			<section class="champions__scheduled">
-				<h2 class="champions__heading">
-					<a class="champions__link" href={`${Astro.url.origin}/scheduled-bouts/`}>Scheduled world title bouts</a>
-				</h2>
-				<ScheduledBouts scheduledBouts={scheduledBouts} />
-			</section>
-		</div>
-	</main>
+<Layout title="Open Boxing" description="Open source world championship boxing data, plus an archive of public domain newspaper articles and documents." img={null}>
+	<section class="max-w-205 pt-[clamp(32px,6vw,56px)] pb-10">
+		<h1 class="mb-4 font-heading text-[clamp(40px,7vw,56px)] leading-[1.08] font-semibold tracking-[-0.01em]">Open Boxing</h1>
+		<p class="mb-4 font-serif text-[clamp(19px,3vw,22px)] leading-[1.45] text-ink-soft">Open source world championship boxing data, plus an archive of public domain newspaper and magazine articles.</p>
+		<p class="mb-4 font-serif text-[clamp(19px,3vw,22px)] leading-[1.45] text-ink-soft">
+			The data covers the world titles of the{" "}
+			<OrgTags
+				orgs={[org("IBU", "IBU"), org("NYSAC", "NYSAC"), org("WBA", "WBA"), org("WBC", "WBC"), org("IBF", "IBF"), org("WBO", "WBO"), org("RING", "The Ring")]}
+			/>.
+		</p>
+		<p class="font-serif text-[clamp(19px,3vw,22px)] leading-[1.45] text-ink-soft">
+			Since {firstYear}, there have been {count(finishedBouts.length)} world title bouts, {count(champions.length)} world champions and {count(reigns.length)} reigns.
+		</p>
+		<p class="mt-4 font-serif text-[clamp(19px,3vw,22px)] leading-[1.45] text-ink-soft">
+			Open Boxing is a work in progress. Found a mistake? Raise an issue on{" "}
+			<a href="https://github.com/edhwright/open-boxing/issues" class="text-ink underline decoration-gold decoration-2 underline-offset-4">GitHub</a>.
+		</p>
+	</section>
+
+	<section aria-labelledby="champions" class="mb-18">
+		<h2 id="champions" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">
+			<a href="/champions/">Current world champions</a>
+		</h2>
+		<CurrentChampionsTable orgs={columns} rows={rows} />
+	</section>
+
+	<section aria-labelledby="upcoming" class="mb-18">
+		<h2 id="upcoming" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">Upcoming world title bouts</h2>
+		<MonthList months={upcoming} empty="No world title bouts are scheduled." />
+	</section>
+
+	<section aria-labelledby="changes">
+		<h2 id="changes" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">World title changes</h2>
+		<MonthList months={changes} empty="No world title changes in the last 12 months." />
+	</section>
 </Layout>
-
-<style>
-	.header {
-		margin: 48px 0 2rem 0;
-	}
-
-	.header__title {
-		font-size: 40px;
-		line-height: 50px;
-		margin-bottom: 8px;
-		text-align: center;
-	}
-
-	.header__description {
-		max-width: 470px;
-		text-align: center;
-		margin: 0 auto;
-		color: var(--theme-text-secondary);
-	}
-
-	.champions__heading {
-		font-size: var(--data-font-size-h2);
-		line-height: var(--data-line-height-h2);
-		margin: 0 0 12px 0;
-	}
-
-	.champions__link {
-		color: var(--theme-text);
-		text-decoration: none;
-	}
-
-	.champions__link:hover {
-		text-decoration: underline;
-	}
-
-	.champions {
-		display: grid;
-		gap: 1rem;
-		grid-template-columns: repeat(12, 1fr);
-		grid-template-rows: repeat(3, auto);
-	}
-
-	.champions__recent {
-		background-color: var(--theme-bg);
-		grid-column: 1 / 13;
-		grid-row: 1;
-		box-shadow: 0px 8px var(--theme-bg), 0px 9px var(--theme-border);
-	}
-
-	.champions__current {
-		background-color: var(--theme-bg);
-		grid-column: 1 / 13;
-		grid-row: 2;
-		box-shadow: 0px 8px var(--theme-bg), 0px 9px var(--theme-border);
-	}
-
-	.champions__scheduled {
-		background-color: var(--theme-bg);
-		grid-column: 1 / 13;
-		grid-row: 3;
-	}
-
-	@media (min-width: 1280px) {
-		.champions {
-			grid-template-columns: repeat(16, 1fr);
-			grid-template-rows: repeat(2, auto);
-		}
-
-		.champions__recent {
-			grid-column: 1 / 17;
-		}
-
-		.champions__current {
-			box-shadow: none;
-		}
-
-		.champions__scheduled {
-			grid-column: 13 / 17;
-			grid-row: 2;
-			box-shadow: -8px 0px var(--theme-bg), -9px 0px var(--theme-border);
-		}
-	}
-</style>

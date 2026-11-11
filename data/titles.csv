@@ -1,0 +1,140 @@
+title_id,org_full_name,org_short_name,org_abbreviation,active,weight_class,latest_weight_lb
+1,International Boxing Union,IBU,IBU,0,Heavyweight,175+
+2,International Boxing Union,IBU,IBU,0,Light Heavyweight,175
+3,International Boxing Union,IBU,IBU,0,Middleweight,160
+4,International Boxing Union,IBU,IBU,0,Welterweight,147
+5,International Boxing Union,IBU,IBU,0,Lightweight,135
+6,International Boxing Union,IBU,IBU,0,Featherweight,126
+7,International Boxing Union,IBU,IBU,0,Bantamweight,118
+8,International Boxing Union,IBU,IBU,0,Flyweight,112
+9,New York State Athletic Commission,NYSAC,NYSAC,0,Heavyweight,175+
+10,New York State Athletic Commission,NYSAC,NYSAC,0,Light Heavyweight,175
+11,New York State Athletic Commission,NYSAC,NYSAC,0,Middleweight,160
+12,New York State Athletic Commission,NYSAC,NYSAC,0,Welterweight,147
+13,New York State Athletic Commission,NYSAC,NYSAC,0,Super Lightweight,140
+14,New York State Athletic Commission,NYSAC,NYSAC,0,Lightweight,135
+15,New York State Athletic Commission,NYSAC,NYSAC,0,Super Featherweight,130
+16,New York State Athletic Commission,NYSAC,NYSAC,0,Featherweight,126
+17,New York State Athletic Commission,NYSAC,NYSAC,0,Bantamweight,118
+18,New York State Athletic Commission,NYSAC,NYSAC,0,Flyweight,112
+19,World Boxing Association,WBA,WBA,0,Heavyweight,200+
+20,World Boxing Association,WBA,WBA,0,Bridgerweight,224
+21,World Boxing Association,WBA,WBA,0,Cruiserweight,200
+22,World Boxing Association,WBA,WBA,0,Light Heavyweight,175
+23,World Boxing Association,WBA,WBA,1,Super Middleweight,168
+24,World Boxing Association,WBA,WBA,0,Middleweight,160
+25,World Boxing Association,WBA,WBA,1,Super Welterweight,154
+26,World Boxing Association,WBA,WBA,0,Welterweight,147
+27,World Boxing Association,WBA,WBA,0,Super Lightweight,140
+28,World Boxing Association,WBA,WBA,1,Lightweight,135
+29,World Boxing Association,WBA,WBA,1,Super Featherweight,130
+30,World Boxing Association,WBA,WBA,1,Featherweight,126
+31,World Boxing Association,WBA,WBA,0,Super Bantamweight,122
+32,World Boxing Association,WBA,WBA,1,Bantamweight,118
+33,World Boxing Association,WBA,WBA,0,Super Flyweight,115
+34,World Boxing Association,WBA,WBA,0,Flyweight,112
+35,World Boxing Association,WBA,WBA,1,Light Flyweight,108
+36,World Boxing Association,WBA,WBA,0,Minimumweight,105
+37,World Boxing Association Regular,WBA Regular,WBAR,1,Heavyweight,200+
+38,World Boxing Association Regular,WBA Regular,WBAR,0,Cruiserweight,200
+39,World Boxing Association Regular,WBA Regular,WBAR,1,Light Heavyweight,175
+40,World Boxing Association Regular,WBA Regular,WBAR,0,Super Middleweight,168
+41,World Boxing Association Regular,WBA Regular,WBAR,1,Middleweight,160
+42,World Boxing Association Regular,WBA Regular,WBAR,0,Super Welterweight,154
+43,World Boxing Association Regular,WBA Regular,WBAR,1,Welterweight,147
+44,World Boxing Association Regular,WBA Regular,WBAR,1,Super Lightweight,140
+45,World Boxing Association Regular,WBA Regular,WBAR,1,Lightweight,135
+46,World Boxing Association Regular,WBA Regular,WBAR,1,Super Featherweight,130
+47,World Boxing Association Regular,WBA Regular,WBAR,0,Featherweight,126
+48,World Boxing Association Regular,WBA Regular,WBAR,0,Super Bantamweight,122
+49,World Boxing Association Regular,WBA Regular,WBAR,1,Bantamweight,118
+50,World Boxing Association Regular,WBA Regular,WBAR,1,Super Flyweight,115
+51,World Boxing Association Regular,WBA Regular,WBAR,1,Flyweight,112
+52,World Boxing Association Regular,WBA Regular,WBAR,1,Light Flyweight,108
+53,World Boxing Association Regular,WBA Regular,WBAR,1,Minimumweight,105
+54,World Boxing Association Super,WBA Super,WBAS,1,Heavyweight,200+
+55,World Boxing Association Super,WBA Super,WBAS,1,Cruiserweight,200
+56,World Boxing Association Super,WBA Super,WBAS,1,Light Heavyweight,175
+57,World Boxing Association Super,WBA Super,WBAS,1,Super Middleweight,168
+58,World Boxing Association Super,WBA Super,WBAS,0,Middleweight,160
+59,World Boxing Association Super,WBA Super,WBAS,0,Super Welterweight,154
+60,World Boxing Association Super,WBA Super,WBAS,1,Welterweight,147
+61,World Boxing Association Super,WBA Super,WBAS,0,Super Lightweight,140
+62,World Boxing Association Super,WBA Super,WBAS,0,Lightweight,135
+63,World Boxing Association Super,WBA Super,WBAS,1,Super Featherweight,130
+64,World Boxing Association Super,WBA Super,WBAS,0,Featherweight,126
+65,World Boxing Association Super,WBA Super,WBAS,1,Super Bantamweight,122
+66,World Boxing Association Super,WBA Super,WBAS,1,Bantamweight,118
+67,World Boxing Association Super,WBA Super,WBAS,0,Super Flyweight,115
+68,World Boxing Association Super,WBA Super,WBAS,0,Flyweight,112
+69,World Boxing Association Super,WBA Super,WBAS,1,Light Flyweight,108
+70,World Boxing Association Super,WBA Super,WBAS,1,Minimumweight,105
+71,World Boxing Council,WBC,WBC,1,Heavyweight,200+
+72,World Boxing Council,WBC,WBC,1,Bridgerweight,224
+73,World Boxing Council,WBC,WBC,1,Cruiserweight,200
+74,World Boxing Council,WBC,WBC,1,Light Heavyweight,175
+75,World Boxing Council,WBC,WBC,1,Super Middleweight,168
+76,World Boxing Council,WBC,WBC,1,Middleweight,160
+77,World Boxing Council,WBC,WBC,1,Super Welterweight,154
+78,World Boxing Council,WBC,WBC,1,Welterweight,147
+79,World Boxing Council,WBC,WBC,1,Super Lightweight,140
+80,World Boxing Council,WBC,WBC,1,Lightweight,135
+81,World Boxing Council,WBC,WBC,1,Super Featherweight,130
+82,World Boxing Council,WBC,WBC,1,Featherweight,126
+83,World Boxing Council,WBC,WBC,1,Super Bantamweight,122
+84,World Boxing Council,WBC,WBC,1,Bantamweight,118
+85,World Boxing Council,WBC,WBC,1,Super Flyweight,115
+86,World Boxing Council,WBC,WBC,1,Flyweight,112
+87,World Boxing Council,WBC,WBC,1,Light Flyweight,108
+88,World Boxing Council,WBC,WBC,1,Minimumweight,105
+89,International Boxing Federation,IBF,IBF,1,Heavyweight,200+
+90,International Boxing Federation,IBF,IBF,1,Cruiserweight,200
+91,International Boxing Federation,IBF,IBF,1,Light Heavyweight,175
+92,International Boxing Federation,IBF,IBF,1,Super Middleweight,168
+93,International Boxing Federation,IBF,IBF,1,Middleweight,160
+94,International Boxing Federation,IBF,IBF,1,Super Welterweight,154
+95,International Boxing Federation,IBF,IBF,1,Welterweight,147
+96,International Boxing Federation,IBF,IBF,1,Super Lightweight,140
+97,International Boxing Federation,IBF,IBF,1,Lightweight,135
+98,International Boxing Federation,IBF,IBF,1,Super Featherweight,130
+99,International Boxing Federation,IBF,IBF,1,Featherweight,126
+100,International Boxing Federation,IBF,IBF,1,Super Bantamweight,122
+101,International Boxing Federation,IBF,IBF,1,Bantamweight,118
+102,International Boxing Federation,IBF,IBF,1,Super Flyweight,115
+103,International Boxing Federation,IBF,IBF,1,Flyweight,112
+104,International Boxing Federation,IBF,IBF,1,Light Flyweight,108
+105,International Boxing Federation,IBF,IBF,1,Minimumweight,105
+106,World Boxing Organization,WBO,WBO,1,Heavyweight,200+
+107,World Boxing Organization,WBO,WBO,1,Cruiserweight,200
+108,World Boxing Organization,WBO,WBO,1,Light Heavyweight,175
+109,World Boxing Organization,WBO,WBO,1,Super Middleweight,168
+110,World Boxing Organization,WBO,WBO,1,Middleweight,160
+111,World Boxing Organization,WBO,WBO,1,Super Welterweight,154
+112,World Boxing Organization,WBO,WBO,1,Welterweight,147
+113,World Boxing Organization,WBO,WBO,1,Super Lightweight,140
+114,World Boxing Organization,WBO,WBO,1,Lightweight,135
+115,World Boxing Organization,WBO,WBO,1,Super Featherweight,130
+116,World Boxing Organization,WBO,WBO,1,Featherweight,126
+117,World Boxing Organization,WBO,WBO,1,Super Bantamweight,122
+118,World Boxing Organization,WBO,WBO,1,Bantamweight,118
+119,World Boxing Organization,WBO,WBO,1,Super Flyweight,115
+120,World Boxing Organization,WBO,WBO,1,Flyweight,112
+121,World Boxing Organization,WBO,WBO,1,Light Flyweight,108
+122,World Boxing Organization,WBO,WBO,1,Minimumweight,105
+123,The Ring,The Ring,RING,1,Heavyweight,200+
+124,The Ring,The Ring,RING,1,Cruiserweight,200
+125,The Ring,The Ring,RING,1,Light Heavyweight,175
+126,The Ring,The Ring,RING,1,Super Middleweight,168
+127,The Ring,The Ring,RING,0,Middleweight,160
+128,The Ring,The Ring,RING,0,Super Welterweight,154
+129,The Ring,The Ring,RING,1,Welterweight,147
+130,The Ring,The Ring,RING,1,Super Lightweight,140
+131,The Ring,The Ring,RING,0,Lightweight,135
+132,The Ring,The Ring,RING,1,Super Featherweight,130
+133,The Ring,The Ring,RING,0,Featherweight,126
+134,The Ring,The Ring,RING,1,Super Bantamweight,122
+135,The Ring,The Ring,RING,1,Bantamweight,118
+136,The Ring,The Ring,RING,1,Super Flyweight,115
+137,The Ring,The Ring,RING,0,Flyweight,112
+138,The Ring,The Ring,RING,0,Light Flyweight,108
+139,The Ring,The Ring,RING,1,Minimumweight,105

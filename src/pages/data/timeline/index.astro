@@ -1,0 +1,18 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import CompareTimelines from "../_components/CompareTimelines.svelte";
+
+// An interactive: it runs in the browser, loading /data/interactives.json
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+---
+
+<Layout title="Champion timeline comparison" description="Add boxers to line up their world title reigns and bouts." img={null}>
+	{/* the link above the heading sits in the top padding, so the heading lines up with other pages' */}
+	<section class="pt-[max(16px,calc(clamp(32px,6vw,56px)-28px))] pb-8">
+		<Breadcrumbs items={[{ name: "Data", href: "/data/" }]} current="Champion timeline comparison" />
+		<h1 class="mb-4 font-heading text-[clamp(40px,7vw,56px)] leading-[1.08] font-semibold tracking-[-0.01em]">Champion timeline comparison</h1>
+		<p class="max-w-205 font-serif text-[clamp(19px,3vw,22px)] leading-[1.45] text-ink-soft">Add boxers to line up their world title reigns and bouts.</p>
+	</section>
+	<CompareTimelines client:only="svelte" />
+	<noscript><p class="border-y border-rule py-12 text-center text-[15px] text-muted">This interactive needs JavaScript.</p></noscript>
+</Layout>

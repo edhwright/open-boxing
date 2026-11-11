@@ -1,263 +1,164 @@
 ---
+import { Image } from "astro:assets";
+import dayjs from "dayjs";
+import { getCollection } from "astro:content";
 import Layout from "../../../layouts/Layout.astro";
-import Breadcrumbs from "../../../components/Breadcrumbs.astro";
-import FeaturedBouts from "../../../components/FeaturedBouts.astro";
-import ReignsPlot from "./_components/ReignsPlot.svelte";
-import Timeline from "./_components/Timeline.astro";
-import { getAllChampions, getChampionReigns, getChampionBouts } from "../../../db";
-import {
-	getCurrentWeightClassChampions,
-	geTimelineFromReignsAndBouts,
-	slugify,
-	getAllBoutArticlesIds,
-	getAllFeaturedBoutPreviews,
-	filterFeaturedBoutPreviewsByChampion,
-	getReignsPlotData,
-} from "../../../utils";
-import type { ReignsPlotData, TimelineDate, FeaturedBoutPreview } from "../../../utils";
+import TimelineSection from "../../../timeline/TimelineSection.astro";
+import { reignsTimeline } from "./_components/reignsTimeline";
+import ChampionTimeline from "./_components/ChampionTimeline.svelte";
+import { championBouts, championReigns, figures, summary } from "./_components/champion";
+import { getAllChampions, getChampionReigns, getChampionBouts, getChampionRankings } from "../../../db";
+import { getAllFeaturedBoutPreviews, filterFeaturedBoutPreviewsByChampion, isChampion, slugify } from "../../../utils";
+import { undisputedTitles } from "../../../undisputed";
+import { tints } from "../../../components/orgTags";
+import type { FeaturedBoutPreview } from "../../../utils";
 import type { Champion, Reign, Bout } from "../../../types";
 
 interface Props {
 	champion: Champion;
 	reigns: Reign[];
 	bouts: Bout[];
-	timeline: TimelineDate[];
-	reignsPlotData: ReignsPlotData;
 	featuredBoutPreviews: FeaturedBoutPreview[];
-	allBoutArticleIds: number[];
+	articleCounts: Record<number, number>;
+	rankings: { date: string; weightClass: string; position: number }[];
 }
 
 export async function getStaticPaths() {
-	const allChampions = getAllChampions();
+	const allChampions = await getAllChampions();
 	const allFeaturedBoutPreviews = await getAllFeaturedBoutPreviews();
-	const allBoutArticleIds = await getAllBoutArticlesIds();
+	// how many articles each bout has
+	const articleCounts: Record<number, number> = {};
+	for (const article of await getCollection("bouts")) articleCounts[article.data.boutId] = (articleCounts[article.data.boutId] ?? 0) + 1;
 
-	const data = allChampions.map((champion) => {
-		const championReigns = getChampionReigns(champion.championId);
-		const championBouts = getChampionBouts(champion.championId);
-		const championTimeline = geTimelineFromReignsAndBouts(championReigns, championBouts);
-		const championReignsPlotData = getReignsPlotData(champion, championReigns, championBouts, championTimeline);
-		const championFeaturedBoutPreviews = filterFeaturedBoutPreviewsByChampion(allFeaturedBoutPreviews, champion.championId);
-
-		return {
-			params: {
-				champion: champion.championId,
-			},
+	return Promise.all(
+		allChampions.map(async (champion) => ({
+			params: { champion: String(champion.championId) },
 			props: {
-				champion: champion,
-				reigns: championReigns,
-				bouts: championBouts,
-				timeline: championTimeline,
-				reignsPlotData: championReignsPlotData,
-				allBoutArticleIds: allBoutArticleIds,
-				featuredBoutPreviews: championFeaturedBoutPreviews,
+				champion,
+				reigns: await getChampionReigns(champion.championId),
+				bouts: await getChampionBouts(champion.championId),
+				featuredBoutPreviews: filterFeaturedBoutPreviewsByChampion(allFeaturedBoutPreviews, champion.championId),
+				articleCounts,
+				rankings: await getChampionRankings(champion.championId, "The Ring"),
 			},
-		};
-	});
-
-	return data;
+		})),
+	);
 }
 
-const { champion, reigns, bouts, timeline, reignsPlotData, allBoutArticleIds, featuredBoutPreviews } = Astro.props;
+const { champion, reigns, bouts, featuredBoutPreviews, articleCounts, rankings } = Astro.props;
+const name = `${champion.name.first} ${champion.name.last}`;
+const today = dayjs().format("YYYY-MM-DD");
+
+const reignData = championReigns(reigns);
+const boutData = championBouts(champion, bouts).map((b, i) => {
+	const ids = [bouts[i].boxers.boxerA, bouts[i].boxers.boxerB].filter(isChampion).map((x) => x.championId);
+	const titleWeight = b.titles[0]?.weight ?? b.weight;
+	return { ...b, gold: undisputedTitles(ids, titleWeight, b.date, b.titles.map((t) => t.org.abbreviation)) };
+});
+const stats = figures(reignData, boutData, today);
+const timeline = reignsTimeline(reignData, boutData, champion.born, today);
+
+// the bouts with transcribed articles, for the archive and the timeline's links
+const archive = featuredBoutPreviews.map((preview) => ({
+	href: `/articles/${preview.bout.date}-${slugify(preview.name)}/`,
+	img: preview.thumbnail,
+	name: preview.name,
+	date: preview.bout.date,
+	count: articleCounts[preview.bout.boutId] ?? 0,
+}));
+const articles = Object.fromEntries(archive.map((a) => [a.date, { href: a.href, count: a.count }]));
+
+const about = summary(champion, reignData, boutData);
+// for search results: what they held, then their record in world title bouts
+const finishedBouts = boutData.filter((b) => b.result !== "scheduled");
+const tally = (r: string) => finishedBouts.filter((b) => b.result === r).length;
+const record = [
+	[tally("won"), "won"],
+	[tally("lost"), "lost"],
+	[tally("draw"), "drawn"],
+	[tally("nc"), tally("nc") === 1 ? "no contest" : "no contests"],
+]
+	.filter(([n]) => n)
+	.map(([n, word]) => (word === "no contest" || word === "no contests" ? `${n} ${word}` : `${word} ${n}`))
+	.join(", ");
+const held = about.map((p) => p.text).join("").split(/(?<=\.) /)[0];
+const description = `${held} ${name}'s world title reigns${
+	finishedBouts.length ? ` and ${finishedBouts.length} world title ${finishedBouts.length === 1 ? "bout" : "bouts"}${record ? `: ${record}` : ""}` : ""
+}.`;
+
+// for search engines: the page as a profile of the champion, with each world title they held. No given or family name,
+// as a champion's first name is sometimes a ring name, e.g. Canelo
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@type": "ProfilePage",
+	url: new URL(Astro.url.pathname, Astro.site).href,
+	name,
+	mainEntity: {
+		"@type": "Person",
+		name,
+		...(champion.born ? { birthDate: champion.born } : {}),
+		description: about.map((p) => p.text).join(""),
+		award: [...new Set(reignData.map((r) => `${r.org.short} ${r.weight.toLowerCase()} world title`))],
+	},
+};
 ---
 
-<Layout title={`${champion.name.first} ${champion.name.last}`} description={`${champion.name.first} ${champion.name.last}'s world boxing title reigns and bouts.`} img={null}>
-	<main class="content">
-		<Breadcrumbs
-			route={[
-				["Champions", `${Astro.url.origin}/champions/`],
-				[`${champion.name.first} ${champion.name.last}`, `${Astro.url.origin}/champions/${champion.championId}/`],
-			]}
-		/>
-
-		<header class="header">
-			<h1 class="header__title">{`${champion.name.first} ${champion.name.last}`}</h1>
-		</header>
-
-		{
-			featuredBoutPreviews.length > 0 && (
-				<section class="featured">
-					<h2 class="featured__title">
-						<a class="featured__link" href={`${Astro.url.origin}/articles#featured-bouts`}>
-							Featured bouts
+<Layout title={name} description={description} img={null} jsonLd={jsonLd}>
+	<section class="pt-[clamp(32px,6vw,56px)] pb-10">
+		<h1 class="mb-4 font-heading text-[clamp(40px,7vw,56px)] leading-[1.08] font-semibold tracking-[-0.01em]">{name}</h1>
+		<p class="mb-8 max-w-205 font-serif text-[clamp(19px,3vw,22px)] leading-[1.45] text-ink-soft">
+			{
+				about.map((p) =>
+					p.org ? (
+						<a href={p.href} class={`org whitespace-nowrap ${tints[p.org] ?? "bg-wba-tint"}`}>
+							{p.text}
 						</a>
-					</h2>
-					<FeaturedBouts featuredBoutPreviews={featuredBoutPreviews} />
-				</section>
-			)
-		}
+					) : (
+						p.text
+					),
+				)
+			}
+		</p>
+		{/* figures first, labels after, all top-aligned so the figures share a baseline however long a label is */}
+		{/* a figure never squeezes narrower than itself: the rows wrap first */}
+		<dl class="flex flex-wrap gap-x-8 gap-y-4 border-t border-ink pt-4">
+			{
+				stats.map((s) => (
+					<div class="flex flex-[1_1_200px] flex-col justify-start">
+						<dt class="order-2 text-[13px] leading-4.5 text-muted">{s.label}</dt>
+						<dd class="order-1 font-heading text-[32px] leading-10 font-semibold whitespace-nowrap">{s.value}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</section>
 
-		<section class="plot">
-			<h2 class="plot__title">World title reigns and bouts</h2>
-			<figure class="plot__figure">
-				<ReignsPlot reignsPlotData={reignsPlotData} />
-			</figure>
-		</section>
+	{/* the whole career to start with; zoom in for a closer look */}
+	<TimelineSection model={timeline} initial={timeline.full} />
 
-		<section class="timeline">
-			<h2 id="timeline" class="timeline__title">Timeline of world title events</h2>
-			<Timeline timeline={timeline} reigns={reigns} boutArticleIds={allBoutArticleIds} />
-		</section>
-	</main>
+	{
+		archive.length > 0 && (
+			<section aria-labelledby="archive" class="mb-18">
+				<h2 id="archive" class="border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold">
+					From the archive
+				</h2>
+				<ul class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-8 pt-6">
+					{archive.map((a) => (
+						<li>
+							<a href={a.href} class="group block hover:no-underline">
+								{a.img && <Image src={a.img} alt={a.name} widths={[480, 960]} sizes="(max-width: 760px) calc(100vw - 32px), 440px" class="block aspect-video h-auto w-full border border-ink object-cover grayscale" />}
+								<p class="mt-3 mb-0.5 text-[13px] text-muted">{dayjs(a.date).format("D MMMM YYYY")}</p>
+								<h3 class="font-heading text-[22px] leading-7 font-semibold group-hover:underline">{a.name}</h3>
+								<p class="mt-1 text-sm underline decoration-gold decoration-2 underline-offset-4 group-hover:decoration-ink">
+									Read {a.count} {a.count === 1 ? "article" : "articles"}
+								</p>
+							</a>
+						</li>
+					))}
+				</ul>
+			</section>
+		)
+	}
+
+	<ChampionTimeline name={name} reigns={reignData} bouts={boutData} articles={articles} rankings={rankings} />
 </Layout>
-
-<style>
-	.header {
-		margin: 2rem auto;
-	}
-
-	.header__title {
-		margin-bottom: 1rem;
-		font-size: var(--font-size-h1);
-		line-height: var(--line-height-h1);
-	}
-
-	.featured__title,
-	.plot__title {
-		font-size: var(--font-size-h2);
-		line-height: var(--line-height-h2);
-		margin-bottom: 12px;
-	}
-
-	.featured__link {
-		color: var(--theme-text);
-		text-decoration: none;
-	}
-
-	.featured__link:hover {
-		text-decoration: underline;
-	}
-
-	.featured,
-	.timeline,
-	.plot {
-		margin-top: 2rem;
-		margin-bottom: 2rem;
-	}
-
-	.plot {
-		position: relative;
-		display: none;
-		margin-top: 2rem;
-		padding: 1rem 0 12px 0;
-		background-color: var(--theme-content-bg);
-		border-top: 1px solid var(--theme-border);
-		border-bottom: 1px solid var(--theme-border);
-	}
-
-	.timeline__title {
-		font-size: var(--font-size-h2);
-		line-height: var(--line-height-h2);
-		margin: 12px 0 12px 0;
-	}
-
-	.featured {
-		padding: 1rem 0 2rem 0;
-		position: relative;
-		background-image: var(--theme-featured-bg);
-		border-top: 1px solid var(--theme-border);
-	}
-
-	.featured:before {
-		content: "";
-		position: absolute;
-		width: 12px;
-		top: 0;
-		bottom: 0;
-		right: 100%;
-		background-image: var(--theme-featured-bg);
-		border-top: 1px solid var(--theme-border);
-		z-index: -1;
-	}
-
-	.featured:after {
-		content: "";
-		position: absolute;
-		width: 12px;
-		top: 0;
-		bottom: 0;
-		left: 100%;
-		background-image: var(--theme-featured-bg);
-		border-top: 1px solid var(--theme-border);
-		z-index: -1;
-	}
-
-	.plot:before {
-		content: "";
-		position: absolute;
-		display: block;
-		height: 100%;
-		width: 12px;
-		top: -1px;
-		bottom: 0;
-		right: 100%;
-		background-color: var(--theme-content-bg);
-		border-top: 1px solid var(--theme-border);
-		border-bottom: 1px solid var(--theme-border);
-		z-index: -1;
-	}
-
-	.plot:after {
-		content: "";
-		position: absolute;
-		display: block;
-		height: 100%;
-		width: 12px;
-		top: -1px;
-		bottom: 0;
-		left: 100%;
-		background-color: var(--theme-content-bg);
-		border-top: 1px solid var(--theme-border);
-		border-bottom: 1px solid var(--theme-border);
-		z-index: -1;
-	}
-
-	@media (min-width: 667px) {
-		.plot {
-			display: inherit;
-		}
-	}
-
-	@media (min-width: 1280px) {
-		.content {
-			width: 100%;
-		}
-
-		.header,
-		.featured:global(> *),
-		.plot__title,
-		.timeline__title {
-			max-width: 956px;
-			margin-left: auto;
-			margin-right: auto;
-		}
-
-		.plot__figure {
-			max-width: 1280px;
-			margin-left: auto;
-			margin-right: auto;
-		}
-
-		.timeline {
-			max-width: 1280px;
-			margin-left: auto;
-			margin-right: auto;
-		}
-
-		.featured:before {
-			display: none;
-		}
-
-		.featured:after {
-			display: none;
-		}
-
-		.plot:before {
-			display: none;
-		}
-
-		.plot:after {
-			display: none;
-		}
-	}
-</style>

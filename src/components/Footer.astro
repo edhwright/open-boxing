@@ -1,0 +1,26 @@
+---
+import { fullDate } from "../dates";
+
+// the day the site was built, which is the day it was last deployed
+const built = new Date().toISOString().slice(0, 10);
+---
+
+<footer class="border-t border-ink">
+	<div class="mx-auto flex max-w-340 flex-wrap items-baseline justify-between gap-x-6 gap-y-6 px-[clamp(16px,4vw,24px)] py-8 text-sm text-muted">
+		<p>
+			Open Boxing is a work in progress. Found a mistake? Raise an issue on <a
+				class="text-ink underline decoration-gold decoration-2 underline-offset-4"
+				href="https://github.com/edhwright/open-boxing/issues"
+				target="_blank"
+				rel="noreferrer">GitHub</a
+			>.
+			<span class="mt-3 block text-xs">Last updated <time datetime={built}>{fullDate(built)}</time></span>
+		</p>
+		<ul class="flex flex-wrap gap-x-4 max-[860px]:order-first max-[860px]:basis-full">
+			<li><a class="hover:text-ink hover:underline" href="/data/">Data</a></li>
+			<li><a class="hover:text-ink hover:underline" href="/articles/">Articles</a></li>
+			<li><a class="hover:text-ink hover:underline" href="/api/">API</a></li>
+			<li><a class="hover:text-ink hover:underline" href="https://github.com/edhwright/open-boxing" target="_blank" rel="noreferrer">GitHub</a></li>
+		</ul>
+	</div>
+</footer>

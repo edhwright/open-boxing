@@ -3,7 +3,7 @@ title: Leonard Now Realizes Tendler neither Second-Rater nor Dub
 author: null
 publication: The Ottawa Evening Journal
 publicationDate: "1922-07-28"
-link: https://web.archive.org/web/20211215205351/https://www.newspapers.com/clip/11481430/the-ottawa-journal/
+link: https://www.newspapers.com/clip/11481430/the-ottawa-journal/
 boutId: 136
 featured: true
 thumbnail: /thumbnails/bouts/1922-07-27-benny-leonard-v-lew-tendler.jpg

@@ -1,0 +1,232 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+	/* fonts: Inter for the interface, Source Serif 4 for reading, DM Serif Display for article headings,
+	   IBM Plex Serif for the data pages' headings, IBM Plex Mono only for code: the API's
+	   paths and fields, and the data's file names. Dates and figures are in the text's own font; where they line up in
+	   a column (dates down a timeline, ranks, counts), tabular-nums keeps every digit the same width */
+	/* each font's stack, with its matched fallback, comes from Astro's fonts (astro.config.mjs) */
+	--font-sans: var(--font-inter);
+	--font-serif: var(--font-source-serif);
+	--font-display: var(--font-dm-serif);
+	--font-heading: var(--font-plex-serif);
+	--font-mono: var(--font-plex-mono);
+
+	/* the light redesign: cream pages (grey-pink for articles), near-black ink, gold only as an accent */
+	--color-cream: rgb(255 255 244);
+	--color-paper: rgb(234 228 225);
+	/* The Boxing Blade's issue pages: a maroon band, with text to match */
+	--color-blade-band: #5c262c;
+	--color-blade-band-ink: #fbf1ee;
+	--color-blade-band-muted: #e7cdc8;
+	--color-ink: #1a1a17;
+	--color-ink-soft: #3a3a33;
+	--color-muted: #4e4a44;
+	--color-rule: #cbc3be;
+
+	/* pale organisation tints, for highlighted org names and reign bars */
+	--color-ibu-tint: #dcdcf4;
+	--color-nysac-tint: #c6e7e1;
+	--color-wba-tint: #e2e0cf;
+	--color-wbc-tint: #c9e6bd;
+	--color-ibf-tint: #f5c6bf;
+	--color-wbo-tint: #e8d2bc;
+	--color-ring-tint: #cfdcf0;
+
+	--color-gold: #c0b38d;
+	/* the focus ring: a darker gold, at least 3:1 against the page */
+	--color-focus: #8a7a4a;
+
+	/* a tooltip fades in quickly when it first opens */
+	--animate-tip-in: tip-in 120ms ease-out;
+	@keyframes tip-in {
+		from {
+			opacity: 0;
+		}
+	}
+}
+
+@layer components {
+	/* round buttons for zooming and scrolling charts and strips */
+	.zoom-button {
+		@apply flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-ink bg-cream p-0 disabled:cursor-default disabled:border-rule disabled:text-[#a3a39a];
+	}
+	/* a highlighted world title name: dark italic text on its organisation's tint (see components/orgTags.ts) */
+	.org {
+		@apply px-1 text-ink italic box-decoration-clone;
+	}
+	/* timeline belt bars: outlined like the charts' reign bars, sides all the way down, a top where a reign begins
+	   and a bottom where it ends. While a reign carries on the bar reaches 1px past the row, over the divider */
+	.belt {
+		width: 10px;
+		--line: rgb(26 26 23 / 0.25);
+		box-shadow:
+			inset 1px 0 0 var(--line),
+			inset -1px 0 0 var(--line);
+	}
+	.belt-held,
+	.belt-begins {
+		position: relative;
+		z-index: 1;
+		margin-bottom: -1px;
+		align-self: stretch;
+	}
+	.belt-begins {
+		margin-top: 12px;
+		border-radius: 3px 3px 0 0;
+		box-shadow:
+			inset 1px 0 0 var(--line),
+			inset -1px 0 0 var(--line),
+			inset 0 1px 0 var(--line);
+	}
+	.belt-ends {
+		height: 22px;
+		border-radius: 0 0 3px 3px;
+		box-shadow:
+			inset 1px 0 0 var(--line),
+			inset -1px 0 0 var(--line),
+			inset 0 -1px 0 var(--line);
+	}
+}
+
+@layer components {
+	/* transcribed articles: a serif reading column, sans subheads, greyscale images with a thin rule. The pages show
+	   the articles' titles, so the headlines the markdown opens with are dropped at build time (drop-title.mjs) */
+	.article-prose {
+		max-width: 68ch;
+		font-family: var(--font-serif);
+		font-size: 20px;
+		line-height: 1.6;
+		color: var(--color-ink);
+	}
+	.article-prose p {
+		margin: 0 0 1em;
+	}
+	.article-prose :is(h2, h3, h4) {
+		margin: 1.8em 0 0.6em;
+		font-family: var(--font-sans);
+		font-size: 17px;
+		line-height: 1.4;
+		font-weight: 600;
+	}
+	/* subheads read at the body text's size */
+	.article-prose h3 {
+		font-size: 1em;
+	}
+	.article-prose > :is(h2, h3, h4):first-child {
+		margin-top: 0;
+	}
+	.article-prose a {
+		text-decoration: underline;
+		text-decoration-color: var(--color-gold);
+		text-decoration-thickness: 2px;
+		text-underline-offset: 4px;
+	}
+	.article-prose hr {
+		margin: 1.4em 0;
+		border: 0;
+		height: 1em;
+		line-height: 1em;
+		text-align: center;
+	}
+	.article-prose hr::after {
+		content: "* * *";
+		letter-spacing: 0.6em;
+		color: var(--color-muted);
+	}
+	.article-prose :is(ul, ol) {
+		margin: 0 0 1em;
+		padding-left: 1.1em;
+		list-style: disc;
+	}
+	.article-prose ol {
+		list-style: decimal;
+	}
+	.article-prose li {
+		margin: 0 0 0.3em;
+	}
+	.article-prose blockquote {
+		margin: 0 0 1em 1.4em;
+		color: var(--color-ink-soft);
+	}
+	.article-prose table {
+		margin: 0 0 1.2em;
+		border-collapse: collapse;
+		font-family: var(--font-sans);
+		font-size: 15px;
+		line-height: 1.4;
+	}
+	.article-prose :is(th, td) {
+		padding: 5px 16px 5px 0;
+		border-bottom: 1px solid var(--color-rule);
+		text-align: left;
+		vertical-align: top;
+	}
+	.article-prose th {
+		font-weight: 600;
+	}
+	.article-prose figure {
+		margin: 1.6em 0;
+	}
+	.article-prose img {
+		display: block;
+		margin: 1.6em auto;
+		max-width: 100%;
+		height: auto;
+		filter: grayscale(1);
+		border: 1px solid var(--color-ink);
+	}
+}
+
+@layer base {
+	/* one focus ring everywhere: square, 2px, just outside the element */
+	:focus-visible {
+		outline: 2px solid var(--color-focus);
+		outline-offset: 2px;
+	}
+	/* links read as plain text and underline on hover */
+	a:hover {
+		text-decoration-line: underline;
+	}
+}
+
+/* one hover for the controls: a faint grey wash behind them (outside the layers, so it wins over their own
+   backgrounds) */
+.zoom-button:hover:not(:disabled),
+.tl-link:hover,
+.tl-jump select:hover,
+summary:hover {
+	background-color: rgb(26 26 23 / 0.06);
+}
+/* gold-underlined links sit in line with text, so a wash would need padding that knocks them out of line: their
+   underline turns to ink instead */
+a.decoration-gold:not(.nav-link):hover {
+	text-decoration-color: var(--color-ink);
+}
+/* on The Boxing Blade's maroon band, it turns to the band's light text colour instead */
+.bg-blade-band a.decoration-gold:not(.nav-link):hover {
+	text-decoration-color: var(--color-blade-band-ink);
+}
+
+/* a highlighted world title name's tint, painted as a band: the text's full height in sans text, and 80% of it in
+   serif text, whose taller lines of highlights would otherwise touch. Outside the layers, so it takes over from the
+   tint's background colour (the bg-*-tint class names the colour) */
+.org {
+	background-color: transparent;
+	background-image: linear-gradient(var(--org-tint), var(--org-tint));
+	background-repeat: no-repeat;
+	background-position: 0 50%;
+	background-size: 100% 100%;
+}
+:is(.font-serif, .article-prose) .org {
+	background-size: 100% 80%;
+}
+.org.bg-ibu-tint { --org-tint: var(--color-ibu-tint); }
+.org.bg-nysac-tint { --org-tint: var(--color-nysac-tint); }
+.org.bg-wba-tint { --org-tint: var(--color-wba-tint); }
+.org.bg-wbc-tint { --org-tint: var(--color-wbc-tint); }
+.org.bg-ibf-tint { --org-tint: var(--color-ibf-tint); }
+.org.bg-wbo-tint { --org-tint: var(--color-wbo-tint); }
+.org.bg-ring-tint { --org-tint: var(--color-ring-tint); }
+.org.bg-gold\/40 { --org-tint: color-mix(in oklab, var(--color-gold) 40%, transparent); }

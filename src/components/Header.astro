@@ -1,0 +1,144 @@
+---
+// The site header: the name, the section links (the current section underlined in gold; each darkens the header's full
+// height on hover) and search. Static HTML;
+// the small script below opens the search panel and filters the search index, so no framework is sent.
+interface Props {
+	currentPath: string;
+	// the page's background class, so the search panel laid over the page matches it
+	background: string;
+}
+
+const { currentPath, background } = Astro.props;
+const links = [
+	{ href: "/data/", label: "Data" },
+	{ href: "/articles/", label: "Articles" },
+	{ href: "/api/", label: "API" },
+];
+// a section's link is underlined in gold on its pages too, e.g. Articles on an article
+const isActive = (href: string) => currentPath.startsWith(href);
+---
+
+<header class="relative border-b border-ink" data-header>
+	<div class="mx-auto flex min-h-14 max-w-340 flex-wrap items-center justify-between gap-x-4 px-[clamp(16px,4vw,24px)]">
+		{/* the logo (public/logo.svg, one cached file): the timeline's fade before the O hangs into the margin, so the O
+		     lines up with the page's edge */}
+		<a href="/" class="-ml-[18px] flex min-h-14 items-center hover:no-underline">
+			<img src="/logo.svg" alt="Open Boxing" width="181" height="26" class="block h-6.5 w-auto" />
+		</a>
+		{/* on phones the links take a second row under the name, with search at its right end, its icon in line with the
+		     page's edge */}
+		<nav class="-ml-2.5 flex flex-wrap items-stretch gap-1 text-sm font-medium max-[480px]:basis-[calc(100%+10px)]" aria-label="Site">
+			{
+				links.map((link) => (
+					<a
+						href={link.href}
+						aria-current={isActive(link.href) ? "page" : undefined}
+						class:list={[
+							"nav-link flex min-h-14 items-center px-2.5 hover:bg-ink/6",
+							isActive(link.href) ? "underline decoration-gold decoration-3 underline-offset-6" : "hover:no-underline",
+						]}
+					>
+						{link.label}
+					</a>
+				))
+			}
+			<button type="button" class="group flex min-h-14 w-11 cursor-pointer items-center justify-center hover:bg-ink/6 max-[480px]:-mr-3 max-[480px]:ml-auto" aria-label="Search" aria-expanded="false" aria-controls="search-panel" data-search-toggle>
+				<svg aria-hidden="true" class="group-aria-expanded:hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+					><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg
+				>
+				<svg aria-hidden="true" class="hidden group-aria-expanded:block" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+					><path d="M5 5l14 14M19 5L5 19"></path></svg
+				>
+			</button>
+		</nav>
+	</div>
+	{/* laid over the page under the header's bottom border, so opening it does not push the page down. The panel slides
+	     down from behind that border: the wrapper clips it there, so the header's border always shows. Instant with
+	     reduced motion. Hidden from focus while closed: it becomes visible at once on opening, so the search box can take
+	     focus, and hides once it has slid shut */}
+	<div class="pointer-events-none absolute inset-x-0 top-[calc(100%+1px)] z-50 overflow-hidden">
+		<div
+			id="search-panel"
+			data-search-panel
+			class="pointer-events-auto invisible -translate-y-full transition-[translate,visibility] duration-200 motion-reduce:transition-none data-open:visible data-open:translate-y-0 data-open:transition-[translate]"
+		>
+			<div class:list={["border-b border-ink", background]}>
+				<div class="mx-auto max-w-340 px-[clamp(16px,4vw,24px)]">
+					<label class="sr-only" for="search">Search the site</label>
+					<input id="search" class="h-14 w-full bg-transparent text-xl outline-hidden placeholder:text-muted" type="text" placeholder="Search" autocomplete="off" />
+				</div>
+			</div>
+			<div class="mx-auto max-w-340 px-[clamp(16px,4vw,24px)]">
+				<ul data-search-results hidden class:list={["border border-t-0 border-ink", background]}></ul>
+			</div>
+		</div>
+	</div>
+</header>
+
+<script>
+	const toggle = document.querySelector<HTMLButtonElement>("[data-search-toggle]")!;
+	const panel = document.querySelector<HTMLElement>("[data-search-panel]")!;
+	const input = panel.querySelector<HTMLInputElement>("input")!;
+	const results = panel.querySelector<HTMLUListElement>("[data-search-results]")!;
+	let index: { name: string; slug: string; also?: string }[] | null = null;
+
+	const render = () => {
+		const query = input.value.trim().toLowerCase();
+		// every word typed must appear in the page's name (or another name it goes by), names that start with the search first
+		const words = query.split(/\s+/);
+		const matches =
+			index && query.length > 1
+				? index
+						.filter((r) => words.every((w) => `${r.name} ${r.also ?? ""}`.toLowerCase().includes(w)))
+						.sort((a, b) => Number(!a.name.toLowerCase().startsWith(query)) - Number(!b.name.toLowerCase().startsWith(query)))
+						.slice(0, 20)
+				: [];
+		results.replaceChildren(
+			...matches.map((r) => {
+				const li = document.createElement("li");
+				li.className = "border-b border-rule last:border-0";
+				const a = document.createElement("a");
+				// the hover darkens whatever the page's background is, cream or grey
+				a.className = "block px-4 py-2 text-sm hover:bg-ink/7 hover:no-underline";
+				a.href = `/${r.slug}/`;
+				const name = document.createElement("span");
+				name.className = "[a:hover>&]:underline";
+				name.textContent = r.name;
+				a.append(name);
+				li.append(a);
+				return li;
+			}),
+		);
+		results.hidden = matches.length === 0;
+	};
+
+	const setOpen = (open: boolean) => {
+		toggle.setAttribute("aria-expanded", String(open));
+		toggle.setAttribute("aria-label", open ? "Close search" : "Search");
+		panel.toggleAttribute("data-open", open);
+		if (open) {
+			input.focus();
+			// the search index is only fetched once someone searches
+			index ??= [];
+			if (index.length === 0)
+				fetch("/search.json")
+					.then((res) => res.json())
+					.then((data) => {
+						index = data;
+						render();
+					});
+		} else {
+			input.value = "";
+			render();
+		}
+	};
+
+	toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
+	input.addEventListener("input", render);
+	document.addEventListener("keydown", (e) => {
+		if (e.key === "Escape" && panel.hasAttribute("data-open")) {
+			setOpen(false);
+			toggle.focus();
+		}
+	});
+</script>

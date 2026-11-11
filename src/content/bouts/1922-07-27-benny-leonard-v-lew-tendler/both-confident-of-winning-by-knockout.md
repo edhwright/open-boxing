@@ -3,7 +3,7 @@ title: Both Confident of Winning by Knockout
 author: null
 publication: The Evening World
 publicationDate: "1922-07-27"
-link: https://web.archive.org/web/20211216132436/https://www.loc.gov/resource/sn83030193/1922-07-27/ed-1/?sp=22
+link: https://www.loc.gov/resource/sn83030193/1922-07-27/ed-1/?sp=22
 boutId: 136
 featured: true
 thumbnail: /thumbnails/bouts/1922-07-27-benny-leonard-v-lew-tendler.jpg

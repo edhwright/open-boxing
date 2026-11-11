@@ -3,7 +3,7 @@ title: Tommy Was Fouled Says Timekeeper
 author: null
 publication: Minnesota Daily Star
 publicationDate: "1923-07-06"
-link: https://web.archive.org/web/20211125201812/https://www.newspapers.com/clip/12737296/the-minneapolis-star/
+link: https://www.newspapers.com/clip/12737296/the-minneapolis-star/
 boutId: 155
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-04-jack-dempsey-v-tommy-gibbons.jpg

@@ -1,0 +1,20 @@
+---
+import { orgSegments } from "./orgTags";
+
+// World title names as highlighted text (see orgTags.ts); the Astro twin of OrgTags.svelte, for static pages
+interface Props {
+	orgs: { abbreviation: string; short: string }[];
+	gold?: string[];
+}
+
+const { orgs, gold = [] } = Astro.props;
+---
+
+{
+	orgSegments(orgs, gold).map((s) => (
+		<>
+			<span class={`org ${s.tint}`}>{s.text}</span>
+			{s.separator}
+		</>
+	))
+}

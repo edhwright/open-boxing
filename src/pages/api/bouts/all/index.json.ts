@@ -1,14 +1,12 @@
 import { getAllBouts } from "../../../../db";
 import type { APIRoute } from "astro";
 
-export const get: APIRoute = () => {
-	const allBouts = getAllBouts();
+export const GET: APIRoute = async () => {
+	const allBouts = await getAllBouts();
 	const allBoutsWithoutReferences = allBouts.map((bout) => {
 		const { references, ...boutWithoutReferences } = { ...bout };
 		return boutWithoutReferences;
 	});
 
-	return {
-		body: JSON.stringify(allBoutsWithoutReferences),
-	};
+	return new Response(JSON.stringify(allBoutsWithoutReferences));
 };

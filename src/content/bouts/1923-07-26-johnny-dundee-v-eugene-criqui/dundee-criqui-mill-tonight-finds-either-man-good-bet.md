@@ -3,7 +3,7 @@ title: Dundee-Criqui Mill Tonight Finds either Man Good Bet
 author: Davis J. Walsh
 publication: The Telegraph-Forum
 publicationDate: "1923-07-26"
-link: https://web.archive.org/web/20211212094740/https://www.newspapers.com/clip/86059085/telegraph-forum/
+link: https://www.newspapers.com/clip/86059085/telegraph-forum/
 boutId: 157
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-26-johnny-dundee-v-eugene-criqui.jpg

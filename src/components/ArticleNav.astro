@@ -1,0 +1,59 @@
+---
+// Marks the article being read in a page's side navigation (any nav with data-article-nav whose links point at
+// articles on the page): the link gets aria-current, which the CSS below draws as a gold bar and bold text, and the
+// navigation scrolls itself to keep it in view. A few lines of script; without it the navigation still works.
+---
+
+<style is:global>
+	/* every item has room for the bar, so the list's text doesn't move when it appears (the navigation scrolls, so the
+	   bar can't sit outside it). The room is inside the link, so a row's hover shade reaches the bar */
+	[data-article-nav] li {
+		border-left: 3px solid transparent;
+	}
+	[data-article-nav] li > a {
+		padding-left: 9px;
+	}
+	[data-article-nav] li:has(a[aria-current="true"]) {
+		border-left-color: var(--color-gold);
+	}
+	[data-article-nav] a[aria-current="true"] .font-medium {
+		font-weight: 600;
+	}
+</style>
+
+<script>
+	for (const nav of document.querySelectorAll<HTMLElement>("[data-article-nav]")) {
+		const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
+		const articles = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1)))).filter((el): el is HTMLElement => el !== null);
+		let current: HTMLAnchorElement | null = null;
+		const update = () => {
+			// the article being read: the last one whose top has passed a third of the way down the screen
+			const line = innerHeight / 3;
+			const index = articles.findLastIndex((el) => el.getBoundingClientRect().top <= line);
+			const link = index === -1 ? null : links.find((a) => a.hash === `#${articles[index].id}`) ?? null;
+			if (link === current) return;
+			current?.removeAttribute("aria-current");
+			link?.setAttribute("aria-current", "true");
+			current = link;
+			// keep it in view when the navigation scrolls on its own (on wide screens it is sticky)
+			if (link && nav.scrollHeight > nav.clientHeight) {
+				const top = link.offsetTop - nav.offsetTop;
+				if (top < nav.scrollTop || top > nav.scrollTop + nav.clientHeight - 40) nav.scrollTo({ top: top - nav.clientHeight / 3 });
+			}
+		};
+		let queued = false;
+		addEventListener(
+			"scroll",
+			() => {
+				if (queued) return;
+				queued = true;
+				requestAnimationFrame(() => {
+					queued = false;
+					update();
+				});
+			},
+			{ passive: true },
+		);
+		update();
+	}
+</script>

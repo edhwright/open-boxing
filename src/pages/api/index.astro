@@ -1,108 +1,201 @@
 ---
+import { Code } from "astro:components";
 import Layout from "../../layouts/Layout.astro";
-import Breadcrumbs from "../../components/Breadcrumbs.astro";
-import Docs from "./_components/Docs.md";
+import { getAllBouts, getAllReigns, getAllTitles } from "../../db";
+import { slugify, weightClasses } from "../../utils";
+
+// The public API: the core data as static JSON files. It leaves out what only the site uses (references, rankings,
+// articles and the search index), and its examples are taken from the data, so they always match it.
+const [bouts, reigns, titles] = await Promise.all([getAllBouts(), getAllReigns(), getAllTitles()]);
+const withoutReferences = <T extends { references: unknown }>({ references, ...rest }: T) => rest;
+const bout = withoutReferences(bouts.find((b) => b.date === "1974-10-30") ?? bouts[0]);
+const reign = withoutReferences(reigns.find((r) => r.champion.name.last === "Hopkins" && r.title.org.name.abbreviation === "IBF") ?? reigns[0]);
+const champion = bout.boxers.boxerB;
+const json = (value: unknown) => JSON.stringify(value, null, 2);
+const base = "https://openboxing.org/api";
+const orgs = [...new Map(titles.map((t) => [t.org.name.abbreviation, t.org.name.full])).entries()];
+
+const endpoints = [
+	["/bouts/all/index.json", "Every world title bout"],
+	["/bouts/scheduled/index.json", "Scheduled world title bouts"],
+	["/{WEIGHT}/bouts/index.json", "A weight class's world title bouts"],
+	["/{WEIGHT}/{ORG}/bouts/index.json", "World title bouts for one weight class and organisation"],
+	["/reigns/all/index.json", "Every world title reign"],
+	["/{WEIGHT}/reigns/index.json", "A weight class's world title reigns"],
+	["/{WEIGHT}/{ORG}/reigns/index.json", "World title reigns for one weight class and organisation"],
+	["/champions/all/index.json", "Every world champion"],
+	["/champions/{ID}/index.json", "A champion's world title reigns and bouts"],
+];
+const boutFields = [
+	["boutId", "The bout's ID"],
+	["date", "The date, as YYYY-MM-DD"],
+	["boxers", "boxerA and boxerB: a champion (with championId, name and born) or, for a boxer who never won a world title, just a name"],
+	["status", "FINISHED or SCHEDULED"],
+	["result", "winner (BOXER A, BOXER B, DRAW, NO CONTEST, or null if scheduled), methodOfVictory (e.g. KO, UD) and totalRounds"],
+	["scheduledRounds", "The total rounds the bout was scheduled for"],
+	["weight", "The weight class the bout was fought at, and its limit in pounds"],
+	["titles", "The world titles at stake, each at its weight at the time. A title's weight class can differ from the bout's"],
+	["location", "Where it was held, where known: the venue, locality, country and coordinates"],
+];
+const reignFields = [
+	["reign_id", "The reign's ID"],
+	["period", "begins and ends, as YYYY-MM-DD (ends is null if the reign is still going), and current (true if it is still going)"],
+	["champion", "The champion: championId, name and born"],
+	["title", "The world title: its weight class (with the limit during the reign), its organisation and whether it is still contested"],
+];
+const fetchExample = `const api = "${base}";
+const get = (path) => fetch(api + path).then((response) => response.json());
+
+// every heavyweight world title reign, oldest first
+const reigns = await get("/heavyweight/reigns/index.json");
+
+// the reigns still going: today's heavyweight world champions
+const current = reigns.filter((reign) => reign.period.current);
+
+// the WBC heavyweight world title's bouts, oldest first
+const wbcBouts = await get("/heavyweight/wbc/bouts/index.json");
+
+// world title bouts that haven't happened yet, soonest first
+const scheduled = await get("/bouts/scheduled/index.json");
+
+// one champion: { champion, reigns, bouts }, here Jack Dempsey
+const { champion, reigns: dempseyReigns, bouts } = await get("/champions/24/index.json");
+
+// the bouts Dempsey won
+const won = bouts.filter((bout) => {
+	const side = bout.boxers.boxerA.championId === champion.championId ? "BOXER A" : "BOXER B";
+	return bout.result.winner === side;
+});`;
+const link = "text-ink underline decoration-gold decoration-2 underline-offset-4";
+const heading = "border-b-2 border-ink pb-2.5 font-heading text-[28px] leading-8 font-semibold";
+const code = "inline-block bg-wba-tint px-1.5 py-0.5 font-mono text-[13px] break-all text-ink";
 ---
 
-<Layout title="API" description="Open Boxing API." img={null}>
-	<main>
-		<Breadcrumbs route={[["API", `${Astro.url.origin}/api/`]]} />
+<Layout title="API" description="Open Boxing's API: world title bouts, reigns and champions as JSON." img={null}>
+	<section class="pt-[clamp(32px,6vw,56px)] pb-10">
+		<h1 class="mb-4 font-heading text-[clamp(40px,7vw,56px)] leading-[1.08] font-semibold tracking-[-0.01em]">API</h1>
+		<p class="max-w-205 font-serif text-[clamp(19px,3vw,22px)] leading-[1.45] text-ink-soft">
+			The site's world title data can be accessed as JSON.
+		</p>
+	</section>
 
-		<h1 class="header">API</h1>
-
-		<div class="description">
+	<div class="max-w-205 space-y-18">
+		<section aria-labelledby="about" class="space-y-3 text-[15px] leading-6 text-ink-soft">
+			<h2 id="about" class={heading}>What it covers</h2>
 			<p>
-				We provide a basic API to explore our data. Open Boxing is in very early development, so expect some mistakes and missing data. Found a bug or mistake? Please raise an
-				issue on <a href="https://github.com/edhwright/open-boxing/issues" target="_blank" rel="noreferrer">GitHub</a>.
+				The API covers the core data: every world title bout and reign. It doesn't include what only the site uses, such as the references behind the data, the rankings or the
+				articles.
 			</p>
-		</div>
+			<p>
+				The same data is also on the <a href="/data/" class={link}>data page</a> as CSV files. Open Boxing is in early development, so expect some mistakes and missing data; found
+				one? Please raise an issue on <a href="https://github.com/edhwright/open-boxing/issues" class={link}>GitHub</a>.
+			</p>
+		</section>
 
-		<div class="content">
-			<hr />
-			<Docs />
-		</div>
-	</main>
+		<section aria-labelledby="endpoints">
+			<h2 id="endpoints" class={heading}>Endpoints</h2>
+			<p class="mt-3 text-[15px] leading-6 text-ink-soft">Every address starts <code class={code}>{base}</code>.</p>
+			<ul class="mt-2">
+				{
+					endpoints.map(([path, about]) => (
+						<li class="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-baseline gap-4 border-b border-rule py-3 max-[760px]:grid-cols-1 max-[760px]:gap-1">
+							<code class="font-mono text-[13px] break-all">{path}</code>
+							<span class="text-sm text-ink-soft">{about}</span>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+
+		<section aria-labelledby="parameters" class="space-y-4">
+			<h2 id="parameters" class={heading}>Parameters</h2>
+			<div>
+				<h3 class="mb-2 font-mono text-sm font-medium">{"{WEIGHT}"}</h3>
+				<p class="flex flex-wrap gap-1.5">{weightClasses.map((wc) => <code class={code}>{slugify(wc.class)}</code>)}</p>
+			</div>
+			<div>
+				<h3 class="mb-2 font-mono text-sm font-medium">{"{ORG}"}</h3>
+				<ul class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-x-6 gap-y-1.5">
+					{
+						orgs.map(([abbreviation, full]) => (
+							<li class="text-sm text-ink-soft">
+								<code class={code}>{slugify(abbreviation)}</code> {full}
+							</li>
+						))
+					}
+				</ul>
+			</div>
+			<div>
+				<h3 class="mb-2 font-mono text-sm font-medium">{"{ID}"}</h3>
+				<p class="text-[15px] leading-6 text-ink-soft">
+					A champion's ID, as in <code class={code}>championId</code>. It is also the number in a champion's page address, e.g. <a href={`/champions/${
+						"championId" in champion ? champion.championId : ""
+					}/`} class={link}>/champions/{"championId" in champion ? champion.championId : ""}/</a>.
+				</p>
+			</div>
+		</section>
+
+		<section aria-labelledby="bouts">
+			<h2 id="bouts" class={heading}>Bouts</h2>
+			<p class="mt-3 text-[15px] leading-6 text-ink-soft">Each bout endpoint returns an array of bouts, oldest first.</p>
+			<dl class="mt-2">
+				{
+					boutFields.map(([field, about]) => (
+						<div class="grid grid-cols-[160px_minmax(0,1fr)] gap-4 border-b border-rule py-2.5 max-[760px]:grid-cols-1 max-[760px]:gap-1">
+							<dt class="font-mono text-[13px]">{field}</dt>
+							<dd class="text-sm text-ink-soft">{about}</dd>
+						</div>
+					))
+				}
+			</dl>
+			<h3 class="mt-6 mb-2 text-sm font-semibold">A bout</h3>
+			<Code code={json(bout)} lang="json" theme="github-light" class="api-code" />
+		</section>
+
+		<section aria-labelledby="reigns">
+			<h2 id="reigns" class={heading}>Reigns</h2>
+			<p class="mt-3 text-[15px] leading-6 text-ink-soft">Each reign endpoint returns an array of reigns, ordered by when they began.</p>
+			<dl class="mt-2">
+				{
+					reignFields.map(([field, about]) => (
+						<div class="grid grid-cols-[160px_minmax(0,1fr)] gap-4 border-b border-rule py-2.5 max-[760px]:grid-cols-1 max-[760px]:gap-1">
+							<dt class="font-mono text-[13px]">{field}</dt>
+							<dd class="text-sm text-ink-soft">{about}</dd>
+						</div>
+					))
+				}
+			</dl>
+			<h3 class="mt-6 mb-2 text-sm font-semibold">A reign</h3>
+			<Code code={json(reign)} lang="json" theme="github-light" class="api-code" />
+		</section>
+
+		<section aria-labelledby="champions">
+			<h2 id="champions" class={heading}>Champions</h2>
+			<p class="mt-3 text-[15px] leading-6 text-ink-soft">
+				<code class={code}>/champions/all/index.json</code> returns an array of champions. <code class={code}>/champions/{"{ID}"}/index.json</code> returns one champion, with
+				arrays of their reigns and world title bouts, shaped as above.
+			</p>
+			<h3 class="mt-6 mb-2 text-sm font-semibold">A champion</h3>
+			<Code code={json({ champion, reigns: ["…"], bouts: ["…"] })} lang="json" theme="github-light" class="api-code" />
+		</section>
+
+		<section aria-labelledby="examples">
+			<h2 id="examples" class={heading}>Examples</h2>
+			<p class="mt-3 mb-4 text-[15px] leading-6 text-ink-soft">In JavaScript, with the comments saying what each returns.</p>
+			<Code code={fetchExample} lang="js" theme="github-light" class="api-code" />
+		</section>
+	</div>
 </Layout>
 
 <style is:global>
-	p {
-		margin: 1rem 0;
-		font-size: 16px;
-		line-height: 20px;
-	}
-
-	h2 {
-		margin-top: 24px;
-		margin-bottom: 16px;
-		font-size: 24px;
-		line-height: 30px;
-		font-size: var(--font-size-h2);
-		line-height: var(--line-height-h2);
-	}
-
-	h3 {
-		margin-top: 24px;
-		margin-bottom: 16px;
-		font-size: var(--font-size-h3);
-		line-height: var(--line-height-h3);
-	}
-
-	pre {
-		margin-bottom: 16px;
-		font-size: 13px;
-		line-height: 17px;
+	/* Shiki's colours on the page's own background, framed like the rest of the site */
+	.api-code {
+		margin: 0;
 		padding: 16px;
-		tab-size: 2;
-		overflow-x: scroll;
-		border-radius: 4px;
-	}
-
-	p > code {
-		padding: 6px;
-		font-size: 14px;
+		border: 1px solid var(--color-ink);
+		background-color: transparent !important;
+		font-size: 13px;
 		line-height: 20px;
-		border-radius: 4px;
-		background-color: rgb(62, 67, 74);
-		color: rgb(202, 219, 216);
-		display: inline-block;
-		margin-bottom: 4px;
-	}
-
-	hr {
-		margin: 24px 0;
-		border: 0;
-		border-top: 1px solid var(--theme-border);
-	}
-
-	@media (min-width: 768px) {
-		pre {
-			font-size: 14px;
-			line-height: 20px;
-		}
-	}
-</style>
-<style>
-	.header {
-		margin: 2rem auto;
-		font-size: var(--font-size-h1);
-		line-height: var(--line-height-h1);
-	}
-
-	.description > p > a {
-		color: var(--theme-text);
-	}
-
-	.content {
-		max-width: 100%;
-	}
-
-	@media (min-width: 1280px) {
-		.header,
-		.description,
-		.content {
-			max-width: 956px;
-			margin-left: auto;
-			margin-right: auto;
-		}
+		overflow-x: auto;
 	}
 </style>

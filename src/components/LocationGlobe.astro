@@ -1,0 +1,59 @@
+---
+import { geoArea, geoOrthographic, geoPath } from "d3-geo";
+import { feature } from "topojson-client";
+import type { Topology, GeometryCollection } from "topojson-specification";
+import type { MultiPolygon, Polygon } from "geojson";
+import land110m from "world-atlas/land-110m.json";
+
+// A small globe turned so the venue is at its centre, drawn as a plain SVG at build time: a slightly thicker outline for the
+// earth's edge, thin coastlines over lightly shaded land, and a gold dot on the venue. Small islands are left out
+// and the paths are rounded to a tenth of a pixel, to keep it simple and light.
+interface Props {
+	latitude: number;
+	longitude: number;
+	// what the dot marks, for screen readers, e.g. "Shelby Arena, Shelby, Montana, USA"
+	label: string;
+	size?: number;
+}
+
+const { latitude, longitude, label, size = 96 } = Astro.props;
+
+const world = land110m as unknown as Topology<{ land: GeometryCollection }>;
+const land = feature(world, world.objects.land) as unknown as { features: { geometry: Polygon | MultiPolygon }[] };
+// every land polygon, without the smallest islands (area in steradians: 0.0005 is roughly Jamaica)
+const polygons = land.features.flatMap((f) => (f.geometry.type === "MultiPolygon" ? f.geometry.coordinates : [f.geometry.coordinates]));
+const kept: MultiPolygon = { type: "MultiPolygon", coordinates: polygons.filter((p) => geoArea({ type: "Polygon", coordinates: p }) > 0.0005) };
+
+const radius = size / 2 - 1;
+const projection = geoOrthographic()
+	.scale(radius)
+	.translate([size / 2, size / 2])
+	.rotate([-longitude, -latitude])
+	.clipAngle(90);
+const path = geoPath(projection).digits(1);
+const [x, y] = projection([longitude, latitude]) ?? [size / 2, size / 2];
+
+// at this size most of a coastline's points sit within a pixel of each other: keep a point only once it is at least
+// 1.2px from the last one kept (and every ring's first point), which keeps the shapes and drops most of the path
+function thin(d: string) {
+	return d.replace(/M([^MZ]+)Z?/g, (ring) => {
+		const closed = ring.endsWith("Z");
+		const points = ring
+			.replace(/[MZ]/g, "")
+			.split("L")
+			.map((p) => p.split(",").map(Number));
+		const kept = [points[0]];
+		for (const [px, py] of points.slice(1)) {
+			const [lx, ly] = kept[kept.length - 1];
+			if (Math.hypot(px - lx, py - ly) >= 1.2) kept.push([px, py]);
+		}
+		return kept.length < 3 ? "" : `M${kept.map((p) => p.join(",")).join("L")}${closed ? "Z" : ""}`;
+	});
+}
+---
+
+<svg role="img" aria-label={`A globe centred on ${label}`} width={size} height={size} viewBox={`0 0 ${size} ${size}`} class="block shrink-0">
+	<path d={thin(path(kept) ?? "")} fill="var(--color-ink)" fill-opacity="0.08" stroke="var(--color-ink)" stroke-width="0.5" stroke-linejoin="round"></path>
+	<circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="var(--color-ink)" stroke-width="1.25"></circle>
+	<circle cx={x} cy={y} r={Math.max(3, size / 28)} fill="var(--color-gold)" stroke="var(--color-ink)" stroke-width="1"></circle>
+</svg>

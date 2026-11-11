@@ -3,7 +3,7 @@ title: Dundee Treated Unfairly
 author: George A. Barton
 publication: The Minneapolis Sunday Tribune
 publicationDate: "1923-04-15"
-link: https://web.archive.org/web/20211212174348/https://www.newspapers.com/clip/58179282/george-barton-the-sport-show-through/
+link: https://www.newspapers.com/clip/58179282/george-barton-the-sport-show-through/
 boutId: 157
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-26-johnny-dundee-v-eugene-criqui.jpg

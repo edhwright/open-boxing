@@ -3,7 +3,7 @@ title: Dundee Choice Over Criqui Eve of Battle
 author: Harry Newman
 publication: The Buffalo Express
 publicationDate: "1923-07-26"
-link: https://web.archive.org/web/20211212231423/https://www.newspapers.com/clip/78228482/buffalo-morning-express-and-illustrated/
+link: https://www.newspapers.com/clip/78228482/buffalo-morning-express-and-illustrated/
 boutId: 157
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-26-johnny-dundee-v-eugene-criqui.jpg

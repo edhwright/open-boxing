@@ -1,198 +1,74 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import Breadcrumbs from "../../components/Breadcrumbs.astro";
-import OrgStatus from "./_components/OrgStatus.astro";
-import WBAWarning from "./_components/WBAWarning.astro";
-import Overview from "./_components/Overview.astro";
-import Timeline from "./_components/Timeline.astro";
-import FeaturedBouts from "../../components/FeaturedBouts.astro";
-import { getAllTitles, getScheduledTitleBouts, getLatestTitleReign, getTitleReigns, getTitleBouts } from "../../db";
-import { geTimelineFromReignsAndBouts, slugify, getAllBoutArticlesIds, getAllFeaturedBoutPreviews, filterFeaturedBoutPreviewsByTitle } from "../../utils";
-import type { WeightClassCurrentChampions, TimelineDate, FeaturedBoutPreview } from "../../utils";
-import type { Title, Bout, Reign } from "../../types";
+import dayjs from "dayjs";
+import { getCollection } from "astro:content";
+import WeightTitlePage from "./_components/WeightTitlePage.astro";
+import { pageBouts, pageReigns } from "./_components/weight";
+import { getAllTitles, getTitleBouts, getTitleReigns } from "../../db";
+import { getAllFeaturedBoutPreviews, filterFeaturedBoutPreviewsByTitle, slugify } from "../../utils";
 
-interface Props {
-	title: Title;
-	timeline: TimelineDate[];
-	champions: WeightClassCurrentChampions;
-	scheduledBouts: Bout[];
-	featuredBoutPreviews: FeaturedBoutPreview[];
-	bouts: Bout[];
-	reigns: Reign[];
-	allBoutArticleIds: number[];
-}
-
+// A page per world title. The WBA Super world title carries on the WBA world title (the NBA's before it), so it has
+// no page of its own: the WBA page holds both, with their reigns and bouts still marked as WBA or WBA Super. The WBA
+// Regular world title, the WBA's secondary title, keeps its own page
 export async function getStaticPaths() {
-	const allTitles = getAllTitles();
+	const titles = await getAllTitles();
 	const allFeaturedBoutPreviews = await getAllFeaturedBoutPreviews();
-	const allBoutArticleIds = await getAllBoutArticlesIds();
+	const articleCounts: Record<number, number> = {};
+	for (const article of await getCollection("bouts")) articleCounts[article.data.boutId] = (articleCounts[article.data.boutId] ?? 0) + 1;
+	const hasTitle = (weightClass: string, org: string) => titles.some((t) => t.weight.class === weightClass && t.org.name.abbreviation === org);
 
-	const data = allTitles.map((title) => {
-		const titleScheduledBouts = getScheduledTitleBouts(title.weight.class, title.org.name.abbreviation);
-		const titleChampion = getLatestTitleReign(title.weight.class, title.org.name.abbreviation);
-		const titleReigns = getTitleReigns(title.weight.class, title.org.name.abbreviation);
-		const titleBouts = getTitleBouts(title.weight.class, title.org.name.abbreviation);
-		const titleTimeline = geTimelineFromReignsAndBouts(titleReigns, titleBouts);
-		const titleFeaturedBoutPreviews = filterFeaturedBoutPreviewsByTitle(allFeaturedBoutPreviews, title.weight.class, title.org.name.abbreviation);
-
-		return {
-			params: {
-				weight: slugify(title.weight.class),
-				org: slugify(title.org.name.abbreviation),
-			},
-			props: {
-				title: title,
-				timeline: titleTimeline,
-				champion: titleChampion,
-				scheduledBouts: titleScheduledBouts,
-				featuredBoutPreviews: titleFeaturedBoutPreviews,
-				bouts: titleBouts,
-				reigns: titleReigns,
-				allBoutArticleIds: allBoutArticleIds,
-			},
-		};
-	});
-
-	return data;
+	return Promise.all(
+		titles
+			.filter((title) => !(title.org.name.abbreviation === "WBAS" && hasTitle(title.weight.class, "WBA")))
+			.map(async (title) => {
+				const weightClass = title.weight.class;
+				const org = title.org.name.abbreviation;
+				const orgs = org === "WBA" && hasTitle(weightClass, "WBAS") ? ["WBA", "WBAS"] : [org];
+				const reigns = (await Promise.all(orgs.map((o) => getTitleReigns(weightClass, o)))).flat().sort((a, b) => a.period.begins.localeCompare(b.period.begins));
+				// a bout for both titles is listed once
+				const bouts = [...new Map((await Promise.all(orgs.map((o) => getTitleBouts(weightClass, o)))).flat().map((b) => [b.boutId, b])).values()].sort((a, b) =>
+					a.date.localeCompare(b.date),
+				);
+				const previews = [...new Map(orgs.flatMap((o) => filterFeaturedBoutPreviewsByTitle(allFeaturedBoutPreviews, weightClass, o)).map((p) => [p.bout.boutId, p])).values()];
+				return {
+					params: { weight: slugify(weightClass), org: slugify(org) },
+					props: {
+						title,
+						// still contested, as either title
+						active: titles.some((t) => t.weight.class === weightClass && orgs.includes(t.org.name.abbreviation) && t.active),
+						titles,
+						reigns,
+						bouts,
+						archive: previews
+							.sort((a, b) => a.bout.date.localeCompare(b.bout.date))
+							.map((p) => ({
+								href: `/articles/${p.bout.date}-${slugify(p.name)}/`,
+								img: p.thumbnail,
+								name: p.name,
+								date: p.bout.date,
+								count: articleCounts[p.bout.boutId] ?? 0,
+							})),
+					},
+				};
+			}),
+	);
 }
 
-const { title, timeline, champion, scheduledBouts, featuredBoutPreviews, bouts, reigns, allBoutArticleIds } = Astro.props;
+const { title, active, titles, reigns, bouts, archive } = Astro.props;
+const today = dayjs().format("YYYY-MM-DD");
+const org = { abbreviation: title.org.name.abbreviation, short: title.org.name.short };
+const boutData = pageBouts(bouts, title.weight.class);
+const reignData = pageReigns(reigns, boutData, today);
 ---
 
-<Layout title={`${title.weight.class} • ${title.org.name.full}`} description={`${title.org.name.full} ${title.weight.class} world title reigns and bouts.`} img={null}>
-	<main class="content">
-		<Breadcrumbs
-			route={[
-				[title.weight.class, `${Astro.url.origin}/${slugify(title.weight.class)}/`],
-				[title.org.name.full, `${Astro.url.origin}/${slugify(title.weight.class)}/${slugify(title.org.name.abbreviation)}/`],
-			]}
-		/>
-
-		<header class="header">
-			<h1 class="header__title">
-				{title.weight.class} • {title.org.name.full}
-			</h1>
-			<Overview isActive={title.active} bouts={bouts} reigns={reigns} target="ORG" />
-		</header>
-
-		{title.active && <OrgStatus title={title} bouts={bouts} reigns={reigns} />}
-
-		{
-			featuredBoutPreviews.length > 0 && (
-				<section class="featured">
-					<h2 class="featured__title">
-						<a class="featured__link" href={`${Astro.url.origin}/articles#featured-bouts`}>
-							Featured bouts
-						</a>
-					</h2>
-					<FeaturedBouts featuredBoutPreviews={featuredBoutPreviews} />
-				</section>
-			)
-		}
-
-		{title.org.name.abbreviation.includes("WBA") && <WBAWarning title={title} />}
-
-		<section class="timeline">
-			<h2 id="timeline" class="timeline__title">Timeline</h2>
-			<Timeline timeline={timeline} boutArticleIds={allBoutArticleIds} target="ORG" />
-		</section>
-	</main>
-</Layout>
-
-<style>
-	.header {
-		margin: 2rem auto;
-	}
-
-	.header__title {
-		margin-bottom: 1rem;
-		font-size: var(--font-size-h1);
-		line-height: var(--line-height-h1);
-	}
-
-	.featured__title {
-		font-size: var(--font-size-h2);
-		line-height: var(--line-height-h2);
-		margin-bottom: 12px;
-	}
-
-	.featured__link {
-		color: var(--theme-text);
-		text-decoration: none;
-	}
-
-	.featured__link:hover {
-		text-decoration: underline;
-	}
-
-	.featured,
-	.timeline {
-		margin-top: 2rem;
-		margin-bottom: 2rem;
-	}
-
-	.timeline__title {
-		font-size: var(--font-size-h2);
-		line-height: var(--line-height-h2);
-		margin: 12px 0 12px 0;
-	}
-
-	.featured {
-		padding: 1rem 0 2rem 0;
-		position: relative;
-		background-image: var(--theme-featured-bg);
-		border-top: 1px solid var(--theme-border);
-	}
-
-	.featured:before {
-		content: "";
-		position: absolute;
-		width: 12px;
-		top: 0;
-		bottom: 0;
-		right: 100%;
-		background-image: var(--theme-featured-bg);
-		border-top: 1px solid var(--theme-border);
-		z-index: -1;
-	}
-
-	.featured:after {
-		content: "";
-		position: absolute;
-		width: 12px;
-		top: 0;
-		bottom: 0;
-		left: 100%;
-		background-image: var(--theme-featured-bg);
-		border-top: 1px solid var(--theme-border);
-		z-index: -1;
-	}
-
-	@media (min-width: 1280px) {
-		.content {
-			width: 100%;
-		}
-
-		.header,
-		.featured:global(> *),
-		.timeline__title {
-			max-width: 956px;
-			margin-left: auto;
-			margin-right: auto;
-		}
-
-		.timeline {
-			max-width: 1280px;
-			margin-left: auto;
-			margin-right: auto;
-		}
-
-		.featured:before {
-			display: none;
-		}
-
-		.featured:after {
-			display: none;
-		}
-	}
-</style>
+<WeightTitlePage
+	weightClass={title.weight.class}
+	lb={title.weight.lb}
+	org={org}
+	active={active}
+	titles={titles}
+	reigns={reignData}
+	bouts={boutData}
+	undisputedNow={[]}
+	archive={archive}
+	today={today}
+/>

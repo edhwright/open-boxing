@@ -1,10 +1,8 @@
 import { getAllChampions } from "../../../../db";
 import type { APIRoute } from "astro";
 
-export const get: APIRoute = () => {
-	const allChampions = getAllChampions();
+export const GET: APIRoute = async () => {
+	const allChampions = await getAllChampions();
 
-	return {
-		body: JSON.stringify(allChampions),
-	};
+	return new Response(JSON.stringify(allChampions));
 };

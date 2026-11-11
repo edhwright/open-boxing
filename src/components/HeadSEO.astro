@@ -1,4 +1,6 @@
 ---
+import { getPageIndex } from "../pageIndex";
+
 interface Props {
 	title: string;
 	description: string;
@@ -8,14 +10,19 @@ interface Props {
 		height: string;
 		alt: string;
 	} | null;
+	// false for a page with no address of its own, e.g. the 404 page
+	canonical?: boolean;
 }
 
-const { title, description, img } = Astro.props;
+const { title, description, img, canonical = true } = Astro.props;
 
-const socialImageURL = img !== null ? img.url : new URL("/og/default.png", Astro.url);
+// a page's own social image (made in pages/og), else the site's: the logo alone
+const slug = Astro.url.pathname.replace(/^\/|\/$/g, "");
+const entry = slug ? (await getPageIndex()).find((e) => e.slug === slug) : undefined;
+const socialImageURL = img !== null ? img.url : new URL(`/og/${entry ? entry.slug : "default"}.png`, Astro.url);
 const socialImageWidth = img !== null ? img.width : "1200";
 const socialImageHeight = img !== null ? img.height : "630";
-const socialImageAlt = img !== null ? img.alt : "Open Boxing logo";
+const socialImageAlt = img !== null ? img.alt : entry ? `${entry.name}, on Open Boxing` : "Open Boxing";
 ---
 
 <title>{title}</title>
@@ -31,4 +38,4 @@ const socialImageAlt = img !== null ? img.alt : "Open Boxing logo";
 <meta property="og:image:alt" content={socialImageAlt} />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content={socialImageURL} />
-<link rel="canonical" href={Astro.url.href} />
+{canonical && <link rel="canonical" href={Astro.url.href} />}

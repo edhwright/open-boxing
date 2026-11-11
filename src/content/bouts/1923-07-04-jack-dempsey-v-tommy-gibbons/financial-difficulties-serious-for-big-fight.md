@@ -3,7 +3,7 @@ title: Financial Difficulties Serious for Big Fight
 author: null
 publication: The Arizona Republican
 publicationDate: "1923-06-29"
-link: https://web.archive.org/web/20211125181002/https://www.newspapers.com/clip/16898974/arizona-republic/
+link: https://www.newspapers.com/clip/16898974/arizona-republic/
 boutId: 155
 featured: true
 thumbnail: /thumbnails/bouts/1923-07-04-jack-dempsey-v-tommy-gibbons.jpg
