@@ -7,9 +7,9 @@ import dropTitle from "./src/markdown/drop-title.mjs";
 import articleImages from "./src/markdown/article-images.mjs";
 import linkChampions from "./src/markdown/link-champions.mjs";
 import stripComments from "./src/integrations/strip-comments.mjs";
-import { sitemapDates } from "./src/integrations/sitemap-dates.mjs";
+import { sitemapDates, SITE_UPDATED } from "./src/integrations/sitemap-dates.mjs";
 
-// each page's last-modified date in the sitemap, from the data it shows
+// each page's last-modified date in the sitemap, from the data it shows (see src/integrations/sitemap-dates.mjs)
 const lastmod = sitemapDates();
 
 // The fonts, from the Fontsource packages installed (so their versions are pinned and the build needs no network):
@@ -50,8 +50,7 @@ export default defineConfig({
 		svelte(),
 		sitemap({
 			serialize(item) {
-				const date = lastmod.get(new URL(item.url).pathname);
-				return date ? { ...item, lastmod: date } : item;
+				return { ...item, lastmod: lastmod.get(new URL(item.url).pathname) ?? SITE_UPDATED };
 			},
 		}),
 		stripComments(),
